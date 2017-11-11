@@ -1,0 +1,1 @@
+<string>I&#39;m a teapot</string>

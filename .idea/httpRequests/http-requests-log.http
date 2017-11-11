@@ -1,0 +1,121 @@
+GET http://localhost:8080/api/comunicati/docenti
+Accept:application/json
+Cache-Control:no-cache
+Keep-Alive:timeout=100, max=50
+
+<> 2017-11-10T054823.200.json
+
+###
+
+GET http://localhost:8080/api/comunicati/docenti
+Accept:application/json
+Cache-Control:no-cache
+
+<> 2017-11-10T033250.200.json
+
+###
+
+GET http://localhost:8080/api/comunicati/docenti
+Accept:application/json
+Cache-Control:no-cache
+
+<> 2017-11-10T033143.200.json
+
+###
+
+GET http://localhost:8080/api/comunicati/docenti
+Accept:application/json
+Cache-Control:no-cache
+
+<> 2017-11-10T033140.200.json
+
+###
+
+GET http://localhost:8080/api/comunicati/docenti
+Accept:application/json
+Cache-Control:no-cache
+
+<> 2017-11-10T032514.200.json
+
+###
+
+GET http://localhost:8080/api/teapot
+Accept:text/plain
+Cache-Control:no-cache
+
+###
+
+GET http://localhost:8080/api/teapot
+Accept:text/html
+Cache-Control:no-cache
+
+<> 2017-10-29T042642.200.txt
+
+###
+
+GET http://localhost:8080/api/teapot
+Accept:application/xml
+Cache-Control:no-cache
+
+<> 2017-10-29T042529.418.txt
+
+###
+
+GET http://localhost:8080/api/teapot
+Accept:application/xml
+Cache-Control:no-cache
+
+<> 2017-10-29T042448.418.txt
+
+###
+
+GET http://localhost:8080/api/teapot
+Accept:*/*
+Cache-Control:no-cache
+
+###
+
+GET http://localhost:8080/api/teapot
+Accept:*/*
+Cache-Control:no-cache
+
+###
+
+PUT http://localhost:8080/api/comunicati/5
+Accept:application/xml
+Cache-Control:no-cache
+
+###
+
+GET http://localhost:8080/api/comunicati/5
+Accept:application/xml
+Cache-Control:no-cache
+
+<> 2017-10-29T040857.200.json
+
+###
+
+GET http://localhost:8080/api/comunicati/5
+Accept:application/xml
+Cache-Control:no-cache
+
+<> 2017-10-29T040831.200.json
+
+###
+
+GET http://localhost:8080/api/comunicati/5
+Accept:application/xml
+Cache-Control:no-cache
+
+<> 2017-10-29T040710.200.json
+
+###
+
+GET http://localhost:8080/api/comunicati
+Accept:application/xml
+Cache-Control:no-cache
+
+<> 2017-10-29T040700.200.json
+
+###
+
