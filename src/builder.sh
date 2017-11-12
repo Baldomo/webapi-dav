@@ -12,6 +12,7 @@ do
     GOOS=${platform_split[0]}
     GOARCH=${platform_split[1]}
     output_name=${exe_name}'-'${GOOS}'_'${GOARCH}
+    echo -e "Building $output_name\n"
     if [ ${GOOS} = "windows" ]; then
         output_name+='.exe'
     fi  
