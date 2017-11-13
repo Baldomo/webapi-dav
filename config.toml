@@ -4,6 +4,7 @@
 # TODO
 riavvio_automatico = true
 index_html = "./src/static/index.html"
+non_trovato_html = "./src/static/404.html"
 
 [connessione]
 porta = "8080"

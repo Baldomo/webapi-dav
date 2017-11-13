@@ -22,12 +22,6 @@ var (
 		"comunicati-studenti-arg": {"/api/comunicati/studenti/5", "Restituirà gli ultimi n comunicati per gli studenti", "/comunicati/studenti/{n: numero}"},
 		"version":                 {"/api/version", "Restituirà la versione dell'API in uso", "/version"},
 	}
-
-	// TODO
-	codes = map[int]string{
-		404: "Elemento non trovato",
-		400: "",
-	}
 )
 
 func GetOp(nome string) (*Operation, error) {

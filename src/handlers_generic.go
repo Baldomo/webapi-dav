@@ -11,7 +11,8 @@ import (
 )
 
 var (
-	indexHtml = ""
+	indexHtml    = ""
+	notFoundHtml = ""
 )
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
@@ -113,5 +114,13 @@ func TeapotHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
-
+	if notFoundHtml == "" {
+		absPath, _ := filepath.Abs(GetConfig().General.NotFoundHTML)
+		raw, _ := ioutil.ReadFile(absPath)
+		notFoundHtml = string(raw)
+	}
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	temp, _ := template.New("notfound").Parse(notFoundHtml)
+	temp.Execute(w, GetMapOps())
 }
