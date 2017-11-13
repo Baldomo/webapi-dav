@@ -2,7 +2,8 @@
 - ![0.1.0](http://progressed.io/bar/100?title=v0.1.0)
 
 # TODO
-- Niente
+- Rimuovere cartelle di test comunicati e fare uno script per generare file nel Makefile
+- Integrazione [Docker](https://blog.golang.org/docker)
 
 ## In attesa
 - Implementare progetti
