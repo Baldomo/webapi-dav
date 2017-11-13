@@ -18,6 +18,7 @@ type config struct {
 type general struct {
 	RestartOnPanic bool   `json:"riavvio_automatico" toml:"riavvio_automatico"`
 	IndexHTML      string `json:"index_html" toml:"index_html"`
+	NotFoundHTML   string `json:"non_trovato_html" toml:"non_trovato_html"`
 }
 
 type conn struct {
@@ -52,6 +53,7 @@ var (
 		general{
 			false,
 			"./src/static/index.html",
+			"./src/static/404.html",
 		},
 		conn{
 			"8080",
