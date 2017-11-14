@@ -4,6 +4,7 @@
 # TODO
 - Rimuovere cartelle di test comunicati e fare uno script per generare file nel Makefile
 - Integrazione [Docker](https://blog.golang.org/docker)
+- Aggiungere versione e altri elementi variabili a `strings.go`
 
 ## In attesa
 - Implementare progetti
