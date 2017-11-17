@@ -2,11 +2,12 @@
 - ![0.1.0](http://progressed.io/bar/100?title=v0.1.0)
 
 # TODO
-- Rimuovere cartelle di test comunicati e fare uno script per generare file nel Makefile
-- Integrazione [Docker](https://blog.golang.org/docker)
+- Refactor generale del progetto
+    - Rimuovere cartelle di test comunicati e fare uno script per generare file nel Makefile
 - Aggiungere versione e altri elementi variabili a `strings.go`
 
 ## In attesa
+- Integrazione [Docker](https://blog.golang.org/docker)
 - Implementare progetti
 - Aggiungere supporto a token/eTAGs (con **mooooolta** calma)
 
