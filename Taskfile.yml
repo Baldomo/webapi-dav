@@ -1,0 +1,93 @@
+all:
+  desc: Compila il progetto per tutte le piattaforme, x64
+  cmds:
+    - task: windows
+      vars: {SUFFIX: .exe}
+    - task: linux
+      vars: {SUFFIX: ""}
+    - task: darwin
+      vars: {SUFFIX: ""}
+
+fcgi:
+  desc: Compila il progetto per compatibilità con FastCGI
+  cmds:
+    - task: windows
+      vars: {SUFFIX: .fcgi}
+    - task: linux
+      vars: {SUFFIX: .fcgi}
+    - task: darwin
+      vars: {SUFFIX: .fcgi}
+
+windows:
+  desc: Compila il progetto per Windows x64
+  dir: src
+  cmds:
+    - echo "Compilo webapi-dav-windows_amd64{{ .SUFFIX }}"
+    - env GOOS=windows GOARCH=amd64 go build -o {{fromSlash "../build/webapi-dav-windows_amd64"}}{{ .SUFFIX }}
+  silent: true
+
+linux:
+  desc: Compila il progetto per Linux x64
+  dir: src
+  vars:
+    SUFFIX: ""
+  cmds:
+    - echo "Compilo webapi-dav-linux_amd64{{ .SUFFIX }}"
+    - env GOOS=linux GOARCH=amd64 go build -o {{fromSlash "../build/webapi-dav-linux_amd64"}}{{ .SUFFIX }}
+  silent: true
+
+darwin:
+  desc: Compila il progetto per macOS x64
+  dir: src
+  cmds:
+    - echo "Compilo webapi-dav-mac_amd64{{ .SUFFIX }}"
+    - env GOOS=darwin GOARCH=amd64 go build -o {{fromSlash "../build/webapi-dav-mac_amd64"}}{{ .SUFFIX }}
+  silent: true
+
+init-playground:
+  deps: [linux]
+  desc: |
+    Crea un playground dove testare il programma:
+      - playground/
+        - comunicati-docenti/
+        - comunicati-genitori/
+        - comunicati-studenti/
+        - config.toml
+        - Eseguibile "webapi-dav-..."
+  cmds:
+    - rm -rf playground
+    - mkdir playground
+    - cp config.toml playground
+    - cp {{fromSlash "build/webapi-dav-*"}} playground
+    - cp {{fromSlash "src/static"}} -r playground
+    - cp file_generator.go playground
+    - mkdir {{fromSlash "playground/comunicati-docenti"}}
+    - mkdir {{fromSlash "playground/comunicati-genitori"}}
+    - mkdir {{fromSlash "playground/comunicati-studenti"}}
+  silent: false
+
+test:
+  desc: Inizia il testing dopo aver creato il playground
+  deps: [init-playground]
+  dir: playground
+  cmds:
+    - go run file_generator.go -- num=85 comunicati-docenti comunicati-genitori comunicati-studenti
+    - ./webapi-dav-{{OS}}_amd64{{exeExt}}
+  silent: true
+
+fmt:
+  desc: Sottopone a 'go fmt' i file del progetti (esclusi import)
+  dir: src
+  vars:
+    GOFILES:
+      sh: go list -f '{{ .GoFiles }}'
+  cmds:
+    - go fmt {go list -f '{{ .GoFiles }}'}
+  silent: true
+
+clean:
+  desc: Rimuove gli eseguibili prodotti nella cartella /build e il playground
+  cmds:
+    - rm -rf {{fromSlash "build/webapi-dav-*"}}
+    - rm -rf playground
+  silent: true
