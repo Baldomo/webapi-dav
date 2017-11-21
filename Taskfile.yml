@@ -20,28 +20,25 @@ fcgi:
 
 windows:
   desc: Compila il progetto per Windows x64
-  dir: src
   cmds:
     - echo "Compilo webapi-dav-windows_amd64{{ .SUFFIX }}"
-    - env GOOS=windows GOARCH=amd64 go build -o {{fromSlash "../build/webapi-dav-windows_amd64"}}{{ .SUFFIX }}
+    - env GOOS=windows GOARCH=amd64 go build -o {{fromSlash "build/webapi-dav-windows_amd64"}}{{ .SUFFIX }}
   silent: true
 
 linux:
   desc: Compila il progetto per Linux x64
-  dir: src
   vars:
     SUFFIX: ""
   cmds:
     - echo "Compilo webapi-dav-linux_amd64{{ .SUFFIX }}"
-    - env GOOS=linux GOARCH=amd64 go build -o {{fromSlash "../build/webapi-dav-linux_amd64"}}{{ .SUFFIX }}
+    - env GOOS=linux GOARCH=amd64 go build -o {{fromSlash "build/webapi-dav-linux_amd64"}}{{ .SUFFIX }}
   silent: true
 
 darwin:
   desc: Compila il progetto per macOS x64
-  dir: src
   cmds:
     - echo "Compilo webapi-dav-mac_amd64{{ .SUFFIX }}"
-    - env GOOS=darwin GOARCH=amd64 go build -o {{fromSlash "../build/webapi-dav-mac_amd64"}}{{ .SUFFIX }}
+    - env GOOS=darwin GOARCH=amd64 go build -o {{fromSlash "build/webapi-dav-mac_amd64"}}{{ .SUFFIX }}
   silent: true
 
 init-playground:
@@ -60,8 +57,8 @@ init-playground:
     - mkdir playground
     - cp config.toml playground
     - cp {{fromSlash "build/webapi-dav-*"}} playground
-    - cp {{fromSlash "src/static"}} -r playground
-    - cp file_generator.go playground
+    - cp static -r playground
+    - cp file_generator.py playground
     - mkdir {{fromSlash "playground/comunicati-docenti"}}
     - mkdir {{fromSlash "playground/comunicati-genitori"}}
     - mkdir {{fromSlash "playground/comunicati-studenti"}}
@@ -73,7 +70,7 @@ test:
   dir: playground
   cmds:
     - echo "Creazione file di prova..."
-    - go run file_generator.go -- num=85 comunicati-docenti comunicati-genitori comunicati-studenti
+    - python3 file_generator.py -n 85 -d comunicati-docenti -d comunicati-genitori -d comunicati-studenti
     - echo -e "Avvio server\n"
     - ./webapi-dav-{{OS}}_amd64{{exeExt}}
   silent: true
@@ -81,10 +78,9 @@ test:
 # TODO: non funzia per qualche ragione
 fmt:
   desc: Sottopone a 'go fmt' i file del progetti (esclusi import)
-  #dir: src
   vars:
     FILES:
-      sh: {{printf "go list -f '{{ .GoFiles }}'"}}
+      sh: go list -f '{{printf "{{ .GoFiles }}"}}'
   cmds:
     - go fmt {{.FILES}}
   silent: true

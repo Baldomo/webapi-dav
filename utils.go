@@ -34,7 +34,7 @@ func (fw FileWatcher) Watch() {
 		for {
 			select {
 			case event := <-w.Event:
-				Log.Info(event)
+				Log.Info(event.String())
 				fw.OnEvent()
 			case err := <-w.Error:
 				log.Fatalln(err)
