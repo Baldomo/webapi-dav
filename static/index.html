@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DaVinci API</title>
+
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="og:url" content="http;//liceodavinci.tv/api">
+    <meta name="og:title" content="DaVinci API">
+    <meta name="og:description" content="Liceo Da Vinci RESTful API">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <style>
+        code {
+            display: block;
+            white-space: pre-line;
+        }
+    </style>
+</head>
+
+<body style="">
+<div class="container">
+    <div class="hero-unit">
+        <h1>DaVinci API</h1>
+        <img src="http://emoji.fileformat.info/gemoji/bee.png" style="width:24px;height:24px;">
+        <p><em>v1.0</em></p>
+    </div>
+</div>
+<div class="container">
+    <div class="content" style="margin-left:50px;">
+        <h2 id="introduction">Introduzione</h2>
+        <p style="padding-bottom: 30px">
+            La API RESTful è un servizio utile per ottenere dati dal
+            <a href="http://www.liceodavinci.tv/sitoLiceo" target="_blank">sito principale</a>
+        </p>
+
+        <h2 id="api">API</h2>
+
+        <h3 id="contentnegotiation">Negoziazione contenuti</h3>
+
+        <p>La API risponderà ai seguenti valori di "Accept:" con contenuti appropriati</p>
+
+        <ul>
+            <li>text/plain - Il contenuto sarà restituito come semplice testo.</li>
+            <li>
+                application/json - Il contenuto sarà restituito come oggetto/array JSON
+                <p><code class="json">{ message: 'message', subtitle: 'subtitle' }</code></p>
+            </li>
+            <li>
+                application/xml - Il contenuto sarà restituito come oggetto/array XML
+                <code class="xml">&lt;object&gt;
+                &lt;message&gt;message&lt;/message&gt;
+                &lt;subtitle&gt;subtitle&lt;/subtitle&gt;
+                &lt;/object&gt;</code>
+            </li>
+        </ul>
+
+        <h3 id="operations">Operazioni</h3>
+
+        <table class="table" id="endpoints">
+            <tr>
+                <th>Percorso</th>
+                <th>Descrizione</th>
+            </tr>
+
+            {{ range $_, $value := . }}
+
+                <tr>
+                    <td><a href={{$value.URI}}>{{$value.Title}}</a></td>
+                    <td>{{$value.Desc}}</td>
+                </tr>
+
+            {{ end }}
+
+        </table>
+
+        <p>Tutti i contributi sono benvenuti.</p>
+
+        <p style="padding-bottom: 60px">Questa homepage è ispirata dal progetto <a href="https://foaas.com" target="_blank">FOAAS</a></p>
+
+    </div>
+</div>
+<div class="container">
+    <div class="hero-unit" style="padding: 60px; margin-bottom: 0">
+        <p>Creato da Leonardo Baldin (2017)</p>
+    </div>
+</div>
+</body>
+</html>

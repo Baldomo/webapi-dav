@@ -1,6 +1,6 @@
 all:
   desc: Compila il progetto per tutte le piattaforme, x64
-  cmds:
+  deps:
     - task: windows
       vars: {SUFFIX: .exe}
     - task: linux
@@ -10,7 +10,7 @@ all:
 
 fcgi:
   desc: Compila il progetto per compatibilità con FastCGI
-  cmds:
+  deps:
     - task: windows
       vars: {SUFFIX: .fcgi}
     - task: linux
@@ -56,6 +56,7 @@ init-playground:
         - Eseguibile "webapi-dav-..."
   cmds:
     - rm -rf playground
+    - echo "Creazione playground..."
     - mkdir playground
     - cp config.toml playground
     - cp {{fromSlash "build/webapi-dav-*"}} playground
@@ -64,25 +65,28 @@ init-playground:
     - mkdir {{fromSlash "playground/comunicati-docenti"}}
     - mkdir {{fromSlash "playground/comunicati-genitori"}}
     - mkdir {{fromSlash "playground/comunicati-studenti"}}
-  silent: false
+  silent: true
 
 test:
   desc: Inizia il testing dopo aver creato il playground
   deps: [init-playground]
   dir: playground
   cmds:
+    - echo "Creazione file di prova..."
     - go run file_generator.go -- num=85 comunicati-docenti comunicati-genitori comunicati-studenti
+    - echo -e "Avvio server\n"
     - ./webapi-dav-{{OS}}_amd64{{exeExt}}
   silent: true
 
+# TODO: non funzia per qualche ragione
 fmt:
   desc: Sottopone a 'go fmt' i file del progetti (esclusi import)
-  dir: src
+  #dir: src
   vars:
-    GOFILES:
-      sh: go list -f '{{ .GoFiles }}'
+    FILES:
+      sh: {{printf "go list -f '{{ .GoFiles }}'"}}
   cmds:
-    - go fmt {go list -f '{{ .GoFiles }}'}
+    - go fmt {{.FILES}}
   silent: true
 
 clean:

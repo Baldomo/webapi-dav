@@ -1,6 +1,6 @@
 # MILESTONE
 - ![0.2.0](http://progressed.io/bar/25?title=v0.2.0)
-- ![0.1.0](http://progressed.io/bar/100?title=v0.1.0)
+- [![0.1.0](http://progressed.io/bar/100?title=v0.1.0)](https://bitbucket.org/Baldomo/webapi-dav/commits/03d5f82f2d93)
 
 # TODO
 - Aggiungere versione e altri elementi variabili a `strings.go`
