@@ -11,12 +11,10 @@ import (
 )
 
 var (
-	indexHtml    = ""
-	notFoundHtml = ""
+	indexHtml = ""
 )
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
-	// Orrendo ma funzionale
 	if indexHtml == "" {
 		absPath, _ := filepath.Abs(GetConfig().General.IndexHTML)
 		raw, _ := ioutil.ReadFile(absPath)
@@ -29,17 +27,17 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func VersionHandler(w http.ResponseWriter, r *http.Request) {
-	type version struct {
+	var version = struct {
 		NomeApi  string `json:"nome" xml:"nome"`
 		Versione string `json:"versione" xml:"versione"`
-	}
+	}{"DaVinci API", Version}
 
 	switch RequestMime(r.Header) {
 
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		w.WriteHeader(http.StatusOK)
-		if err := json.NewEncoder(w).Encode(version{"API Dav", "1.0"}); err != nil {
+		if err := json.NewEncoder(w).Encode(version); err != nil {
 			w.WriteHeader(http.StatusNoContent)
 		}
 
@@ -47,7 +45,7 @@ func VersionHandler(w http.ResponseWriter, r *http.Request) {
 
 		w.Header().Set("Content-Type", "application/xml; charset=UTF-8")
 		w.WriteHeader(http.StatusOK)
-		if err := xml.NewEncoder(w).Encode(version{"API Dav", "1.0"}); err != nil {
+		if err := xml.NewEncoder(w).Encode(version); err != nil {
 			w.WriteHeader(http.StatusNoContent)
 		}
 	default:
@@ -56,15 +54,14 @@ func VersionHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func AboutHandler(w http.ResponseWriter, r *http.Request) {
-	type about struct {
+	var about = struct {
 		Autore    string `json:"autore" xml:"autore"`
 		Versione  string `json:"versione" xml:"versione"`
 		Info      string `json:"info" xml:"info"`
 		Copyright string `json:"copyright" xml:"copyright"`
-	}
-	myAbout := about{
+	}{
 		"Leonardo Baldin",
-		"v1.0",
+		`v` + Version,
 		"",
 		"2017",
 	}
@@ -73,13 +70,13 @@ func AboutHandler(w http.ResponseWriter, r *http.Request) {
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		w.WriteHeader(http.StatusOK)
-		if err := json.NewEncoder(w).Encode(myAbout); err != nil {
+		if err := json.NewEncoder(w).Encode(about); err != nil {
 			w.WriteHeader(http.StatusNoContent)
 		}
 	case "application/xml":
 		w.Header().Set("Content-Type", "application/xml; charset=UTF-8")
 		w.WriteHeader(http.StatusOK)
-		if err := xml.NewEncoder(w).Encode(myAbout); err != nil {
+		if err := xml.NewEncoder(w).Encode(about); err != nil {
 			w.WriteHeader(http.StatusNoContent)
 		}
 	default:
@@ -88,17 +85,18 @@ func AboutHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func TeapotHandler(w http.ResponseWriter, r *http.Request) {
+	var message = APIMessage{http.StatusTeapot, "I'm a teapot"}
 	switch RequestMime(r.Header) {
 
 	case "application/json":
-		if err := json.NewEncoder(w).Encode("I'm a teapot"); err != nil {
+		if err := json.NewEncoder(w).Encode(message); err != nil {
 			w.WriteHeader(http.StatusNoContent)
 		} else {
 			w.WriteHeader(http.StatusTeapot)
 		}
 
 	case "application/xml":
-		if err := xml.NewEncoder(w).Encode("I'm a teapot"); err != nil {
+		if err := xml.NewEncoder(w).Encode(message); err != nil {
 			w.WriteHeader(http.StatusNoContent)
 		} else {
 			w.WriteHeader(http.StatusTeapot)
@@ -107,6 +105,11 @@ func TeapotHandler(w http.ResponseWriter, r *http.Request) {
 	case "text/plain":
 		fmt.Fprint(w, "I'm a teapot")
 
+	case "text/html":
+		if err := ShowGenericTemplate(w, message); err != nil {
+			Log.Error(err.Error())
+		}
+
 	default:
 		w.WriteHeader(http.StatusBadRequest)
 
@@ -114,13 +117,25 @@ func TeapotHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
-	if notFoundHtml == "" {
-		absPath, _ := filepath.Abs(GetConfig().General.NotFoundHTML)
-		raw, _ := ioutil.ReadFile(absPath)
-		notFoundHtml = string(raw)
+	var message = APIMessage{http.StatusNotFound, "Non trovato"}
+
+	w.WriteHeader(http.StatusNotFound)
+	switch RequestMime(r.Header) {
+	case "text/html":
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		if err := ShowGenericTemplate(w, message); err != nil {
+			Log.Error(err.Error())
+		}
+
+	case "application/json":
+		if err := json.NewEncoder(w).Encode(message); err != nil {
+			w.WriteHeader(http.StatusNoContent)
+		}
+
+	case "application/xml":
+		if err := xml.NewEncoder(w).Encode(message); err != nil {
+			w.WriteHeader(http.StatusNoContent)
+		}
+
 	}
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.WriteHeader(http.StatusOK)
-	temp, _ := template.New("notfound").Parse(notFoundHtml)
-	temp.Execute(w, GetMapOps())
 }

@@ -16,9 +16,9 @@ type FileWatcher struct {
 }
 
 func RequestMime(header http.Header) string {
-	if strings.Split(header.Get("Accept"), ",")[0] == "text/html" {
+	/*if strings.Split(header.Get("Accept"), ",")[0] == "text/html" {
 		return "application/json"
-	}
+	}*/
 	return strings.Split(header.Get("Accept"), ",")[0]
 }
 

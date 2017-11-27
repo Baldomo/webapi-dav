@@ -75,16 +75,6 @@ test:
     - ./webapi-dav-{{OS}}_amd64{{exeExt}}
   silent: true
 
-# TODO: non funzia per qualche ragione
-fmt:
-  desc: Sottopone a 'go fmt' i file del progetti (esclusi import)
-  vars:
-    FILES:
-      sh: go list -f '{{printf "{{ .GoFiles }}"}}'
-  cmds:
-    - go fmt {{.FILES}}
-  silent: true
-
 clean:
   desc: Rimuove gli eseguibili prodotti nella cartella /build e il playground
   cmds:
