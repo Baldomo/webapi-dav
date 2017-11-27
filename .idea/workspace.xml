@@ -1,111 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="99199c7d-09b6-43a6-aa65-4e89047b9fce" name="Default" comment="Finito refactor,">
-      <change beforePath="" afterPath="$PROJECT_DIR$/Gopkg.lock" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/Gopkg.toml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/file_generator.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/.gitignore" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/.travis.yml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/COMPATIBLE" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/COPYING" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/Makefile" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/README.md" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/_examples/example.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/_examples/example.toml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/_examples/hard.toml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/_examples/implicit.toml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/_examples/invalid-apples.toml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/_examples/invalid.toml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/_examples/readme1.toml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/_examples/readme2.toml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/cmd/toml-test-decoder/COPYING" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/cmd/toml-test-decoder/README.md" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/cmd/toml-test-decoder/main.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/cmd/toml-test-encoder/COPYING" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/cmd/toml-test-encoder/README.md" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/cmd/toml-test-encoder/main.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/cmd/tomlv/COPYING" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/cmd/tomlv/README.md" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/cmd/tomlv/main.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/decode.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/decode_meta.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/decode_test.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/doc.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/encode.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/encode_test.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/encoding_types.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/encoding_types_1.1.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/lex.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/parse.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/session.vim" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/type_check.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/BurntSushi/toml/type_fields.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/gorilla/context/.travis.yml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/gorilla/context/LICENSE" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/gorilla/context/README.md" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/gorilla/context/context.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/gorilla/context/context_test.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/gorilla/context/doc.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/gorilla/mux/.travis.yml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/gorilla/mux/LICENSE" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/gorilla/mux/README.md" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/gorilla/mux/bench_test.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/gorilla/mux/context_gorilla.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/gorilla/mux/context_gorilla_test.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/gorilla/mux/context_native.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/gorilla/mux/context_native_test.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/gorilla/mux/doc.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/gorilla/mux/mux.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/gorilla/mux/mux_test.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/gorilla/mux/old_test.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/gorilla/mux/regexp.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/gorilla/mux/route.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/op/go-logging/.travis.yml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/op/go-logging/CONTRIBUTORS" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/op/go-logging/LICENSE" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/op/go-logging/README.md" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/op/go-logging/backend.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/op/go-logging/example_test.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/op/go-logging/examples/example.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/op/go-logging/examples/example.png" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/op/go-logging/format.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/op/go-logging/format_test.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/op/go-logging/level.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/op/go-logging/level_test.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/op/go-logging/log_nix.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/op/go-logging/log_test.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/op/go-logging/log_windows.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/op/go-logging/logger.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/op/go-logging/logger_test.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/op/go-logging/memory.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/op/go-logging/memory_test.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/op/go-logging/multi.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/op/go-logging/multi_test.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/op/go-logging/syslog.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/op/go-logging/syslog_fallback.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/radovskyb/watcher/.travis.yml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/radovskyb/watcher/LICENSE" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/radovskyb/watcher/README.md" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/radovskyb/watcher/cmd/watcher/README.md" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/radovskyb/watcher/cmd/watcher/main.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/radovskyb/watcher/example/basics/main.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/radovskyb/watcher/example/close_watcher/main.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/radovskyb/watcher/example/filter_events/main.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/radovskyb/watcher/example/ignore_files/main.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/radovskyb/watcher/example/ignore_hidden_files/main.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/radovskyb/watcher/example/test_folder/.dotfile" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/radovskyb/watcher/example/test_folder/file.txt" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/radovskyb/watcher/example/test_folder/test_folder_recursive/file_recursive.txt" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/radovskyb/watcher/samefile.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/radovskyb/watcher/samefile_windows.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/radovskyb/watcher/watcher.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vendor/github.com/radovskyb/watcher/watcher_test.go" />
-      <change beforePath="$PROJECT_DIR$/.idea/webapi-dav.iml" afterPath="$PROJECT_DIR$/.idea/webapi-dav.iml" />
+    <list default="true" id="99199c7d-09b6-43a6-aa65-4e89047b9fce" name="Default" comment="Cancellato 404.html, portato a template interna generica per qualunque codice errore. In corso creazione README. Altri minuscoli bug risolti">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/Taskfile.yml" afterPath="$PROJECT_DIR$/Taskfile.yml" />
-      <change beforePath="$PROJECT_DIR$/file_generator.go" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/utils.go" afterPath="$PROJECT_DIR$/utils.go" />
+      <change beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change beforePath="$PROJECT_DIR$/TODO.md" afterPath="$PROJECT_DIR$/TODO.md" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/httpRequests/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -120,19 +19,19 @@
       <file leaf-file-name="config.toml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config.toml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
+            <state relative-caret-position="85">
               <caret line="5" column="34" lean-forward="false" selection-start-line="5" selection-start-column="34" selection-end-line="5" selection-end-column="34" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TODO.md" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/TODO.md">
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="34">
-                <caret line="2" column="117" lean-forward="false" selection-start-line="2" selection-start-column="117" selection-end-line="2" selection-end-column="117" />
+              <first_editor relative-caret-position="519">
+                <caret line="36" column="58" lean-forward="false" selection-start-line="36" selection-start-column="58" selection-end-line="36" selection-end-column="58" />
                 <folding />
               </first_editor>
               <second_editor>
@@ -142,11 +41,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Taskfile.yml" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Taskfile.yml">
+      <file leaf-file-name="preferences.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/preferences.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="13">
-              <caret line="76" column="0" lean-forward="false" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
+            <state relative-caret-position="602">
+              <caret line="151" column="12" lean-forward="false" selection-start-line="151" selection-start-column="12" selection-end-line="151" selection-end-column="12" />
               <folding />
             </state>
           </provider>
@@ -155,18 +54,33 @@
       <file leaf-file-name="logger.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/logger.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-51">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="-493">
+              <caret line="22" column="5" lean-forward="false" selection-start-line="22" selection-start-column="5" selection-end-line="22" selection-end-column="5" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="file_generator.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/file_generator.py">
+      <file leaf-file-name="TODO.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/TODO.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="85">
+                <caret line="5" column="68" lean-forward="true" selection-start-line="5" selection-start-column="68" selection-end-line="5" selection-end-column="68" />
+                <folding />
+              </first_editor>
+              <second_editor>
+                <js_state />
+              </second_editor>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="handlers_generic.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/handlers_generic.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="18" lean-forward="false" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
+            <state relative-caret-position="17">
+              <caret line="21" column="5" lean-forward="true" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -175,9 +89,21 @@
       <file leaf-file-name="utils.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/utils.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="493">
-              <caret line="36" column="39" lean-forward="false" selection-start-line="36" selection-start-column="39" selection-end-line="36" selection-end-column="39" />
+            <state relative-caret-position="221">
+              <caret line="20" column="7" lean-forward="false" selection-start-line="20" selection-start-column="7" selection-end-line="20" selection-end-column="7" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="strings.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/strings.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="330">
+              <caret line="66" column="0" lean-forward="false" selection-start-line="66" selection-start-column="0" selection-end-line="66" selection-end-column="0" />
+              <folding>
+                <element signature="e#14#53#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -188,8 +114,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Go Application" />
-        <option value="HTML File" />
         <option value="Go File" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -247,15 +173,23 @@
         <option value="$PROJECT_DIR$/src/github.com/markbates/grift/grift/grift.go" />
         <option value="$PROJECT_DIR$/Makefile" />
         <option value="$PROJECT_DIR$/src/backend_test.go" />
-        <option value="$PROJECT_DIR$/config.toml" />
-        <option value="$PROJECT_DIR$/TODO.md" />
         <option value="$PROJECT_DIR$/src/static/index.html" />
         <option value="$PROJECT_DIR$/src/static/index.html" />
-        <option value="$PROJECT_DIR$/utils.go" />
         <option value="$PROJECT_DIR$/file_generator.go" />
         <option value="$PROJECT_DIR$/test/file_generator.py" />
-        <option value="$PROJECT_DIR$/Taskfile.yml" />
         <option value="$PROJECT_DIR$/Gopkg.toml" />
+        <option value="$PROJECT_DIR$/comunicati.go" />
+        <option value="$PROJECT_DIR$/file_generator.py" />
+        <option value="$PROJECT_DIR$/preferences.go" />
+        <option value="$PROJECT_DIR$/Taskfile.yml" />
+        <option value="$PROJECT_DIR$/static/404.html" />
+        <option value="$PROJECT_DIR$/static/generic.html" />
+        <option value="$PROJECT_DIR$/strings.go" />
+        <option value="$PROJECT_DIR$/utils.go" />
+        <option value="$PROJECT_DIR$/handlers_generic.go" />
+        <option value="$PROJECT_DIR$/config.toml" />
+        <option value="$PROJECT_DIR$/TODO.md" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -317,6 +251,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -326,14 +262,17 @@
             </path>
             <path>
               <item name="webapi-dav" type="b2602c69:ProjectViewProjectNode" />
+              <item name="webapi-dav" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="webapi-dav" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -348,6 +287,7 @@
     <property name="nodejs.jest.jest_package" value="" />
     <property name="GO_FMT" value="true" />
     <property name="go.vendoring.notification.had.been.shown" value="true" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -563,7 +503,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Go Application.Run Main">
+  <component name="RunManager" selected="Go Build.Run Main">
     <configuration default="true" type="GoAppEngineRunConfiguration" factoryName="Go App Engine">
       <module name="webapi-prova" />
       <working_directory value="$PROJECT_DIR$/" />
@@ -590,7 +530,7 @@
       </makefile>
     </configuration>
     <list size="2">
-      <item index="0" class="java.lang.String" itemvalue="Go Application.Run Main" />
+      <item index="0" class="java.lang.String" itemvalue="Go Build.Run Main" />
       <item index="1" class="java.lang.String" itemvalue="Makefile.all" />
     </list>
     <recent_temporary>
@@ -604,8 +544,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="12" y="-6" width="1342" height="737" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15620328" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15620328" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25902668" sideWeight="0.48721805" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -613,7 +554,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25902668" sideWeight="0.512782" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31083202" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31083202" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3987441" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -622,6 +563,7 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="REST Client" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4115806" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32967034" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3286385" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
@@ -642,7 +584,9 @@
     <MESSAGE value="Aggiornati TODO e piccolo refactor Makefile" />
     <MESSAGE value="Rimosso Makefile: aggiunto Task (github.com/go-task/task), eseguibile in bin/" />
     <MESSAGE value="Refactor progett" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor progett" />
+    <MESSAGE value="Finito refactor, aaggiunti Gopkg.toml/.lock da usare con go dep, aggiornato Taskfile, file_generato riscritto in python3" />
+    <MESSAGE value="Cancellato 404.html, portato a template interna generica per qualunque codice errore. In corso creazione README. Altri minuscoli bug risolti" />
+    <option name="LAST_COMMIT_MESSAGE" value="Cancellato 404.html, portato a template interna generica per qualunque codice errore. In corso creazione README. Altri minuscoli bug risolti" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -660,71 +604,6 @@
     <select />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/strings.go" />
-    <entry file="file://$PROJECT_DIR$/TODO.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="34">
-            <caret line="2" column="117" lean-forward="false" selection-start-line="2" selection-start-column="117" selection-end-line="2" selection-end-column="117" />
-            <folding />
-          </first_editor>
-          <second_editor>
-            <js_state />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/file_generator.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Taskfile.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1360">
-          <caret line="80" column="38" lean-forward="false" selection-start-line="80" selection-start-column="38" selection-end-line="80" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config.toml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="38" lean-forward="true" selection-start-line="5" selection-start-column="38" selection-end-line="5" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/comunicati.go" />
-    <entry file="file://$PROJECT_DIR$/src/handlers_generic.go" />
-    <entry file="file://$PROJECT_DIR$/src/static/index.html" />
-    <entry file="file://$PROJECT_DIR$/src/static/404.html" />
-    <entry file="file://$PROJECT_DIR$/src/strings.go" />
-    <entry file="file://$PROJECT_DIR$/TODO.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="153">
-            <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-            <folding />
-          </first_editor>
-          <second_editor>
-            <js_state />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Makefile" />
-    <entry file="file://$PROJECT_DIR$/config.toml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="41" lean-forward="false" selection-start-line="6" selection-start-column="20" selection-end-line="6" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/comunicati.go" />
     <entry file="file://$PROJECT_DIR$/src/handlers_generic.go" />
     <entry file="file://$PROJECT_DIR$/src/static/index.html" />
@@ -762,14 +641,6 @@
     <entry file="file://$PROJECT_DIR$/src/utils.go" />
     <entry file="file://$PROJECT_DIR$/src/comunicati.go" />
     <entry file="file://$PROJECT_DIR$/src/startup.go" />
-    <entry file="file://$PROJECT_DIR$/config.toml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="5" column="34" lean-forward="false" selection-start-line="5" selection-start-column="34" selection-end-line="5" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/strings.go" />
     <entry file="file:///usr/lib/go-1.9/src/internal/poll/fd_posix.go">
       <provider selected="true" editor-type-id="text-editor">
@@ -801,19 +672,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/github.com/go-task/task/command_test.go" />
     <entry file="file://$PROJECT_DIR$/src/handlers_generic.go" />
-    <entry file="file://$PROJECT_DIR$/TODO.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="34">
-            <caret line="2" column="117" lean-forward="false" selection-start-line="2" selection-start-column="117" selection-end-line="2" selection-end-column="117" />
-            <folding />
-          </first_editor>
-          <second_editor>
-            <js_state />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/lib/go-1.9/src/path/filepath/path.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="203">
@@ -827,23 +685,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="203">
           <caret line="464" column="4" lean-forward="false" selection-start-line="464" selection-start-column="4" selection-end-line="464" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/file_generator.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-10">
-          <caret line="0" column="11" lean-forward="false" selection-start-line="0" selection-start-column="11" selection-end-line="0" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/test/file_generator.go" />
     <entry file="file://$PROJECT_DIR$/Gopkg.lock">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -851,39 +700,172 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/startup.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/logger.go">
+    <entry file="file://$PROJECT_DIR$/routes.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-51">
+        <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/router.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="14" column="23" lean-forward="false" selection-start-line="14" selection-start-column="23" selection-end-line="14" selection-end-column="23" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/file_generator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="18" lean-forward="false" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
+        <state relative-caret-position="323">
+          <caret line="22" column="58" lean-forward="false" selection-start-line="22" selection-start-column="58" selection-end-line="22" selection-end-column="58" />
+          <folding>
+            <element signature="e#20#35#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/logger.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-493">
+          <caret line="22" column="5" lean-forward="false" selection-start-line="22" selection-start-column="5" selection-end-line="22" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utils.go">
+    <entry file="file://$PROJECT_DIR$/comunicati.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="36" column="39" lean-forward="false" selection-start-line="36" selection-start-column="39" selection-end-line="36" selection-end-column="39" />
+        <state relative-caret-position="119">
+          <caret line="55" column="22" lean-forward="false" selection-start-line="55" selection-start-column="22" selection-end-line="55" selection-end-column="22" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Taskfile.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="13">
-          <caret line="76" column="0" lean-forward="false" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
+        <state relative-caret-position="1275">
+          <caret line="75" column="14" lean-forward="false" selection-start-line="75" selection-start-column="14" selection-end-line="75" selection-end-column="14" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/404.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="50" lean-forward="false" selection-start-line="6" selection-start-column="50" selection-end-line="6" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/lib/go-1.9/src/html/template/template.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="203">
+          <caret line="183" column="19" lean-forward="false" selection-start-line="183" selection-start-column="19" selection-end-line="183" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/lib/go-1.9/src/builtin/builtin.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="474">
+          <caret line="254" column="4" lean-forward="false" selection-start-line="254" selection-start-column="4" selection-end-line="254" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="25" column="18" lean-forward="false" selection-start-line="25" selection-start-column="18" selection-end-line="25" selection-end-column="61" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/generic.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="16" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/strings.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="66" column="0" lean-forward="false" selection-start-line="66" selection-start-column="0" selection-end-line="66" selection-end-column="0" />
+          <folding>
+            <element signature="e#14#53#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="20" column="7" lean-forward="false" selection-start-line="20" selection-start-column="7" selection-end-line="20" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/handlers_generic.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="21" column="5" lean-forward="true" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.toml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="34" lean-forward="false" selection-start-line="5" selection-start-column="34" selection-end-line="5" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TODO.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="85">
+            <caret line="5" column="68" lean-forward="true" selection-start-line="5" selection-start-column="68" selection-end-line="5" selection-end-column="68" />
+            <folding />
+          </first_editor>
+          <second_editor>
+            <js_state />
+          </second_editor>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/preferences.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="602">
+          <caret line="151" column="12" lean-forward="false" selection-start-line="151" selection-start-column="12" selection-end-line="151" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="519">
+            <caret line="36" column="58" lean-forward="false" selection-start-line="36" selection-start-column="58" selection-end-line="36" selection-end-column="58" />
+            <folding />
+          </first_editor>
+          <second_editor>
+            <js_state />
+          </second_editor>
         </state>
       </provider>
     </entry>
