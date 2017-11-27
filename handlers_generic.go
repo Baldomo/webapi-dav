@@ -85,7 +85,7 @@ func AboutHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func TeapotHandler(w http.ResponseWriter, r *http.Request) {
-	var message = APIMessage{http.StatusTeapot, "I'm a teapot"}
+	var message = APIMessage{http.StatusTeapot, `I'm a teapot`}
 	switch RequestMime(r.Header) {
 
 	case "application/json":

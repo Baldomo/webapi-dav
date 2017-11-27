@@ -1,8 +1,5 @@
-# Configurazione esempio in TOML
-
 [generali]
-# TODO
-riavvio_automatico = true
+riavvio_automatico = true  # TODO: da implementare
 index_html = "./static/index.html"
 
 [connessione]
@@ -13,12 +10,10 @@ apache_cgi = false
 comunicati_genitori = "./comunicati-genitori"
 comunicati_studenti = "./comunicati-studenti"
 comunicati_docenti = "./comunicati-docenti"
-# TODO
-progetti = "./progetti"
+progetti = "./progetti"  # TODO: da implementare
 
 [logging]
 log_in_terminale = true
 salva_su_file = false
 file_log = "./webapi.log"
-# Può essere "verbose", "warning" o "error"
 livello_log = "verbose"
