@@ -61,8 +61,8 @@ Se sia `log_in_terminale` che `salva_su_file` sono `false`, nessun evento sarà 
 
 ---
 
-#### Esempi configurazione
-##### TOML
+## Esempi configurazione
+#### TOML
 Esempio di `config.toml` (configurazione di default):
 
 ```toml
@@ -87,7 +87,7 @@ file_log = "./webapi.log"
 livello_log = "verbose"
 ```
 
-##### JSON
+#### JSON
 Esempio di `config.json` (configurazione di default):
 ```json
 {
