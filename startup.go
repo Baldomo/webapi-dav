@@ -9,6 +9,7 @@ var configPtr *string
 
 func main() {
 	configPtr = flag.String("config", "./config.toml", "Indirizzo del file di configurazione, in .toml o .json")
+	flag.Parse()
 	err := LoadPrefs(*configPtr)
 	if err != nil {
 		panic(err)
