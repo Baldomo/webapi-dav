@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="99199c7d-09b6-43a6-aa65-4e89047b9fce" name="Default" comment="Corretti errori di formattazione README">
-      <change beforePath="" afterPath="$PROJECT_DIR$/config.json" />
+    <list default="true" id="99199c7d-09b6-43a6-aa65-4e89047b9fce" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change beforePath="$PROJECT_DIR$/config.toml" afterPath="$PROJECT_DIR$/config.toml" />
-      <change beforePath="$PROJECT_DIR$/handlers_generic.go" afterPath="$PROJECT_DIR$/handlers_generic.go" />
-      <change beforePath="$PROJECT_DIR$/preferences.go" afterPath="$PROJECT_DIR$/preferences.go" />
-      <change beforePath="$PROJECT_DIR$/startup.go" afterPath="$PROJECT_DIR$/startup.go" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/httpRequests/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -56,8 +51,8 @@
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="204">
-                <caret line="12" column="4" lean-forward="false" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="4" />
+              <first_editor relative-caret-position="51">
+                <caret line="63" column="2" lean-forward="false" selection-start-line="63" selection-start-column="2" selection-end-line="63" selection-end-column="2" />
                 <folding />
               </first_editor>
               <second_editor>
@@ -598,7 +593,8 @@
     <MESSAGE value="Finito refactor, aaggiunti Gopkg.toml/.lock da usare con go dep, aggiornato Taskfile, file_generato riscritto in python3" />
     <MESSAGE value="Cancellato 404.html, portato a template interna generica per qualunque codice errore. In corso creazione README. Altri minuscoli bug risolti" />
     <MESSAGE value="Corretti errori di formattazione README" />
-    <option name="LAST_COMMIT_MESSAGE" value="Corretti errori di formattazione README" />
+    <MESSAGE value="Aggiornato README, aggiunto config.json e relativo esempio" />
+    <option name="LAST_COMMIT_MESSAGE" value="Aggiornato README, aggiunto config.json e relativo esempio" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -880,8 +876,8 @@
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="204">
-            <caret line="12" column="4" lean-forward="false" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="4" />
+          <first_editor relative-caret-position="51">
+            <caret line="63" column="2" lean-forward="false" selection-start-line="63" selection-start-column="2" selection-end-line="63" selection-end-column="2" />
             <folding />
           </first_editor>
           <second_editor>
