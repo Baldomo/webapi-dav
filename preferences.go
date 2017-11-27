@@ -42,12 +42,13 @@ type logPrefs struct {
 
 var (
 	currentFiletype = "none"
-	filetypes       = []string{
+
+	filetypes = []string{
 		".json",
 		".toml",
 	}
 
-	preferences = new(config)
+	preferences = defaultPrefs
 
 	defaultPrefs = config{
 		general{
@@ -90,7 +91,11 @@ func LoadPrefs(path string) error {
 			return errIO
 		}
 		if !json.Valid(raw) {
-			currentFiletype = ".toml"
+			if _, err := toml.DecodeFile(absPath, &config{}); err != nil {
+				currentFiletype = "none"
+			} else {
+				currentFiletype = ".toml"
+			}
 		}
 		if _, err := toml.DecodeFile(absPath, &config{}); err != nil {
 			currentFiletype = "none"
@@ -116,6 +121,7 @@ func LoadPrefs(path string) error {
 	case "none":
 		return Error("preferences: ", "File configurazione non valido: %s", path)
 	}
+
 	formatPrefs()
 	return nil
 }
@@ -132,17 +138,16 @@ func formatPrefs() {
 		case "error":
 			break
 
+		case "warning":
+			break
+
 		default:
-			Log.Warning(`formatPrefs: Il livello del log può essere "verbose" o "error", ignoro opzione, default: "verbose"`)
-			preferences.Log.LogLevel = "verbose"
+			Log.Warning(`formatPrefs: Il livello del log può essere "verbose", "warning" o "error", ignoro opzione, default: "warning"`)
+			preferences.Log.LogLevel = "warning"
 		}
 	}
 }
 
 func GetConfig() *config {
-	if preferences == nil {
-		Log.Error("Errore config: preferences == nil")
-		return nil
-	}
-	return preferences
+	return &preferences
 }

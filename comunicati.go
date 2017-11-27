@@ -2,7 +2,6 @@ package main
 
 import (
 	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -54,7 +53,7 @@ func fetchComunicati(dir string, tipo string) Comunicati {
 	absPath, _ := filepath.Abs(dir)
 	files, err := ioutil.ReadDir(absPath)
 	if err != nil {
-		log.Fatal(err)
+		Log.Fatal(err)
 	}
 
 	buf := make(Comunicati, len(files))

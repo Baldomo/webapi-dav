@@ -4,6 +4,7 @@
 
 # TODO
 - Aggiungere versione e altri elementi variabili a `strings.go`
+     - Eventualmente aggiungere una template di base con relativa `struct`
 
 ## In attesa
 - Integrazione [Docker](https://blog.golang.org/docker)
