@@ -17,7 +17,7 @@ Chiavi e parametri:
 | Nome                 | Tipo    | Valori             | Descrizione |
 |----------------------|---------|--------------------|-------------|
 | `riavvio_automatico` | boolean | `true, false`      | Ancora da implementare, non funzionante. |
-| `index_html`         | string  | "&lt;percorso&gt;" | Indica il percorso del file HTML da usare come pagina principale, indirizzo /api |
+| `index_html`         | string  | "/percorso/"       | Indica il percorso del file HTML da usare come pagina principale, indirizzo /api |
 
 #### Connessione
 | Nome                 | Tipo     | Valori         | Descrizione |
@@ -28,17 +28,17 @@ Chiavi e parametri:
 #### Cartelle
 | Nome                  | Tipo    | Valori             | Descrizione |
 |-----------------------|---------|--------------------|-------------|
-| `comunicati_genitori` | string  | "&lt;percorso&gt;" | Percorso della cartella comunicati genitori |
-| `comunicati_studenti` | string  | "&lt;percorso&gt;" | Percorso della cartella comunicati studenti |
-| `comunicati_docenti`  | string  | "&lt;percorso&gt;" | Percorso della cartella comunicati docenti |
-| `progetti`            | string  | "&lt;percorso&gt;" | Percorso della cartella progetti (non ancora implementato) |
+| `comunicati_genitori` | string  | "/percorso/"       | Percorso della cartella comunicati genitori |
+| `comunicati_studenti` | string  | "/percorso/"       | Percorso della cartella comunicati studenti |
+| `comunicati_docenti`  | string  | "/percorso/"       | Percorso della cartella comunicati docenti |
+| `progetti`            | string  | "/percorso/"       | Percorso della cartella progetti (non ancora implementato) |
 
 #### Logging
 | Nome               | Tipo    | Valori                    | Descrizione |
 |--------------------|---------|---------------------------|-------------|
 | `log_in_terminale` | boolean | `true, false`             |             |
 | `salva_su_file`    | boolean | `true, false`             |             |
-| `file_log`         | string  | "&lt;percorso&gt;"        |             |
+| `file_log`         | string  | "/percorso/"              |             |
 | `livello_log`      | string  | "verbose, error, warning" |             |
 
 #### Esempio configurazione
