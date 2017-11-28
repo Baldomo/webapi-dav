@@ -3,14 +3,17 @@ Questa è la documentazione ufficiale di Da Vinci API, contenente utilizzo e con
 Ultima versione: v0.1.0
 
 ## Indice
+* [Esecuzione](#esecuzione)
 * [Configurazione](#configurazione)
-  * [Generali](#generali)
-  * [Connessione](#connessione)
-  * [Cartelle](#cartelle)
-  * [Logging](#logging)
-  * [Esempi](#esempi-configurazione)
-    * [TOML](#toml)
-    * [JSON](#json)
+    * [Generali](#generali)
+    * [Connessione](#connessione)
+    * [Cartelle](#cartelle)
+    * [Logging](#logging)
+    * [Esempi](#esempi-configurazione)
+        * [TOML](#toml)
+        * [JSON](#json)
+* [Comunicati](#comunicati)
+* [Progetti](#progetti)
 
 
 ## Esecuzione
@@ -113,3 +116,35 @@ Esempio di `config.json` (in quella di default le cartelle non sono specificate)
   }
 }
 ```
+
+## Comunicati
+Qualunque cartella contenente file può essere esposta nella configurazione: la API
+terrà in memoria una lista dei comunicati secondo la struttura:
+```go
+Comunicato
+    Nome  string    (nome del file)
+    Data  time.Time (data di ultima modifica)
+    Tipo  string    ("genitori", "studenti" o "docenti")
+    URL             (link diretto al PDF)
+```
+Esempio di risposta di singolo comunicato in JSON:
+```json
+{
+    "nome":"177_corsa campestre istituto.pdf",
+    "data":"2017-11-26T10:30:49.272711528+01:00",
+    "tipo":"studenti",
+    "url":"http://liceodavinci.tv/sitoLiceo/comunicati/comunicati-studenti/..."
+}
+```
+Esempio di risposta di singolo comunicato in XML:
+```xml
+<Comunicato>
+    <Nome>83.txt</Nome>
+    <Data>2017-11-28T22:16: 44.580082707+01: 00</Data>
+    <Tipo>docenti</Tipo>
+    <URL>http: //liceodavinci.tv/sitoLiceo/images/comunicati/comunicati-docenti/83.txt</URL>
+</Comunicato>
+```
+
+## Progetti
+Ancora da implementare

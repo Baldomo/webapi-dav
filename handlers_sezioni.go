@@ -31,6 +31,13 @@ func ComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 			panic(err)
 		}
 
+	case "text/html":
+		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+		w.WriteHeader(http.StatusOK)
+		if err := json.NewEncoder(w).Encode(all{Genitori, Studenti, Docenti}); err != nil {
+			panic(err)
+		}
+
 	default:
 		w.WriteHeader(http.StatusBadRequest)
 	}
@@ -63,6 +70,13 @@ func GenitoriComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		w.WriteHeader(http.StatusOK)
 		if err := xml.NewEncoder(w).Encode(GetByName("genitori")[:localCount]); err != nil {
+			panic(err)
+		}
+
+	case "text/html":
+		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+		w.WriteHeader(http.StatusOK)
+		if err := json.NewEncoder(w).Encode(GetByName("genitori")[:localCount]); err != nil {
 			panic(err)
 		}
 
@@ -100,6 +114,13 @@ func StudentiComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 			panic(err)
 		}
 
+	case "text/html":
+		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+		w.WriteHeader(http.StatusOK)
+		if err := json.NewEncoder(w).Encode(GetByName("studenti")[:localCount]); err != nil {
+			panic(err)
+		}
+
 	default:
 		w.WriteHeader(http.StatusBadRequest)
 	}
@@ -131,6 +152,13 @@ func DocentiComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		w.WriteHeader(http.StatusOK)
 		if err := xml.NewEncoder(w).Encode(GetByName("docenti")[:localCount]); err != nil {
+			panic(err)
+		}
+
+	case "text/html":
+		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+		w.WriteHeader(http.StatusOK)
+		if err := json.NewEncoder(w).Encode(GetByName("docenti")[:localCount]); err != nil {
 			panic(err)
 		}
 
