@@ -59,10 +59,10 @@ var (
 			false,
 		},
 		dirs{
-			"./comunicati-genitori",
-			"./comunicati-studenti",
-			"./comunicati-docenti",
-			"./progetti",
+			"",
+			"",
+			"",
+			"",
 		},
 		logPrefs{
 			true,
@@ -125,9 +125,6 @@ func LoadPrefs(path string) error {
 }
 
 func formatPrefs() {
-	if preferences == defaultPrefs {
-		Log.Warning("Caricato defaultPrefs!")
-	}
 	if !strings.HasPrefix(preferences.Conn.Port, ":") {
 		preferences.Conn.Port = ":" + preferences.Conn.Port
 	}
