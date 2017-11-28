@@ -63,7 +63,7 @@ Se sia `log_in_terminale` che `salva_su_file` sono `false`, nessun evento sarà 
 
 ## Esempi configurazione
 #### TOML
-Esempio di `config.toml` (configurazione di default):
+Esempio di `config.toml` (in quella di default le cartelle non sono specificate):
 
 ```toml
 [generali]
@@ -88,7 +88,7 @@ livello_log = "verbose"
 ```
 
 #### JSON
-Esempio di `config.json` (configurazione di default):
+Esempio di `config.json` (in quella di default le cartelle non sono specificate):
 ```json
 {
   "generali": {
