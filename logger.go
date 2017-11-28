@@ -35,7 +35,7 @@ func EventLogger(inner http.Handler, name string) http.Handler {
 	})
 }
 
-func InitLogger() {
+func InitLogger(before func()) {
 	if runtime.GOOS == "windows" {
 		logging.MustStringFormatter("[%{level:-1s}%{time: 15:04:05.999999} %{shortfile}] %{message}")
 	}
@@ -57,6 +57,8 @@ func InitLogger() {
 	if !GetConfig().Log.WriteStd && !GetConfig().Log.WriteFile {
 		defer Log.Info("-* Logger avviato in modalità silenziosa *-")
 	}
+
+	before()
 
 	switch strings.ToLower(GetConfig().Log.LogLevel) {
 	case "verbose":

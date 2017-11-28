@@ -15,8 +15,7 @@ func main() {
 		panic(err)
 	}
 
-	InitLogger()
-	initServer()
+	InitLogger(initServer)
 
 	if GetConfig().Conn.FastCGI {
 		router := NewRouter()

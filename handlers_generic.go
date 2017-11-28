@@ -31,6 +31,7 @@ func VersionHandler(w http.ResponseWriter, r *http.Request) {
 		NomeApi  string `json:"nome" xml:"nome"`
 		Versione string `json:"versione" xml:"versione"`
 	}{"DaVinci API", Version}
+	var versionMessage = APIMessage{http.StatusOK, "DaVinci API v" + Version}
 
 	switch RequestMime(r.Header) {
 
@@ -42,12 +43,17 @@ func VersionHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 	case "application/xml":
-
 		w.Header().Set("Content-Type", "application/xml; charset=UTF-8")
 		w.WriteHeader(http.StatusOK)
 		if err := xml.NewEncoder(w).Encode(version); err != nil {
 			w.WriteHeader(http.StatusNoContent)
 		}
+
+	case "text/html":
+		if err := ShowGenericTemplate(w, versionMessage); err != nil {
+			Log.Error(err.Error())
+		}
+
 	default:
 		w.WriteHeader(http.StatusBadRequest)
 	}
@@ -63,8 +69,10 @@ func AboutHandler(w http.ResponseWriter, r *http.Request) {
 		"Leonardo Baldin",
 		`v` + Version,
 		"",
-		"2017",
+		"(c) 2017",
 	}
+	var aboutMessage = APIMessage{http.StatusOK, "Leonardo Baldin, v" + Version + ", (c) 2017"}
+
 	switch RequestMime(r.Header) {
 
 	case "application/json":
@@ -73,12 +81,19 @@ func AboutHandler(w http.ResponseWriter, r *http.Request) {
 		if err := json.NewEncoder(w).Encode(about); err != nil {
 			w.WriteHeader(http.StatusNoContent)
 		}
+
 	case "application/xml":
 		w.Header().Set("Content-Type", "application/xml; charset=UTF-8")
 		w.WriteHeader(http.StatusOK)
 		if err := xml.NewEncoder(w).Encode(about); err != nil {
 			w.WriteHeader(http.StatusNoContent)
 		}
+
+	case "text/html":
+		if err := ShowGenericTemplate(w, aboutMessage); err != nil {
+			Log.Error(err.Error())
+		}
+
 	default:
 		w.WriteHeader(http.StatusBadRequest)
 	}

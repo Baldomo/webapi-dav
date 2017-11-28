@@ -1,14 +1,14 @@
 # MILESTONE
-- ![0.2.0](http://progressed.io/bar/25?title=v0.2.0)
+- ![0.1.1](http://progressed.io/bar/95?title=v0.1.1)
 - [![0.1.0](http://progressed.io/bar/100?title=v0.1.0)](https://bitbucket.org/Baldomo/webapi-dav/commits/03d5f82f2d93)
 
 # TODO
-- Controllare slash escaping nei percorsi dappertutto
 - Aggiungere supporto a [HTTPS](https://github.com/denji/golang-tls)
 - Aggiungere versione e altri elementi variabili a `strings.go`
      - Eventualmente aggiungere una template di base con relativa `struct`
 
 ## In attesa
+- Aggiungere routes dinamiche a config
 - Integrazione [Docker](https://blog.golang.org/docker)
 - Implementare progetti
 - Aggiungere supporto a token/eTAGs (con **mooooolta** calma)

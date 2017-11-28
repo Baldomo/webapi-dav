@@ -12,10 +12,10 @@ import (
 )
 
 type Comunicato struct {
-	Nome string    `json:"nome" xml:"nome"`
-	Data time.Time `json:"data" xml:"data"`
-	Tipo string    `json:"tipo" xml:"tipo"`
-	URL  string    `json:"url" xml:"url"`
+	Nome string
+	Data time.Time
+	Tipo string
+	URL  string
 }
 
 type Comunicati []*Comunicato
