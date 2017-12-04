@@ -5,6 +5,7 @@ Ultima versione: v0.1.0
 ## Indice
 * [Esecuzione](#esecuzione)
 * [Configurazione](#configurazione)
+    * [Apache](#apache)
     * [Generali](#generali)
     * [Connessione](#connessione)
     * [Cartelle](#cartelle)
@@ -13,7 +14,7 @@ Ultima versione: v0.1.0
         * [TOML](#toml)
         * [JSON](#json)
 * [Comunicati](#comunicati)
-* [Progetti](#progetti)
+* ~~[Progetti](#progetti)~~
 
 
 ## Esecuzione
@@ -24,6 +25,34 @@ per specificare manualmente il percorso del file di configurazione
 Sono accettate configurazioni in formato `toml` e `json`. Gli [esempi](#esempi-configurazione)
 contengono la configurazione di default in entrambi i formati.
 Chiavi e parametri:
+
+#### Apache
+L'unico modo (al momento) di poter eseguire il webserver è tramite mod_proxy: in `httpd.conf` usare moduli:
+```apache
+LoadModule headers_module modules/mod_headers.so
+LoadModule proxy_module modules/mod_proxy.so
+LoadModule proxy_connect_module modules/mod_proxy_connect.so
+LoadModule proxy_html_module modules/mod_proxy_html.so
+LoadModule proxy_http_module modules/mod_proxy_http.so
+LoadModule proxy_http2_module modules/mod_proxy_http2.so
+LoadModule slotmem_shm_module modules/mod_slotmem_shm.so
+LoadModule socache_shmcb_module modules/mod_socache_shmcb.so
+LoadModule xml2enc_module modules/mod_xml2enc.so
+```
+
+VirtualHost per redirezionamento richieste, aggiungere sempre a `httpd.conf`:
+```apache
+<VirtualHost *:80>
+    ServerName localhost/api
+
+    ProxyRequests Off
+    ProxyVia Off
+
+    ProxyPass /api http://127.0.0.1:8080/api
+    ProxyPassReverse /api http://127.0.0.1:8080/api
+</VirtualHost>
+```
+La modalità [FastCGI](https://httpd.apache.org/docs/2.4/mod/mod_proxy_fcgi.html) è in sviluppo, insieme all'integrazione del sistema di gestione servizi di Windows
 
 #### Generali
 | Nome                 | Tipo    | Valori             | Descrizione |
@@ -37,7 +66,7 @@ Chiavi e parametri:
 | Nome                 | Tipo     | Valori         | Descrizione |
 |----------------------|----------|----------------|-------------|
 | `porta`              | string   | "numero porta" | Indica la porta che il server userà per le connessioni in entrata. **Non necessaria** se `apache_cgi` è `true` |
-| `apache_cgi`         | boolean  | `true, false`  | Avvia il server in modalità [FastCGI](https://httpd.apache.org/docs/2.4/mod/mod_proxy_fcgi.html) (richiede attivazione di mod_proxy_fcgi in Apache) |
+| `apache_cgi`         | boolean  | `true, false`  | Avvia il server in modalità [FastCGI](https://httpd.apache.org/docs/2.4/mod/mod_proxy_fcgi.html) (richiede attivazione di mod_fcgi in Apache, in sviluppo) |
 
 ---
 
@@ -125,7 +154,7 @@ Comunicato
     Nome  string    (nome del file)
     Data  time.Time (data di ultima modifica)
     Tipo  string    ("genitori", "studenti" o "docenti")
-    URL             (link diretto al PDF)
+    URL   string    (link diretto al PDF)
 ```
 Esempio di risposta di singolo comunicato in JSON:
 ```json
@@ -139,10 +168,10 @@ Esempio di risposta di singolo comunicato in JSON:
 Esempio di risposta di singolo comunicato in XML:
 ```xml
 <Comunicato>
-    <Nome>83.txt</Nome>
-    <Data>2017-11-28T22:16: 44.580082707+01: 00</Data>
-    <Tipo>docenti</Tipo>
-    <URL>http: //liceodavinci.tv/sitoLiceo/images/comunicati/comunicati-docenti/83.txt</URL>
+    <Nome>177_corsa campestre istituto.pdf</Nome>
+    <Data>2017-11-26T10:30:49.272711528+01:00</Data>
+    <Tipo>studenti</Tipo>
+    <URL>http://liceodavinci.tv/sitoLiceo/comunicati/comunicati-studenti/...</URL>
 </Comunicato>
 ```
 
