@@ -22,7 +22,7 @@ windows:
   desc: Compila il progetto per Windows x64
   cmds:
     - echo "Compilo webapi-dav-windows_amd64{{ .SUFFIX }}"
-    - env GOOS=windows GOARCH=amd64 go build -o {{fromSlash "build/webapi-dav-windows_amd64"}}{{ .SUFFIX }}
+    - env GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o {{fromSlash "build/webapi-dav-windows_amd64"}}{{ .SUFFIX }}
   silent: true
 
 linux:
@@ -31,14 +31,14 @@ linux:
     SUFFIX: ""
   cmds:
     - echo "Compilo webapi-dav-linux_amd64{{ .SUFFIX }}"
-    - env GOOS=linux GOARCH=amd64 go build -o {{fromSlash "build/webapi-dav-linux_amd64"}}{{ .SUFFIX }}
+    - env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o {{fromSlash "build/webapi-dav-linux_amd64"}}{{ .SUFFIX }}
   silent: true
 
 darwin:
   desc: Compila il progetto per macOS x64
   cmds:
     - echo "Compilo webapi-dav-mac_amd64{{ .SUFFIX }}"
-    - env GOOS=darwin GOARCH=amd64 go build -o {{fromSlash "build/webapi-dav-mac_amd64"}}{{ .SUFFIX }}
+    - env GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o {{fromSlash "build/webapi-dav-mac_amd64"}}{{ .SUFFIX }}
   silent: true
 
 init-playground:
@@ -73,6 +73,13 @@ test:
     - python3 file_generator.py -n 85 -d comunicati-docenti -d comunicati-genitori -d comunicati-studenti
     - echo -e "Avvio server\n"
     - ./webapi-dav-{{OS}}_amd64{{exeExt}}
+  silent: true
+
+pack:
+  desc: Usa UPX per comprimere gli eseguibili
+  dir: build
+  cmds:
+    - upx --brute webapi-*
   silent: true
 
 clean:

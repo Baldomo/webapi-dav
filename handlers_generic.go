@@ -30,8 +30,8 @@ func VersionHandler(w http.ResponseWriter, r *http.Request) {
 	var version = struct {
 		NomeApi  string `json:"nome" xml:"nome"`
 		Versione string `json:"versione" xml:"versione"`
-	}{"DaVinci API", Version}
-	var versionMessage = APIMessage{http.StatusOK, "DaVinci API v" + Version}
+	}{"DaVinci API", VersionNumber}
+	var versionMessage = APIMessage{http.StatusOK, "DaVinci API v" + VersionNumber}
 
 	switch RequestMime(r.Header) {
 
@@ -67,11 +67,11 @@ func AboutHandler(w http.ResponseWriter, r *http.Request) {
 		Copyright string `json:"copyright" xml:"copyright"`
 	}{
 		"Leonardo Baldin",
-		`v` + Version,
+		`v` + VersionNumber,
 		"",
 		"(c) 2017",
 	}
-	var aboutMessage = APIMessage{http.StatusOK, "Leonardo Baldin, v" + Version + ", (c) 2017"}
+	var aboutMessage = APIMessage{http.StatusOK, "Leonardo Baldin, v" + VersionNumber + ", (c) 2017"}
 
 	switch RequestMime(r.Header) {
 

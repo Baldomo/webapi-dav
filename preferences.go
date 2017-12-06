@@ -23,6 +23,9 @@ type general struct {
 type conn struct {
 	Port    string `json:"porta" toml:"porta"`
 	FastCGI bool   `json:"apache_cgi" toml:"apache_cgi"`
+	HTTPS   bool   `json:"https" toml:"https"`
+	Cert    string `json:"certificato" toml:"certificato"`
+	Key     string `json:"chiave" toml:"chiave"`
 }
 
 type dirs struct {
@@ -57,6 +60,9 @@ var (
 		conn{
 			"8080",
 			false,
+			false,
+			"",
+			"",
 		},
 		dirs{
 			"",
@@ -127,6 +133,16 @@ func LoadPrefs(path string) error {
 func formatPrefs() {
 	if !strings.HasPrefix(preferences.Conn.Port, ":") {
 		preferences.Conn.Port = ":" + preferences.Conn.Port
+	}
+	if GetConfig().Conn.HTTPS {
+		if GetConfig().Conn.Cert == "" {
+			Log.Fatal("Certificato non specificato!")
+		}
+		if GetConfig().Conn.Key == "" {
+			Log.Fatal("Chiave non specificata!")
+		}
+
+
 	}
 	if GetConfig().Log.WriteStd || GetConfig().Log.WriteFile {
 		switch preferences.Log.LogLevel {

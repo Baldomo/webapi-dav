@@ -1,6 +1,6 @@
 # webapi-dav
 Questa è la documentazione ufficiale di Da Vinci API, contenente utilizzo e configurazione del webserver.
-Ultima versione: v0.1.0
+Ultima versione: v0.2.0
 
 ## Indice
 * [Esecuzione](#esecuzione)
@@ -19,7 +19,9 @@ Ultima versione: v0.1.0
 
 ## Esecuzione
 L'eseguibile accetta un solo parametro all'esecuzione: `-config file.{json/toml}`,
-per specificare manualmente il percorso del file di configurazione
+per specificare manualmente il percorso del file di configurazione. Anche se il file non avesse
+l'estensione corretta, il programma cercherà di interpretarlo e, se valido,
+lo utilizzerà.
 
 ## Configurazione
 Sono accettate configurazioni in formato `toml` e `json`. Gli [esempi](#esempi-configurazione)
@@ -34,7 +36,6 @@ LoadModule proxy_module modules/mod_proxy.so
 LoadModule proxy_connect_module modules/mod_proxy_connect.so
 LoadModule proxy_html_module modules/mod_proxy_html.so
 LoadModule proxy_http_module modules/mod_proxy_http.so
-LoadModule proxy_http2_module modules/mod_proxy_http2.so
 LoadModule slotmem_shm_module modules/mod_slotmem_shm.so
 LoadModule socache_shmcb_module modules/mod_socache_shmcb.so
 LoadModule xml2enc_module modules/mod_xml2enc.so
@@ -52,7 +53,7 @@ VirtualHost per redirezionamento richieste, aggiungere sempre a `httpd.conf`:
     ProxyPassReverse /api http://127.0.0.1:8080/api
 </VirtualHost>
 ```
-La modalità [FastCGI](https://httpd.apache.org/docs/2.4/mod/mod_proxy_fcgi.html) è in sviluppo, insieme all'integrazione del sistema di gestione servizi di Windows
+La modalità [FastCGI](https://httpd.apache.org/docs/2.4/mod/mod_proxy_fcgi.html) è in sviluppo, insieme all'integrazione del sistema di gestione servizi di Windows.
 
 #### Generali
 | Nome                 | Tipo    | Valori             | Descrizione |
@@ -67,6 +68,12 @@ La modalità [FastCGI](https://httpd.apache.org/docs/2.4/mod/mod_proxy_fcgi.html
 |----------------------|----------|----------------|-------------|
 | `porta`              | string   | "numero porta" | Indica la porta che il server userà per le connessioni in entrata. **Non necessaria** se `apache_cgi` è `true` |
 | `apache_cgi`         | boolean  | `true, false`  | Avvia il server in modalità [FastCGI](https://httpd.apache.org/docs/2.4/mod/mod_proxy_fcgi.html) (richiede attivazione di mod_fcgi in Apache, in sviluppo) |
+| `https`              | boolean  | `true, false`  | Avvia il server in modalità HTTPS - richiede percorsi di certificato e chiave privata del certificato |
+| `certificato`        | string   | "/percorso/"   | Indica il percorso del file `.crt` del certificato firmato |
+| `chiave`             | string   | "/percorso/"   | Indica il percorso del file `.key` contenente la chiave con cui è stato firmato il certificato |
+
+##### Note:
+Impostare HTTPS a `true` sovrascriverà la porta a `:443`, standard per HTTPS
 
 ---
 
@@ -100,22 +107,25 @@ Esempio di `config.toml` (in quella di default le cartelle non sono specificate)
 ```toml
 [generali]
 riavvio_automatico = true
-index_html = "./static/index.html"
+index_html = "static/index.html"
 
 [connessione]
 porta = "8080"
 apache_cgi = false
+https = false
+certificato = "server.crt"
+chiave = "server.key"
 
 [cartelle]
-comunicati_genitori = "./comunicati-genitori"
-comunicati_studenti = "./comunicati-studenti"
-comunicati_docenti = "./comunicati-docenti"
-progetti = "./progetti"
+comunicati_genitori = "comunicati-genitori"
+comunicati_studenti = "comunicati-studenti"
+comunicati_docenti = "comunicati-docenti"
+progetti = "progetti"
 
 [logging]
 log_in_terminale = true
 salva_su_file = false
-file_log = "./webapi.log"
+file_log = "webapi.log"
 livello_log = "verbose"
 ```
 
@@ -125,22 +135,28 @@ Esempio di `config.json` (in quella di default le cartelle non sono specificate)
 {
   "generali": {
     "riavvio_automatico": true,
-    "index_html": "./static/index.html"
+    "index_html": "static/index.html"
   },
+
   "connessione": {
     "porta": "8080",
     "apache_cgi": false
+    "https": false,
+    "certificato": "server.crt",
+    "chiave": "server.key"
   },
+
   "cartelle": {
-    "comunicati_genitori": "./comunicati-genitori",
-    "comunicati_studenti": "./comunicati-studenti",
-    "comunicati_docenti": "./comunicati-docenti",
-    "progetti": "./progetti"
+    "comunicati_genitori": "comunicati-genitori",
+    "comunicati_studenti": "comunicati-studenti",
+    "comunicati_docenti": "comunicati-docenti",
+    "progetti": "progetti"
   },
+
   "logging": {
     "log_in_terminale": true,
     "salva_su_file": false,
-    "file_log": "./webapi.log",
+    "file_log": "webapi.log",
     "livello_log": "verbose"
   }
 }

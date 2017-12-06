@@ -1,19 +1,21 @@
 # MILESTONE
-- ![0.1.1](http://progressed.io/bar/95?title=v0.1.1)
+- [![0.2.0](http://progressed.io/bar/100?title=v0.2.0)](https://bitbucket.org/Baldomo/webapi-dav/commits/360a9de8917d)
 - [![0.1.0](http://progressed.io/bar/100?title=v0.1.0)](https://bitbucket.org/Baldomo/webapi-dav/commits/03d5f82f2d93)
 
 # TODO
-- Aggiungere supporto a [HTTPS](https://github.com/denji/golang-tls)
-- Aggiungere versione e altri elementi variabili a `strings.go`
-     - Eventualmente aggiungere una template di base con relativa `struct`
+- Finire supporto a FCGI su Apache + documentazione
+- Aggiungere supporto a servizi di Windows
 
 ## In attesa
 - Aggiungere routes dinamiche a config
-- Integrazione [Docker](https://blog.golang.org/docker)
 - Implementare progetti
 - Aggiungere supporto a token/eTAGs (con **mooooolta** calma)
+- Integrazione [Docker](https://blog.golang.org/docker)
 
 ## Risolti
+- ~~Aggiungere supporto a [HTTPS](https://github.com/denji/golang-tls)~~
+- ~~Aggiungere elementi a `strings.go`~~
+     - ~~Eventualmente aggiungere una template di base con relativa `struct`~~
 - ~~Rimuovere cartelle di test comunicati e fare uno script per generare file nel Makefile~~
 - ~~Finire 404.html (static)~~
 - ~~Data race in `temp.Execute(w, GetAllOps())`~~
