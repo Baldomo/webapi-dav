@@ -20,7 +20,7 @@ var routes = Routes{
 		IndexHandler,
 	},
 	Route{
-		"Version",
+		"VersionNumber",
 		"GET",
 		"/api/version",
 		VersionHandler,

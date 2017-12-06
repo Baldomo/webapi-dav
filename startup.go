@@ -2,14 +2,21 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"net/http/fcgi"
+	"os"
 )
 
-var configPtr *string
-
 func main() {
-	configPtr = flag.String("config", "./config.toml", "Indirizzo del file di configurazione, in .toml o .json")
+	configPtr := flag.String("config", "./config.toml", "Indirizzo del file di configurazione, in .toml o .json")
+	versionPtr := flag.Bool("version", false, "Mostra la versione attuale del programma")
 	flag.Parse()
+
+	if *versionPtr {
+		fmt.Println("DaVinci API v" + VersionNumber)
+		fmt.Println("Leonardo Baldin, " + VersionDate)
+		os.Exit(0)
+	}
 	err := LoadPrefs(*configPtr)
 	if err != nil {
 		panic(err)
@@ -20,6 +27,8 @@ func main() {
 	if GetConfig().Conn.FastCGI {
 		router := NewRouter()
 		Log.Fatal(fcgi.Serve(nil, router))
+	} else if GetConfig().Conn.HTTPS {
+		Log.Fatal(NewServerHTTPS().ListenAndServeTLS(GetConfig().Conn.Cert, GetConfig().Conn.Key))
 	} else {
 		Log.Fatal(NewServer().ListenAndServe())
 	}
