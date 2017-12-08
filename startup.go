@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"net/http/fcgi"
 	"os"
 )
 
@@ -17,6 +16,7 @@ func main() {
 		fmt.Println("Leonardo Baldin, " + VersionDate)
 		os.Exit(0)
 	}
+
 	err := LoadPrefs(*configPtr)
 	if err != nil {
 		panic(err)
@@ -24,14 +24,7 @@ func main() {
 
 	InitLogger(initServer)
 
-	if GetConfig().Conn.FastCGI {
-		router := NewRouter()
-		Log.Fatal(fcgi.Serve(nil, router))
-	} else if GetConfig().Conn.HTTPS {
-		Log.Fatal(NewServerHTTPS().ListenAndServeTLS(GetConfig().Conn.Cert, GetConfig().Conn.Key))
-	} else {
-		Log.Fatal(NewServer().ListenAndServe())
-	}
+	StartServer()
 }
 
 func initServer() {
@@ -57,4 +50,5 @@ func initServer() {
 	go DocentiWatcher.Watch()
 
 	Log.Info("Avvio completato.")
+	Log.Info("---------------------------------")
 }
