@@ -1,20 +1,21 @@
 # webapi-dav
 Questa è la documentazione ufficiale di Da Vinci API, contenente utilizzo e configurazione del webserver.
 Ultima versione: v0.2.0
+[Copia del README su Github](https://gist.github.com/Baldomo/5dc1db7a46e00f94ef714b7063f7fa3d)
 
 ## Indice
-* [Esecuzione](#esecuzione)
-* [Configurazione](#configurazione)
-    * [Apache](#apache)
-    * [Generali](#generali)
-    * [Connessione](#connessione)
-    * [Cartelle](#cartelle)
-    * [Logging](#logging)
-    * [Esempi](#esempi-configurazione)
-        * [TOML](#toml)
-        * [JSON](#json)
-* [Comunicati](#comunicati)
-* ~~[Progetti](#progetti)~~
+* [Esecuzione](#markdown-header-esecuzione)
+* [Configurazione](#markdown-header-configurazione)
+    * [Apache](#markdown-header-apache)
+    * [Generali](#markdown-header-generali)
+    * [Connessione](#markdown-header-connessione)
+    * [Cartelle](#markdown-header-cartelle)
+    * [Logging](#markdown-header-logging)
+    * [Esempi](#markdown-header-esempi-configurazione)
+        * [TOML](#markdown-header-toml)
+        * [JSON](#markdown-header-json)
+* [Comunicati](#markdown-header-comunicati)
+* ~~[Progetti](#markdown-header-progetti)~~
 
 
 ## Esecuzione
@@ -140,7 +141,7 @@ Esempio di `config.json` (in quella di default le cartelle non sono specificate)
 
   "connessione": {
     "porta": "8080",
-    "apache_cgi": false
+    "apache_cgi": false,
     "https": false,
     "certificato": "server.crt",
     "chiave": "server.key"
