@@ -1,4 +1,8 @@
+# GoLand conf
+.idea/
+
 # Binaries for programs and plugins
+build/
 *.exe
 *.dll
 *.so
