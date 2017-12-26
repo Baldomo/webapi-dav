@@ -24,7 +24,7 @@ func main() {
 
 	InitLogger(initServer)
 
-	StartServer()
+	StartServers()
 }
 
 func initServer() {

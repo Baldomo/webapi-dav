@@ -3,12 +3,12 @@
 - [![0.1.0](http://progressed.io/bar/100?title=v0.1.0)](https://bitbucket.org/Baldomo/webapi-dav/commits/03d5f82f2d93)
 
 # TODO
-- Finire supporto a FCGI su Apache + documentazione
 - Aggiungere supporto a servizi di Windows
 
 ## In attesa
-- Aggiungere routes dinamiche a config
 - Implementare progetti
+- Finire supporto a FCGI su Apache + documentazione
+- Aggiungere routes dinamiche a config
 - Aggiungere supporto a token/eTAGs (con **mooooolta** calma)
 - Integrazione [Docker](https://blog.golang.org/docker)
 

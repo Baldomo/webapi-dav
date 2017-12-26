@@ -2,12 +2,15 @@
 riavvio_automatico = true  # TODO: da implementare
 index_html = "static/index.html"
 
-[connessione]
-porta = "8080"
-apache_cgi = false
-https = false
+[https]
+abilitato = false
+porta = ":443"
 certificato = "server.crt"
 chiave = "server.key"
+
+[http]
+abilitato = true
+porta = ":8080"
 
 [cartelle]
 comunicati_genitori = "comunicati-genitori"

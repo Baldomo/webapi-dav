@@ -1,16 +1,15 @@
 package main
 
 import (
-	"github.com/gorilla/mux"
-	"net/http"
-	"time"
+	"context"
 	"crypto/tls"
+	"github.com/gorilla/mux"
+	"github.com/op/go-logging"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
-	"github.com/op/go-logging"
-	"context"
-	"net/http/fcgi"
+	"time"
 )
 
 var (
@@ -39,7 +38,7 @@ func NewRouter() *mux.Router {
 func NewServer() *http.Server {
 	return &http.Server{
 		Handler:           NewRouter(),
-		Addr:              GetConfig().Conn.Port,
+		Addr:              GetConfig().HTTP.Port,
 		WriteTimeout:      time.Second * 5,
 		ReadTimeout:       time.Second * 5,
 		IdleTimeout:       time.Second * 5,
@@ -50,7 +49,7 @@ func NewServer() *http.Server {
 func NewServerHTTPS() *http.Server {
 	return &http.Server{
 		Handler:           NewRouter(),
-		Addr:              ":443",
+		Addr:              GetConfig().HTTPS.Port,
 		WriteTimeout:      time.Second * 5,
 		ReadTimeout:       time.Second * 5,
 		IdleTimeout:       time.Second * 5,
@@ -128,25 +127,35 @@ func shutdown(s *http.Server, logger *logging.Logger) {
 	}
 }
 
-func StartServer() {
-	if GetConfig().Conn.FastCGI {
+func StartServers() {
+	/*if GetConfig().Conn.FastCGI {
 		router := NewRouter()
 		Log.Fatal(fcgi.Serve(nil, router))
-	} else if GetConfig().Conn.HTTPS {
-		server := NewServerHTTPS()
-		go func() {
-			if err := server.ListenAndServeTLS(GetConfig().Conn.Cert, GetConfig().Conn.Key); err != nil {
-				Log.Fatal(err)
-			}
-		}()
-		Shutdown(server)
-	} else {
-		server := NewServer()
-		go func() {
-			if err := server.ListenAndServe(); err != nil {
-				Log.Fatal(err)
-			}
-		}()
-		Shutdown(server)
+	}*/
+	if GetConfig().HTTPS.Enabled {
+		startHTTPS()
+		startHTTP()
+	} else if GetConfig().HTTP.Enabled {
+		startHTTP()
 	}
+}
+
+func startHTTP() {
+	httpServer := NewServer()
+	go func() {
+		if err := httpServer.ListenAndServe(); err != nil {
+			Log.Fatal(err)
+		}
+	}()
+	Shutdown(httpServer)
+}
+
+func startHTTPS() {
+	httpsServer := NewServerHTTPS()
+	go func() {
+		if err := httpsServer.ListenAndServeTLS(GetConfig().HTTPS.Cert, GetConfig().HTTPS.Key); err != nil {
+			Log.Fatal(err)
+		}
+	}()
+	Shutdown(httpsServer)
 }

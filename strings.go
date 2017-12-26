@@ -54,11 +54,12 @@ var (
 	}
 )
 
-func GetOp(nome string) (*Operation, error) {
+func GetOp(nome string) *Operation {
 	if val, ok := ops[nome]; ok {
-		return val, nil
+		return val
 	} else {
-		return nil, Error("GetOp: ", "Valore non presente %s", nome)
+		Log.Errorf("GetOp: ", "Valore non presente %s", nome)
+		return nil
 	}
 }
 

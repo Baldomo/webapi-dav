@@ -50,7 +50,7 @@ func VersionHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 	case "text/html":
-		if err := ShowGenericTemplate(w, versionMessage ); err != nil {
+		if err := ShowGenericTemplate(w, versionMessage); err != nil {
 			Log.Error(err.Error())
 		}
 

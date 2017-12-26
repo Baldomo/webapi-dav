@@ -9,10 +9,11 @@ import (
 )
 
 type config struct {
-	General general  `json:"generali" toml:"generali"`
-	Conn    conn     `json:"connessione" toml:"connessione"`
-	Dirs    dirs     `json:"cartelle" toml:"cartelle"`
-	Log     logPrefs `json:"logging" toml:"logging"`
+	General general   `json:"generali" toml:"generali"`
+	HTTPS   connhttps `json:"https" toml:"https"`
+	HTTP    connhttp  `json:"http" toml:"http"`
+	Dirs    dirs      `json:"cartelle" toml:"cartelle"`
+	Log     logPrefs  `json:"logging" toml:"logging"`
 }
 
 type general struct {
@@ -20,12 +21,16 @@ type general struct {
 	IndexHTML      string `json:"index_html" toml:"index_html"`
 }
 
-type conn struct {
+type connhttps struct {
+	Enabled bool   `json:"abilitato" toml:"abilitato"`
 	Port    string `json:"porta" toml:"porta"`
-	FastCGI bool   `json:"apache_cgi" toml:"apache_cgi"`
-	HTTPS   bool   `json:"https" toml:"https"`
 	Cert    string `json:"certificato" toml:"certificato"`
 	Key     string `json:"chiave" toml:"chiave"`
+}
+
+type connhttp struct {
+	Enabled bool   `json:"abilitato" toml:"abilitato"`
+	Port    string `json:"porta" toml:"porta"`
 }
 
 type dirs struct {
@@ -57,12 +62,15 @@ var (
 			false,
 			"./src/static/index.html",
 		},
-		conn{
-			"8080",
-			false,
+		connhttps{
 			false,
 			"",
 			"",
+			"",
+		},
+		connhttp{
+			true,
+			":8080",
 		},
 		dirs{
 			"",
@@ -131,20 +139,22 @@ func LoadPrefs(path string) error {
 }
 
 func formatPrefs() {
-	if !strings.HasPrefix(preferences.Conn.Port, ":") {
-		preferences.Conn.Port = ":" + preferences.Conn.Port
+	if !strings.HasPrefix(preferences.HTTPS.Port, ":") {
+		preferences.HTTPS.Port = ":" + preferences.HTTPS.Port
 	}
-	if GetConfig().Conn.HTTPS {
-		if GetConfig().Conn.Cert == "" {
+	if !strings.HasPrefix(preferences.HTTP.Port, ":") {
+		preferences.HTTP.Port = ":" + preferences.HTTP.Port
+	}
+	if preferences.HTTPS.Enabled {
+		if preferences.HTTPS.Cert == "" {
 			Log.Fatal("Certificato non specificato!")
 		}
-		if GetConfig().Conn.Key == "" {
+		if preferences.HTTPS.Key == "" {
 			Log.Fatal("Chiave non specificata!")
 		}
 
-
 	}
-	if GetConfig().Log.WriteStd || GetConfig().Log.WriteFile {
+	if preferences.Log.WriteStd || preferences.Log.WriteFile {
 		switch preferences.Log.LogLevel {
 		case "verbose":
 			break

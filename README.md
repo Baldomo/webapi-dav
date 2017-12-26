@@ -65,16 +65,21 @@ La modalità [FastCGI](https://httpd.apache.org/docs/2.4/mod/mod_proxy_fcgi.html
 ---
 
 #### Connessione
+
+##### HTTPS
 | Nome                 | Tipo     | Valori         | Descrizione |
 |----------------------|----------|----------------|-------------|
-| `porta`              | string   | "numero porta" | Indica la porta che il server userà per le connessioni in entrata. **Non necessaria** se `apache_cgi` è `true` |
-| `apache_cgi`         | boolean  | `true, false`  | Avvia il server in modalità [FastCGI](https://httpd.apache.org/docs/2.4/mod/mod_proxy_fcgi.html) (richiede attivazione di mod_fcgi in Apache, in sviluppo) |
-| `https`              | boolean  | `true, false`  | Avvia il server in modalità HTTPS - richiede percorsi di certificato e chiave privata del certificato |
+| `abilitato`          | boolean  | `true, false`  | Avvia il server in modalità HTTPS - richiede percorsi di certificato e chiave privata del certificato |
+| `porta`              | string   | "numero porta" | Indica la porta che il server userà per le connessioni HTTPS in entrata. |
 | `certificato`        | string   | "/percorso/"   | Indica il percorso del file `.crt` del certificato firmato |
 | `chiave`             | string   | "/percorso/"   | Indica il percorso del file `.key` contenente la chiave con cui è stato firmato il certificato |
 
-##### Note:
-Impostare HTTPS a `true` sovrascriverà la porta a `:443`, standard per HTTPS
+##### HTTP
+| Nome                 | Tipo     | Valori         | Descrizione |
+|----------------------|----------|----------------|-------------|
+| `abilitato`          | boolean  | `true, false`  | Avvia il server in modalità HTTP |
+| `porta`              | string   | "numero porta" | Indica la porta che il server userà per le connessioni HTTP in entrata. |
+
 
 ---
 
@@ -107,21 +112,22 @@ Esempio di `config.toml` (in quella di default le cartelle non sono specificate)
 
 ```toml
 [generali]
-riavvio_automatico = true
 index_html = "static/index.html"
 
-[connessione]
-porta = "8080"
-apache_cgi = false
-https = false
+[https]
+abilitato = false
+porta = ":443"
 certificato = "server.crt"
 chiave = "server.key"
+
+[http]
+abilitato = true
+porta = ":8080"
 
 [cartelle]
 comunicati_genitori = "comunicati-genitori"
 comunicati_studenti = "comunicati-studenti"
 comunicati_docenti = "comunicati-docenti"
-progetti = "progetti"
 
 [logging]
 log_in_terminale = true
@@ -135,25 +141,23 @@ Esempio di `config.json` (in quella di default le cartelle non sono specificate)
 ```json
 {
   "generali": {
-    "riavvio_automatico": true,
     "index_html": "static/index.html"
   },
-
-  "connessione": {
-    "porta": "8080",
-    "apache_cgi": false,
-    "https": false,
+  "https": {
+    "abilitato": false,
+    "porta": ":443",
     "certificato": "server.crt",
     "chiave": "server.key"
   },
-
+  "http": {
+    "abilitato": true,
+    "porta": ":8080"
+  },
   "cartelle": {
     "comunicati_genitori": "comunicati-genitori",
     "comunicati_studenti": "comunicati-studenti",
     "comunicati_docenti": "comunicati-docenti",
-    "progetti": "progetti"
   },
-
   "logging": {
     "log_in_terminale": true,
     "salva_su_file": false,
