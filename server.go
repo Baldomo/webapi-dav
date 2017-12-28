@@ -87,7 +87,7 @@ func shutdown(s *http.Server, logger *logging.Logger) {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
-	logger.Warningf("Spegnimento server con timeout %s", timeout)
+	logger.Warningf("Conclusione richieste con timeout %s", timeout)
 
 	if err := s.Shutdown(ctx); err != nil {
 		logger.Error(err.Error())
@@ -148,6 +148,7 @@ func startHTTP() {
 		}
 	}()
 	Shutdown(httpServer)
+	return
 }
 
 func startHTTPS() {
@@ -158,4 +159,5 @@ func startHTTPS() {
 		}
 	}()
 	Shutdown(httpsServer)
+	return
 }

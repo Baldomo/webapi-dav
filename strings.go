@@ -50,6 +50,7 @@ var (
 		"comunicati-genitori-arg": {"/api/comunicati/genitori/5", "Restituirà gli ultimi n comunicati per i genitori", "/comunicati/genitori/{n: numero}"},
 		"comunicati-studenti":     {"/api/comunicati/studenti", "Restituirà la lista dei comunicati per gli studenti", "/comunicati/studenti"},
 		"comunicati-studenti-arg": {"/api/comunicati/studenti/5", "Restituirà gli ultimi n comunicati per gli studenti", "/comunicati/studenti/{n: numero}"},
+		"teapot":                  {"/api/teapot", "Restituirà codice HTTP 418. Utile solamente a capire se la API è online e funzionante", "/teapot"},
 		"version":                 {"/api/version", "Restituirà la versione dell'API in uso", "/version"},
 	}
 )

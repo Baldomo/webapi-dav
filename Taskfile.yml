@@ -57,14 +57,11 @@ init-playground:
     - mkdir playground
     - cp config.toml playground
     - cp {{fromSlash "build/webapi-dav-*"}} playground
-    - cp static -r playground
+    - cp -r static playground
     - cp file_generator.py playground
-    - mkdir {{fromSlash "playground/comunicati-docenti"}}
-    - mkdir {{fromSlash "playground/comunicati-genitori"}}
-    - mkdir {{fromSlash "playground/comunicati-studenti"}}
   silent: true
 
-test:
+deploy-test:
   desc: Inizia il testing dopo aver creato il playground
   deps: [init-playground]
   dir: playground
@@ -73,6 +70,21 @@ test:
     - python3 file_generator.py -n 85 -d comunicati-docenti -d comunicati-genitori -d comunicati-studenti
     - echo -e "Avvio server\n"
     - ./webapi-dav-{{OS}}_amd64{{exeExt}}
+  silent: true
+
+go-test:
+  desc: Deploy minimale e go test
+  cmds:
+    - rm -rf playground
+    - echo "Creazione playground..."
+    - mkdir playground
+    - cp config.toml playground
+    - cp -r static playground
+    - cp file_generator.py playground
+    - echo "Creazione file di prova..."
+    - python3 file_generator.py -n 85 -d playground/comunicati-docenti -d playground/comunicati-genitori -d playground/comunicati-studenti
+    - cp *.go playground
+    - cd playground && go test -v -benchmem
   silent: true
 
 pack:

@@ -1,3 +1,9 @@
+# Vagrant files
+.vagrant/
+
+# Packer cache
+packer_cache/
+
 # GoLand conf
 .idea/
 
