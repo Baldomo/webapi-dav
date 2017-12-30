@@ -134,8 +134,8 @@ func StartServers() {
 	}*/
 	if GetConfig().HTTPS.Enabled {
 		startHTTPS()
-		startHTTP()
-	} else if GetConfig().HTTP.Enabled {
+	}
+	if GetConfig().HTTP.Enabled {
 		startHTTP()
 	}
 }

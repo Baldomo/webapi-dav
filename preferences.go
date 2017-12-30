@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/BurntSushi/toml"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 )
@@ -17,8 +18,7 @@ type config struct {
 }
 
 type general struct {
-	RestartOnPanic bool   `json:"riavvio_automatico" toml:"riavvio_automatico"`
-	IndexHTML      string `json:"index_html" toml:"index_html"`
+	RestartOnPanic bool `json:"riavvio_automatico" toml:"riavvio_automatico"`
 }
 
 type connhttps struct {
@@ -34,6 +34,7 @@ type connhttp struct {
 }
 
 type dirs struct {
+	HTML     string `json:"html" toml:"html"`
 	Genitori string `json:"comunicati_genitori" toml:"comunicati_genitori"`
 	Studenti string `json:"comunicati_studenti" toml:"comunicati_studenti"`
 	Docenti  string `json:"comunicati_docenti" toml:"comunicati_docenti"`
@@ -60,7 +61,6 @@ var (
 	defaultPrefs = config{
 		general{
 			false,
-			"./src/static/index.html",
 		},
 		connhttps{
 			false,
@@ -73,6 +73,7 @@ var (
 			":8080",
 		},
 		dirs{
+			"./static",
 			"",
 			"",
 			"",
@@ -82,7 +83,7 @@ var (
 			true,
 			false,
 			"./webapi.log",
-			"verbose",
+			"warning",
 		},
 	}
 )
@@ -139,11 +140,16 @@ func LoadPrefs(path string) error {
 }
 
 func formatPrefs() {
-	if !strings.HasPrefix(preferences.HTTPS.Port, ":") {
-		preferences.HTTPS.Port = ":" + preferences.HTTPS.Port
-	}
+	// General
+
+	//HTTP
 	if !strings.HasPrefix(preferences.HTTP.Port, ":") {
 		preferences.HTTP.Port = ":" + preferences.HTTP.Port
+	}
+
+	// HTTPS
+	if !strings.HasPrefix(preferences.HTTPS.Port, ":") {
+		preferences.HTTPS.Port = ":" + preferences.HTTPS.Port
 	}
 	if preferences.HTTPS.Enabled {
 		if preferences.HTTPS.Cert == "" {
@@ -154,6 +160,13 @@ func formatPrefs() {
 		}
 
 	}
+
+	// Dirs
+	if _, err := os.Stat(preferences.Dirs.HTML); os.IsNotExist(err) || preferences.Dirs.HTML == "" {
+		Log.Fatal("Cartella contenuti HTML non specificata")
+	}
+
+	// Logging
 	if preferences.Log.WriteStd || preferences.Log.WriteFile {
 		switch preferences.Log.LogLevel {
 		case "verbose":
@@ -167,7 +180,6 @@ func formatPrefs() {
 
 		default:
 			Log.Warning(`formatPrefs: Il livello del log può essere "verbose", "warning" o "error", ignoro opzione, default: "warning"`)
-			preferences.Log.LogLevel = "warning"
 		}
 	}
 }

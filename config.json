@@ -1,7 +1,6 @@
 {
   "generali": {
-    "riavvio_automatico": true,
-    "index_html": "static/index.html"
+    "riavvio_automatico": true
   },
   "https": {
     "abilitato": false,
@@ -14,6 +13,7 @@
     "porta": ":8080"
   },
   "cartelle": {
+    "html": "static",
     "comunicati_genitori": "comunicati-genitori",
     "comunicati_studenti": "comunicati-studenti",
     "comunicati_docenti": "comunicati-docenti",

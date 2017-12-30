@@ -63,19 +63,19 @@ func TestEndpoints(t *testing.T) {
 		}
 		assert.Equal(t, http.StatusOK, resp.StatusCode)
 		raw, _ := ioutil.ReadAll(resp.Body)
-		assert.True(t, json.Valid(raw))
+		assert.True(t, json.Valid(raw), "Risposta dovrebbe contenere JSON valido")
 	}
 
 	// HTTPS
 	for _, endpoint := range endpoints {
 		t.Logf("Testing %s", endpoint)
-		req, _ := http.NewRequest("GET", fmt.Sprintf("http://127.0.0.1%s/%s", GetConfig().HTTPS.Port, endpoint), nil)
+		req, _ := http.NewRequest("GET", fmt.Sprintf("https://127.0.0.1/%s", endpoint), nil)
 		resp, err := client.Do(req)
 		if err != nil {
 			panic(err)
 		}
 		assert.Equal(t, http.StatusOK, resp.StatusCode)
 		raw, _ := ioutil.ReadAll(resp.Body)
-		assert.True(t, json.Valid(raw))
+		assert.True(t, json.Valid(raw), "Risposta dovrebbe contenere JSON valido")
 	}
 }

@@ -60,7 +60,6 @@ La modalità [FastCGI](https://httpd.apache.org/docs/2.4/mod/mod_proxy_fcgi.html
 | Nome                 | Tipo    | Valori             | Descrizione |
 |----------------------|---------|--------------------|-------------|
 | `riavvio_automatico` | boolean | `true, false`      | Ancora da implementare, non funzionante. |
-| `index_html`         | string  | "/percorso/"       | Indica il percorso del file HTML da usare come pagina principale, indirizzo /api |
 
 ---
 
@@ -86,6 +85,7 @@ La modalità [FastCGI](https://httpd.apache.org/docs/2.4/mod/mod_proxy_fcgi.html
 #### Cartelle
 | Nome                  | Tipo    | Valori             | Descrizione |
 |-----------------------|---------|--------------------|-------------|
+| `html`                | string  | "/percorso/"       | Percorso della cartella che contiene i file HTML per le pagine web |
 | `comunicati_genitori` | string  | "/percorso/"       | Percorso della cartella comunicati genitori |
 | `comunicati_studenti` | string  | "/percorso/"       | Percorso della cartella comunicati studenti |
 | `comunicati_docenti`  | string  | "/percorso/"       | Percorso della cartella comunicati docenti |
@@ -111,9 +111,6 @@ Se sia `log_in_terminale` che `salva_su_file` sono `false`, nessun evento sarà 
 Esempio di `config.toml` (in quella di default le cartelle non sono specificate):
 
 ```toml
-[generali]
-index_html = "static/index.html"
-
 [https]
 abilitato = false
 porta = ":443"
@@ -125,6 +122,7 @@ abilitato = true
 porta = ":8080"
 
 [cartelle]
+html = "static/"
 comunicati_genitori = "comunicati-genitori"
 comunicati_studenti = "comunicati-studenti"
 comunicati_docenti = "comunicati-docenti"
@@ -140,9 +138,6 @@ livello_log = "verbose"
 Esempio di `config.json` (in quella di default le cartelle non sono specificate):
 ```json
 {
-  "generali": {
-    "index_html": "static/index.html"
-  },
   "https": {
     "abilitato": false,
     "porta": ":443",
@@ -154,6 +149,7 @@ Esempio di `config.json` (in quella di default le cartelle non sono specificate)
     "porta": ":8080"
   },
   "cartelle": {
+    "html": "static/",
     "comunicati_genitori": "comunicati-genitori",
     "comunicati_studenti": "comunicati-studenti",
     "comunicati_docenti": "comunicati-docenti",

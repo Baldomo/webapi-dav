@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/radovskyb/watcher"
-	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -14,6 +13,13 @@ type FileWatcher struct {
 	Store   interface{}
 	OnEvent func()
 }
+
+type WebContentWatcher struct {
+	Path    string
+	OnEvent func()
+}
+
+type ConfigWatcher struct{}
 
 func RequestMime(header http.Header) string {
 	/*if strings.Split(header.Get("Accept"), ",")[0] == "text/html" {
@@ -37,7 +43,7 @@ func (fw FileWatcher) Watch() {
 				Log.Info(event.String())
 				fw.OnEvent()
 			case err := <-w.Error:
-				log.Fatalln(err)
+				Log.Error(err.Error())
 			case <-w.Closed:
 				return
 			}
@@ -45,17 +51,36 @@ func (fw FileWatcher) Watch() {
 	}()
 
 	if err := w.Add(fw.Path); err != nil {
-		log.Fatalln(err)
+		Log.Error(err.Error())
 	}
 
 	if err := w.Start(time.Millisecond * 100); err != nil {
-		log.Fatalln(err)
+		Log.Error(err.Error())
 	}
 }
 
-//TODO
-func CheckAndRecover(err error) {
-	if err != nil {
-		panic(err)
+func (cw WebContentWatcher) Watch() {
+	w := watcher.New()
+	w.SetMaxEvents(1)
+	go func() {
+		for {
+			select {
+			case event := <-w.Event:
+				Log.Info(event.String())
+				cw.OnEvent()
+			case err := <-w.Error:
+				Log.Error(err.Error())
+			case <-w.Closed:
+				return
+			}
+		}
+	}()
+
+	if err := w.Add(cw.Path); err != nil {
+		Log.Error(err.Error())
+	}
+
+	if err := w.Start(time.Millisecond * 100); err != nil {
+		Log.Error(err.Error())
 	}
 }

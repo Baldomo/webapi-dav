@@ -1,18 +1,18 @@
 [generali]
 riavvio_automatico = true  # TODO: da implementare
-index_html = "static/index.html"
 
 [https]
 abilitato = false
 porta = ":443"
 certificato = "server.crt"
-chiave = "server.key"
+chiave = "id_rsa.nodes"
 
 [http]
 abilitato = true
 porta = ":8080"
 
 [cartelle]
+html = "static"
 comunicati_genitori = "comunicati-genitori"
 comunicati_studenti = "comunicati-studenti"
 comunicati_docenti = "comunicati-docenti"

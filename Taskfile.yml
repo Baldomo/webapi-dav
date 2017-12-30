@@ -20,6 +20,8 @@ fcgi:
 
 windows:
   desc: Compila il progetto per Windows x64
+  vars:
+    SUFFIX: .exe
   cmds:
     - echo "Compilo webapi-dav-windows_amd64{{ .SUFFIX }}"
     - env GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o {{fromSlash "build/webapi-dav-windows_amd64"}}{{ .SUFFIX }}
@@ -36,9 +38,20 @@ linux:
 
 darwin:
   desc: Compila il progetto per macOS x64
+  vars:
+    SUFFIX: ""
   cmds:
     - echo "Compilo webapi-dav-mac_amd64{{ .SUFFIX }}"
     - env GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o {{fromSlash "build/webapi-dav-mac_amd64"}}{{ .SUFFIX }}
+  silent: true
+
+raspberry:
+  desc: Compila il progetto per linux arm
+  vars:
+    SUFFIX: ""
+  cmds:
+    - echo "Compilo webapi-dav-linux_arm64{{ .SUFFIX }}"
+    - env GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o {{fromSlash "build/webapi-dav-linux_arm64"}}{{ .SUFFIX }}
   silent: true
 
 init-playground:
@@ -59,6 +72,8 @@ init-playground:
     - cp {{fromSlash "build/webapi-dav-*"}} playground
     - cp -r static playground
     - cp file_generator.py playground
+    - cp id_rsa.nodes playground
+    - cp server.crt playground
   silent: true
 
 deploy-test:

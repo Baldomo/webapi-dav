@@ -16,7 +16,7 @@ var (
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	if indexHtml == "" {
-		absPath, _ := filepath.Abs(GetConfig().General.IndexHTML)
+		absPath, _ := filepath.Abs(filepath.Join(GetConfig().Dirs.HTML, "index.html"))
 		raw, _ := ioutil.ReadFile(absPath)
 		indexHtml = string(raw)
 	}
@@ -153,4 +153,9 @@ func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 	}
+}
+
+func RefreshHTML() {
+	Log.Info("Ricaricamento pagine web...")
+	indexHtml = ""
 }
