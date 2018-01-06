@@ -41,11 +41,15 @@ func initServer() {
 		HTMLWatcher = WebContentWatcher{GetConfig().Dirs.HTML, func() {
 			RefreshHTML()
 		}}
+		PrefWatcher = ConfigWatcher{GetConfigPath(), func() {
+			LoadPrefs(GetConfigPath())
+		}}
 	)
 	Log.Info("---------- DaVinci API ----------")
 	Log.Info("Avvio server...")
 	Log.Info("Caricamento contenuti web...")
 	go HTMLWatcher.Watch()
+
 	Log.Info("Caricamento comunicati...")
 	LoadComunicati(TipoGenitori)
 	go GenitoriWatcher.Watch()
@@ -53,6 +57,9 @@ func initServer() {
 	go StudentiWatcher.Watch()
 	LoadComunicati(TipoDocenti)
 	go DocentiWatcher.Watch()
+
+	Log.Info("Caricamento config...")
+	go PrefWatcher.Watch()
 	Log.Info("Avvio completato.")
 	Log.Info("---------------------------------")
 }

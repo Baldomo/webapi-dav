@@ -49,6 +49,7 @@ type logPrefs struct {
 }
 
 var (
+	currentFilePath = ""
 	currentFiletype = "none"
 
 	filetypes = []string{
@@ -89,7 +90,9 @@ var (
 )
 
 func LoadPrefs(path string) error {
+	preferences = defaultPrefs
 	absPath, err := filepath.Abs(path)
+	currentFilePath = absPath
 	if err != nil {
 		return err
 	}
@@ -186,4 +189,8 @@ func formatPrefs() {
 
 func GetConfig() *config {
 	return &preferences
+}
+
+func GetConfigPath() string {
+	return currentFilePath
 }

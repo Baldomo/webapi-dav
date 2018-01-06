@@ -161,3 +161,7 @@ func startHTTPS() {
 	Shutdown(httpsServer)
 	return
 }
+
+func Restart(s *http.Server, name string) {
+	Log.Info("Riavvio server %s in corso...", name)
+}

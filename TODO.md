@@ -7,10 +7,8 @@
 
 ## In attesa
 - Implementare progetti
-- Finire supporto a FCGI su Apache + documentazione
 - Aggiungere routes dinamiche a config
-- Aggiungere supporto a token/eTAGs (con **mooooolta** calma)
-- Integrazione [Docker](https://blog.golang.org/docker)
+- Aggiungere supporto a token (con **mooooolta** calma)
 
 ## Risolti
 - ~~Aggiungere supporto a [HTTPS](https://github.com/denji/golang-tls)~~

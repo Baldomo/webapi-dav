@@ -6,7 +6,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"net/http"
-	"sync"
 	"testing"
 	"time"
 )
@@ -31,28 +30,8 @@ var (
 	}
 )
 
-func startTestServers() {
-	var wg sync.WaitGroup
-	httpServer := NewServer()
-	go func() {
-		wg.Add(1)
-		defer wg.Done()
-		Log.Fatal(httpServer.ListenAndServe())
-	}()
-	Shutdown(httpServer)
-
-	httpsServer := NewServerHTTPS()
-	go func() {
-		wg.Add(1)
-		defer wg.Done()
-		Log.Fatal(httpsServer.ListenAndServe())
-	}()
-	Shutdown(httpsServer)
-	wg.Wait()
-}
-
 func TestEndpoints(t *testing.T) {
-	startTestServers()
+	StartServers()
 	// HTTP
 	for _, endpoint := range endpoints {
 		t.Logf("Testing %s", endpoint)

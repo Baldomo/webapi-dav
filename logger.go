@@ -27,10 +27,11 @@ func EventLogger(inner http.Handler, name string) http.Handler {
 		inner.ServeHTTP(w, r)
 
 		Log.Info(
-			r.Method,
-			r.RequestURI,
-			name,
-			time.Since(start),
+			r.Method + " " +
+				r.RequestURI + " " +
+				name + " " +
+				time.Since(start).String() + " " +
+				r.UserAgent(),
 		)
 	})
 }
