@@ -9,6 +9,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"net/url"
 )
 
 type Comunicato struct {
@@ -42,7 +43,7 @@ func NewComunicato(nome string, data time.Time, tipo string) *Comunicato {
 		strings.Replace(tipo, "/", "", -1)
 	}
 	com.Tipo = tipo
-	com.URL = urlPrefix + "comunicati-" + tipo + "/" + com.Nome
+	com.URL = urlPrefix + "comunicati-" + tipo + "/" + url.PathEscape(nome)
 
 	return com
 }

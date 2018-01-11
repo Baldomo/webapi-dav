@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -40,9 +39,13 @@ func TestEndpoints(t *testing.T) {
 		if err != nil {
 			panic(err)
 		}
-		assert.Equal(t, http.StatusOK, resp.StatusCode)
+		if resp.StatusCode != http.StatusOK {
+			t.Fatal("Risposta non OK 200")
+		}
 		raw, _ := ioutil.ReadAll(resp.Body)
-		assert.True(t, json.Valid(raw), "Risposta dovrebbe contenere JSON valido")
+		if !json.Valid(raw) {
+			t.Errorf("JSON invalido per %s, su HTTP", endpoint)
+		}
 	}
 
 	// HTTPS
@@ -53,8 +56,12 @@ func TestEndpoints(t *testing.T) {
 		if err != nil {
 			panic(err)
 		}
-		assert.Equal(t, http.StatusOK, resp.StatusCode)
+		if resp.StatusCode != http.StatusOK {
+			t.Fatal("Risposta non OK 200")
+		}
 		raw, _ := ioutil.ReadAll(resp.Body)
-		assert.True(t, json.Valid(raw), "Risposta dovrebbe contenere JSON valido")
+		if !json.Valid(raw) {
+			t.Errorf("JSON invalido per %s, su HTTPS", endpoint)
+		}
 	}
 }
