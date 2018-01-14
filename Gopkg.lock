@@ -8,6 +8,12 @@
   version = "v0.3.0"
 
 [[projects]]
+  name = "github.com/appleboy/go-fcm"
+  packages = ["."]
+  revision = "3bc382cee4180b7e4753761fda69a003de97b0e9"
+  version = "0.1.1"
+
+[[projects]]
   name = "github.com/gorilla/context"
   packages = ["."]
   revision = "1ea25387ff6f684839d82767c1733ff4d4d15d0a"
@@ -34,6 +40,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c9838a0f417d37789ec0b2ed354b89beab5aadfa51b8d98471be055114a1ec9a"
+  inputs-digest = "4d8820b2a84682ed39f0127aedc319e5a76a20e0de0a369b31fb2bf03f8017db"
   solver-name = "gps-cdcl"
   solver-version = 1
