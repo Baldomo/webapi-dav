@@ -5,6 +5,12 @@ import (
 	"time"
 )
 
+type WatcherType uint64
+
+const (
+	ComunicatiWatcher WatcherType = iota
+)
+
 type Watcher interface {
 	Watch()
 }
@@ -13,6 +19,8 @@ type FileWatcher struct {
 	Path    string
 	Store   interface{}
 	OnEvent func()
+	Notify  bool
+	Type    WatcherType
 }
 
 type WebContentWatcher struct {
@@ -35,6 +43,12 @@ func (fw *FileWatcher) Watch() {
 			case event := <-w.Event:
 				Log.Info(event.String())
 				fw.OnEvent()
+				if fw.Notify {
+					switch fw.Type {
+					case ComunicatiWatcher:
+						NotifyComunicato(event.FileInfo.Name(), event.Path)
+					}
+				}
 			case err := <-w.Error:
 				Log.Error(err.Error())
 			case <-w.Closed:

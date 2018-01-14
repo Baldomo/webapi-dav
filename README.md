@@ -30,7 +30,7 @@ contengono la configurazione di default in entrambi i formati.
 Chiavi e parametri:
 
 #### Apache
-L'unico modo (al momento) di poter eseguire il webserver è tramite mod_proxy: in `httpd.conf` usare moduli:
+L'unico modo (al momento) di poter eseguire il webserver è tramite mod_proxy; moduli richiesti:
 ```apache
 LoadModule headers_module modules/mod_headers.so
 LoadModule proxy_module modules/mod_proxy.so
@@ -42,7 +42,7 @@ LoadModule socache_shmcb_module modules/mod_socache_shmcb.so
 LoadModule xml2enc_module modules/mod_xml2enc.so
 ```
 
-VirtualHost per redirezionamento richieste, aggiungere sempre a `httpd.conf`:
+VirtualHost per redirezionamento richieste HTTP:
 ```apache
 <VirtualHost *:80>
     ServerName localhost/api
@@ -50,11 +50,23 @@ VirtualHost per redirezionamento richieste, aggiungere sempre a `httpd.conf`:
     ProxyRequests Off
     ProxyVia Off
 
-    ProxyPass /api http://127.0.0.1:8080/api
-    ProxyPassReverse /api http://127.0.0.1:8080/api
+    ProxyPass /api http://127.0.0.1:80/api
+    ProxyPassReverse /api http://127.0.0.1:80/api
 </VirtualHost>
 ```
-La modalità [FastCGI](https://httpd.apache.org/docs/2.4/mod/mod_proxy_fcgi.html) è in sviluppo, insieme all'integrazione del sistema di gestione servizi di Windows.
+
+VirtualHost per redirezionamento richieste HTTPS:
+```apache
+<VirtualHost *:443>
+    ServerName localhost/api
+
+    ProxyRequests Off
+    ProxyVia Off
+
+    ProxyPass /api http://127.0.0.1:443/api
+    ProxyPassReverse /api http://127.0.0.1:443/api
+</VirtualHost>
+```
 
 #### Generali
 | Nome                 | Tipo    | Valori             | Descrizione |

@@ -20,3 +20,7 @@
 [[constraint]]
   branch = "master"
   name = "github.com/facebookgo/grace"
+
+[[constraint]]
+  name = "github.com/appleboy/go-fcm"
+  version = "0.1.1"
