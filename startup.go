@@ -31,13 +31,13 @@ func initServer() {
 	var (
 		GenitoriWatcher = FileWatcher{GetConfig().Dirs.Genitori, Genitori, func() {
 			LoadComunicati(TipoGenitori)
-		}, false, ComunicatiWatcher}
+		}, true, ComunicatiWatcher}
 		StudentiWatcher = FileWatcher{GetConfig().Dirs.Studenti, Studenti, func() {
 			LoadComunicati(TipoStudenti)
-		}, false, ComunicatiWatcher}
+		}, true, ComunicatiWatcher}
 		DocentiWatcher = FileWatcher{GetConfig().Dirs.Docenti, Docenti, func() {
 			LoadComunicati(TipoDocenti)
-		}, false, ComunicatiWatcher}
+		}, true, ComunicatiWatcher}
 		HTMLWatcher = WebContentWatcher{GetConfig().Dirs.HTML, func() {
 			RefreshHTML()
 		}}

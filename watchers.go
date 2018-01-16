@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/radovskyb/watcher"
 	"time"
+	"strings"
 )
 
 type WatcherType uint64
@@ -35,7 +36,7 @@ type ConfigWatcher struct {
 
 func (fw *FileWatcher) Watch() {
 	w := watcher.New()
-	w.SetMaxEvents(1)
+	//w.SetMaxEvents(1)
 	//w.FilterOps(watcher.Create, watcher.Rename, watcher.Remove, watcher.Write)
 	go func() {
 		for {
@@ -43,10 +44,10 @@ func (fw *FileWatcher) Watch() {
 			case event := <-w.Event:
 				Log.Info(event.String())
 				fw.OnEvent()
-				if fw.Notify {
+				if fw.Notify && event.Op == watcher.Create{
 					switch fw.Type {
 					case ComunicatiWatcher:
-						NotifyComunicato(event.FileInfo.Name(), event.Path)
+						fw.notifyComunicato(event)
 					}
 				}
 			case err := <-w.Error:
@@ -66,9 +67,21 @@ func (fw *FileWatcher) Watch() {
 	}
 }
 
+func (fw FileWatcher) notifyComunicato(event watcher.Event) {
+	var tipo = ""
+	if strings.Contains(event.Path, "genitori") {
+		tipo = TipoGenitori
+	} else if strings.Contains(event.Path, "docenti") {
+		tipo = TipoDocenti
+	} else if strings.Contains(event.Path, "studenti") {
+		tipo = TipoStudenti
+	}
+	NotifyComunicato(event.FileInfo.Name(), tipo)
+}
+
 func (cw *WebContentWatcher) Watch() {
 	w := watcher.New()
-	w.SetMaxEvents(1)
+	//w.SetMaxEvents(1)
 	go func() {
 		for {
 			select {
@@ -94,7 +107,7 @@ func (cw *WebContentWatcher) Watch() {
 
 func (cfgw *ConfigWatcher) Watch() {
 	w := watcher.New()
-	w.SetMaxEvents(1)
+	//w.SetMaxEvents(1)
 	go func() {
 		for {
 			select {

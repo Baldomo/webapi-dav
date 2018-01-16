@@ -17,7 +17,7 @@ type APIMessage struct {
 }
 
 const (
-	VersionNumber = "0.2.0"
+	VersionNumber = "0.3.0"
 	VersionDate   = "06/12/2017"
 )
 
