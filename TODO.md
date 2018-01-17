@@ -12,6 +12,7 @@
 - Aggiungere supporto a token (con **mooooolta** calma)
 
 ## Risolti
+~~- Usare una struct generica per risposte a endpoint /about, /version ecc.~~
 - ~~Aggiungere supporto a [HTTPS](https://github.com/denji/golang-tls)~~
 - ~~Aggiungere elementi a `strings.go`~~
      - ~~Eventualmente aggiungere una template di base con relativa `struct`~~

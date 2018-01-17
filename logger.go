@@ -49,9 +49,11 @@ func InitLogger(before func()) {
 	if GetConfig().Log.WriteFile {
 		file, err := os.Create(GetConfig().Log.LogFile)
 		if err != nil {
-			panic(err)
+			Log.Critical("Errore creazione file di log. Logging su file disabilitato.")
+			fileBackend = logging.NewLogBackend(ioutil.Discard, "", 0)
+		} else {
+			fileBackend = logging.NewLogBackend(file, "", 0)
 		}
-		fileBackend = logging.NewLogBackend(file, "", 0)
 	} else {
 		fileBackend = logging.NewLogBackend(ioutil.Discard, "", 0)
 	}
