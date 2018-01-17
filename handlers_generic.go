@@ -27,25 +27,21 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func VersionHandler(w http.ResponseWriter, r *http.Request) {
-	var version = struct {
-		NomeApi  string `json:"nome" xml:"nome"`
-		Versione string `json:"versione" xml:"versione"`
-	}{"DaVinci API", VersionNumber}
-	var versionMessage = APIMessage{http.StatusOK, "DaVinci API v" + VersionNumber}
+	var versionMessage = APIMessage{http.StatusOK, "webapi-dav v" + VersionNumber}
 
 	switch RequestMime(r.Header) {
 
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		w.WriteHeader(http.StatusOK)
-		if err := json.NewEncoder(w).Encode(version); err != nil {
+		if err := json.NewEncoder(w).Encode(versionMessage); err != nil {
 			w.WriteHeader(http.StatusNoContent)
 		}
 
 	case "application/xml":
 		w.Header().Set("Content-Type", "application/xml; charset=UTF-8")
 		w.WriteHeader(http.StatusOK)
-		if err := xml.NewEncoder(w).Encode(version); err != nil {
+		if err := xml.NewEncoder(w).Encode(versionMessage); err != nil {
 			w.WriteHeader(http.StatusNoContent)
 		}
 
@@ -60,17 +56,6 @@ func VersionHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func AboutHandler(w http.ResponseWriter, r *http.Request) {
-	var about = struct {
-		Autore    string `json:"autore" xml:"autore"`
-		Versione  string `json:"versione" xml:"versione"`
-		Info      string `json:"info" xml:"info"`
-		Copyright string `json:"copyright" xml:"copyright"`
-	}{
-		"Leonardo Baldin",
-		`v` + VersionNumber,
-		"",
-		"(c) 2017",
-	}
 	var aboutMessage = APIMessage{http.StatusOK, "Leonardo Baldin, v" + VersionNumber + ", (c) 2017"}
 
 	switch RequestMime(r.Header) {
@@ -78,14 +63,14 @@ func AboutHandler(w http.ResponseWriter, r *http.Request) {
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		w.WriteHeader(http.StatusOK)
-		if err := json.NewEncoder(w).Encode(about); err != nil {
+		if err := json.NewEncoder(w).Encode(aboutMessage); err != nil {
 			w.WriteHeader(http.StatusNoContent)
 		}
 
 	case "application/xml":
 		w.Header().Set("Content-Type", "application/xml; charset=UTF-8")
 		w.WriteHeader(http.StatusOK)
-		if err := xml.NewEncoder(w).Encode(about); err != nil {
+		if err := xml.NewEncoder(w).Encode(aboutMessage); err != nil {
 			w.WriteHeader(http.StatusNoContent)
 		}
 
@@ -158,4 +143,7 @@ func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
 func RefreshHTML() {
 	Log.Info("Ricaricamento pagine web...")
 	indexHtml = ""
+	absPath, _ := filepath.Abs(filepath.Join(GetConfig().Dirs.HTML, "index.html"))
+	raw, _ := ioutil.ReadFile(absPath)
+	indexHtml = string(raw)
 }

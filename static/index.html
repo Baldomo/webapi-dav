@@ -61,6 +61,7 @@
         <table class="table" id="endpoints">
             <tr>
                 <th>Percorso</th>
+                <th>Metodo</th>
                 <th>Descrizione</th>
             </tr>
 
@@ -68,13 +69,13 @@
 
                 <tr>
                     <td><a href={{$value.URI}}>{{$value.Title}}</a></td>
+                    <td>{{$value.Method}}</td>
                     <td>{{$value.Desc}}</td>
                 </tr>
 
             {{ end }}
 
         </table>
-
         <p>Tutti i contributi sono benvenuti.</p>
 
         <p style="padding-bottom: 60px">Questa homepage è ispirata dal progetto <a href="https://foaas.com" target="_blank">FOAAS</a></p>
