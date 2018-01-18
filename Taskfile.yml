@@ -27,6 +27,15 @@ windows:
     - env GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o {{fromSlash "build/webapi-dav-windows_amd64"}}{{ .SUFFIX }}
   silent: true
 
+windows-nogui:
+  desc: Compila il progetto per Windows x64 con "-H windowsgui" per staccare dal terminale
+  vars:
+    SUFFIX: .exe
+  cmds:
+    - echo "Compilo webapi-dav-windows_amd64{{ .SUFFIX }}"
+    - env GOOS=windows GOARCH=amd64 go build -ldflags="-s -w -H windowsgui" -o {{fromSlash "build/webapi-dav-windows_amd64"}}{{ .SUFFIX }}
+  silent: true
+
 linux:
   desc: Compila il progetto per Linux x64
   vars:

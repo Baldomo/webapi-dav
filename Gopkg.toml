@@ -13,14 +13,15 @@
 [[constraint]]
   name = "github.com/radovskyb/watcher"
   version = "1.0.2"
-[[constraint]]
-  name = "github.com/stretchr/testify"
-  version = "1.1.4"
-
-[[constraint]]
-  branch = "master"
-  name = "github.com/facebookgo/grace"
 
 [[constraint]]
   name = "github.com/appleboy/go-fcm"
   version = "0.1.1"
+
+[[constraint]]
+  name = "gopkg.in/hlandau/service.v2"
+  version = "2.0.16"
+
+[[constraint]]
+  name = "gopkg.in/hlandau/easyconfig.v1"
+  version = "1.0.16"

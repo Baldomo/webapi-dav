@@ -5,6 +5,8 @@
 
 # TODO
 - Aggiungere supporto a servizi di Windows
+    - Implementare serverHandler
+- Evitare forking o altri processi
 
 ## In attesa
 - Implementare progetti
