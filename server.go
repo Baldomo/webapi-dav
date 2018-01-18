@@ -12,6 +12,11 @@ import (
 	"time"
 )
 
+type serverHandler struct {
+	servers []*http.Server
+	done    chan struct{}
+}
+
 var (
 	signals chan os.Signal
 	timeout = 15 * time.Second
