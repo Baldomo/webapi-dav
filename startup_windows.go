@@ -5,10 +5,21 @@ package main
 import (
 	"gopkg.in/hlandau/easyconfig.v1"
 	"gopkg.in/hlandau/service.v2"
+	"flag"
+	"fmt"
+	"os"
 )
 
 func main() {
 	easyconfig.ParseFatal(nil, nil)
+	versionPtr := flag.Bool("version", false, "Mostra la versione attuale del programma")
+	flag.Parse()
+
+	if *versionPtr {
+		fmt.Println("DaVinci API v" + VersionNumber)
+		fmt.Println("Leonardo Baldin, " + VersionDate)
+		os.Exit(0)
+	}
 
 	service.Main(&service.Info{
 		Title:       "WebAPI Dav",
@@ -29,7 +40,7 @@ func main() {
 
 			InitLogger(initServer)
 
-			go StartServers()
+			StartServers()
 
 			smgr.SetStarted()
 			smgr.SetStatus("webapi-dav in esecuzione")

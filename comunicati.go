@@ -5,6 +5,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"regexp"
 	"runtime"
 	"sort"
 	"strings"
@@ -25,6 +26,8 @@ var (
 	Genitori Comunicati
 	Studenti Comunicati
 	Docenti  Comunicati
+
+	formatNome = regexp.MustCompile(`^(?:(\d+)\s*[-|_]\s*(com.)*\s*)+`)
 )
 
 const (
@@ -37,7 +40,7 @@ const (
 
 func NewComunicato(nome string, data time.Time, tipo string) *Comunicato {
 	com := new(Comunicato)
-	com.Nome = nome
+	com.Nome = formatNome.ReplaceAllLiteralString(nome, "")
 	com.Data = data
 	if strings.ContainsAny(tipo, "/") {
 		strings.Replace(tipo, "/", "", -1)
