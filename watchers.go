@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/radovskyb/watcher"
-	"time"
 	"strings"
+	"time"
 )
 
 type WatcherType uint64
@@ -37,14 +37,14 @@ type ConfigWatcher struct {
 func (fw *FileWatcher) Watch() {
 	w := watcher.New()
 	//w.SetMaxEvents(1)
-	//w.FilterOps(watcher.Create, watcher.Rename, watcher.Remove, watcher.Write)
+	w.FilterOps(watcher.Create)
 	go func() {
 		for {
 			select {
 			case event := <-w.Event:
 				Log.Info(event.String())
 				fw.OnEvent()
-				if fw.Notify && event.Op == watcher.Create{
+				if fw.Notify && event.Op == watcher.Create {
 					switch fw.Type {
 					case ComunicatiWatcher:
 						fw.notifyComunicato(event)
