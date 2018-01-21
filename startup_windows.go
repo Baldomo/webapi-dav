@@ -3,16 +3,16 @@
 package main
 
 import (
-	"gopkg.in/hlandau/service.v2"
 	"gopkg.in/hlandau/easyconfig.v1"
+	"gopkg.in/hlandau/service.v2"
 )
 
 func main() {
 	easyconfig.ParseFatal(nil, nil)
 
 	service.Main(&service.Info{
-		Title: "WebAPI Dav",
-		Name: "webapi-dav",
+		Title:       "WebAPI Dav",
+		Name:        "webapi-dav",
 		Description: "Servizio per gestione web API",
 
 		RunFunc: func(smgr service.Manager) error {
@@ -32,8 +32,12 @@ func main() {
 			go StartServers()
 
 			smgr.SetStarted()
-		},
+			smgr.SetStatus("webapi-dav in esecuzione")
 
+			<-smgr.StopChan()
+
+			return nil
+		},
 	})
 }
 
