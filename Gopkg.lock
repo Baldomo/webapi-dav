@@ -97,9 +97,15 @@
   revision = "c25dac49e50cbbcbef8c81b089f56156f4067729"
   version = "v1.0.10"
 
+[[projects]]
+  name = "gopkg.in/natefinch/lumberjack.v2"
+  packages = ["."]
+  revision = "a96e63847dc3c67d17befa69c303767e2f84e54f"
+  version = "v2.1"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "dd5e57b3cbb754f0448f1dfeea15c372b84cb5148aebabd0941ae205ff2bafad"
+  inputs-digest = "de8cd12d8174c4fbef628890b0f43f15000e259caf70f0fa99fc5ca25a57d427"
   solver-name = "gps-cdcl"
   solver-version = 1

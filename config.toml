@@ -19,7 +19,6 @@ comunicati_docenti = "comunicati-docenti"
 progetti = "progetti"  # TODO: da implementare
 
 [logging]
-log_in_terminale = true
-salva_su_file = false
-file_log = "webapi.log"
+abilitato = true
+file_log = "./webapi.log"
 livello_log = "verbose"

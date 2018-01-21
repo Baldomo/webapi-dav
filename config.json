@@ -20,8 +20,7 @@
     "progetti": "progetti"
   },
   "logging": {
-    "log_in_terminale": true,
-    "salva_su_file": false,
+    "abilitato": true,
     "file_log": "webapi.log",
     "livello_log": "verbose"
   }

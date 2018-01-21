@@ -2,6 +2,7 @@ package main
 
 import (
 	"io/ioutil"
+	"net/url"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -9,7 +10,6 @@ import (
 	"strings"
 	"sync"
 	"time"
-	"net/url"
 )
 
 type Comunicato struct {
@@ -32,7 +32,7 @@ const (
 	TipoStudenti = "studenti"
 	TipoDocenti  = "docenti"
 
-	urlPrefix = "http://liceodavinci.tv/sitoLiceo/images/comunicati/"
+	urlPrefix = "http://www.liceodavinci.tv/sitoLiceo/images/comunicati/"
 )
 
 func NewComunicato(nome string, data time.Time, tipo string) *Comunicato {

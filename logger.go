@@ -2,20 +2,20 @@ package main
 
 import (
 	"github.com/op/go-logging"
+	"gopkg.in/natefinch/lumberjack.v2"
 	"io/ioutil"
 	"net/http"
 	"os"
-	"runtime"
+	"os/signal"
 	"strings"
+	"syscall"
 	"time"
 )
 
 var (
-	formatLong       = logging.MustStringFormatter("%{color}[%{level}%{time: 15:04:05.999999} %{shortfile}] %{message} %{color:reset}")
-	formatShort      = logging.MustStringFormatter("[%{time:0102 15:04:05.999999}] %{message}")
-	stdBackend       logging.Backend
-	fileBackend      logging.Backend
-	compiledBackends []logging.Backend
+	formatLong  = logging.MustStringFormatter("[%{level}%{time: 15:04:05.999} %{shortfile}] %{message}")
+	formatShort = logging.MustStringFormatter("[%{time:0102 15:04:05.999}] %{message}")
+	fileBackend logging.Backend
 
 	Log = logging.MustGetLogger("webapi-dav")
 )
@@ -37,55 +37,45 @@ func EventLogger(inner http.Handler, name string) http.Handler {
 }
 
 func InitLogger(before func()) {
-	if runtime.GOOS == "windows" {
-		logging.MustStringFormatter("[%{level:-1s}%{time: 15:04:05.999999} %{shortfile}] %{message}")
-	}
-	if GetConfig().Log.WriteStd {
-		stdBackend = logging.NewLogBackend(os.Stdout, "", 0)
+	var backendFileFormatted logging.LeveledBackend
 
-	} else {
-		stdBackend = logging.NewLogBackend(ioutil.Discard, "", 0)
-	}
-	if GetConfig().Log.WriteFile {
-		file, err := os.Create(GetConfig().Log.LogFile)
-		if err != nil {
-			Log.Critical("Errore creazione file di log. Logging su file disabilitato.")
-			fileBackend = logging.NewLogBackend(ioutil.Discard, "", 0)
-		} else {
-			fileBackend = logging.NewLogBackend(file, "", 0)
+	if GetConfig().Log.Enabled {
+		l := &lumberjack.Logger{
+			Filename: GetConfig().Log.LogFile,
+			MaxSize:  10,
+			MaxAge:   30,
 		}
+		fileBackend = logging.NewLogBackend(l, "", 0)
+
+		sign := make(chan os.Signal, 1)
+		signal.Notify(sign, os.Interrupt, syscall.SIGTERM)
+		go func() {
+			for {
+				<-sign
+				Log.Warning("Salvataggio log...")
+				l.Close()
+			}
+		}()
 	} else {
 		fileBackend = logging.NewLogBackend(ioutil.Discard, "", 0)
 	}
-	if !GetConfig().Log.WriteStd && !GetConfig().Log.WriteFile {
-		defer Log.Info("-* Logger avviato in modalità silenziosa *-")
-	}
-
-	before()
 
 	switch strings.ToLower(GetConfig().Log.LogLevel) {
 	case "verbose":
-		backendStdFormatted := logging.AddModuleLevel(logging.NewBackendFormatter(stdBackend, formatLong))
-		backendStdFormatted.SetLevel(logging.INFO, "")
-		backendFileFormatted := logging.AddModuleLevel(logging.NewBackendFormatter(fileBackend, formatLong))
+		backendFileFormatted = logging.AddModuleLevel(logging.NewBackendFormatter(fileBackend, formatLong))
 		backendFileFormatted.SetLevel(logging.INFO, "")
-		compiledBackends = append(compiledBackends, backendStdFormatted)
 
 	case "warning":
-		backendStdFormatted := logging.AddModuleLevel(logging.NewBackendFormatter(stdBackend, formatLong))
-		backendStdFormatted.SetLevel(logging.WARNING, "")
-		backendFileFormatted := logging.AddModuleLevel(logging.NewBackendFormatter(fileBackend, formatLong))
+		backendFileFormatted = logging.AddModuleLevel(logging.NewBackendFormatter(fileBackend, formatLong))
 		backendFileFormatted.SetLevel(logging.WARNING, "")
-		compiledBackends = append(compiledBackends, backendStdFormatted)
 
 	case "error":
-		backendStdFormatted := logging.AddModuleLevel(logging.NewBackendFormatter(stdBackend, formatLong))
-		backendStdFormatted.SetLevel(logging.ERROR, "")
-		backendFileFormatted := logging.AddModuleLevel(logging.NewBackendFormatter(fileBackend, formatLong))
+		backendFileFormatted = logging.AddModuleLevel(logging.NewBackendFormatter(fileBackend, formatLong))
 		backendFileFormatted.SetLevel(logging.ERROR, "")
-		compiledBackends = append(compiledBackends, backendStdFormatted)
 
 	}
 
-	logging.SetBackend(compiledBackends...)
+	logging.SetBackend(backendFileFormatted)
+
+	before()
 }

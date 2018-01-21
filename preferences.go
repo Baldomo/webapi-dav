@@ -42,10 +42,9 @@ type dirs struct {
 }
 
 type logPrefs struct {
-	WriteStd  bool   `json:"log_in_terminale" toml:"log_in_terminale"`
-	WriteFile bool   `json:"salva_su_file" toml:"salva_su_file"`
-	LogFile   string `json:"file_log" toml:"file_log"`
-	LogLevel  string `json:"livello_log" toml:"livello_log"`
+	Enabled  bool   `json:"abilitato" tom:"abilitato"`
+	LogFile  string `json:"file_log" toml:"file_log"`
+	LogLevel string `json:"livello_log" toml:"livello_log"`
 }
 
 var (
@@ -82,7 +81,6 @@ var (
 		},
 		logPrefs{
 			true,
-			false,
 			"./webapi.log",
 			"warning",
 		},
@@ -143,8 +141,6 @@ func LoadPrefs(path string) error {
 }
 
 func formatPrefs() {
-	// General
-
 	//HTTP
 	if !strings.HasPrefix(preferences.HTTP.Port, ":") {
 		preferences.HTTP.Port = ":" + preferences.HTTP.Port
@@ -170,7 +166,11 @@ func formatPrefs() {
 	}
 
 	// Logging
-	if preferences.Log.WriteStd || preferences.Log.WriteFile {
+	if preferences.Log.Enabled {
+		if preferences.Log.LogFile == "" {
+			preferences.Log.LogFile = "./webapi.log"
+		}
+
 		switch preferences.Log.LogLevel {
 		case "verbose":
 			break
