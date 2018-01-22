@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"encoding/xml"
-	"fmt"
 	"html/template"
 	"io/ioutil"
 	"net/http"
@@ -29,28 +28,29 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 func VersionHandler(w http.ResponseWriter, r *http.Request) {
 	var versionMessage = APIMessage{http.StatusOK, "webapi-dav v" + VersionNumber}
 
+	w.WriteHeader(http.StatusOK)
 	switch RequestMime(r.Header) {
-
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		w.WriteHeader(http.StatusOK)
 		if err := json.NewEncoder(w).Encode(versionMessage); err != nil {
-			w.WriteHeader(http.StatusNoContent)
+			Log.Error("VersionHandler: errore encoding json")
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 
 	case "application/xml":
 		w.Header().Set("Content-Type", "application/xml; charset=UTF-8")
-		w.WriteHeader(http.StatusOK)
 		if err := xml.NewEncoder(w).Encode(versionMessage); err != nil {
-			w.WriteHeader(http.StatusNoContent)
+			Log.Error("VersionHandler: errore encoding xml")
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 
 	case "text/html":
 		if err := ShowGenericTemplate(w, versionMessage); err != nil {
-			Log.Error(err.Error())
+			Log.Error("VersionHandler: errore template html")
 		}
 
 	default:
+		Log.Info("VersionHandler: Accept errato")
 		w.WriteHeader(http.StatusBadRequest)
 	}
 }
@@ -58,61 +58,56 @@ func VersionHandler(w http.ResponseWriter, r *http.Request) {
 func AboutHandler(w http.ResponseWriter, r *http.Request) {
 	var aboutMessage = APIMessage{http.StatusOK, "Leonardo Baldin, v" + VersionNumber + ", (c) 2017"}
 
+	w.WriteHeader(http.StatusOK)
 	switch RequestMime(r.Header) {
-
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		w.WriteHeader(http.StatusOK)
 		if err := json.NewEncoder(w).Encode(aboutMessage); err != nil {
-			w.WriteHeader(http.StatusNoContent)
+			Log.Error("AboutHandler: errore encoding json")
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 
 	case "application/xml":
 		w.Header().Set("Content-Type", "application/xml; charset=UTF-8")
-		w.WriteHeader(http.StatusOK)
 		if err := xml.NewEncoder(w).Encode(aboutMessage); err != nil {
-			w.WriteHeader(http.StatusNoContent)
+			Log.Error("AboutHandler: errore encoding xml")
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 
 	case "text/html":
 		if err := ShowGenericTemplate(w, aboutMessage); err != nil {
-			Log.Error(err.Error())
+			Log.Error("AboutHandler: errore template html")
 		}
 
 	default:
+		Log.Warning("AboutHandler: Accept errato")
 		w.WriteHeader(http.StatusBadRequest)
 	}
 }
 
 func TeapotHandler(w http.ResponseWriter, r *http.Request) {
 	var message = APIMessage{http.StatusTeapot, `I'm a teapot`}
-	switch RequestMime(r.Header) {
 
+	w.WriteHeader(http.StatusTeapot)
+	switch RequestMime(r.Header) {
 	case "application/json":
 		if err := json.NewEncoder(w).Encode(message); err != nil {
-			w.WriteHeader(http.StatusNoContent)
-		} else {
-			w.WriteHeader(http.StatusTeapot)
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 
 	case "application/xml":
 		if err := xml.NewEncoder(w).Encode(message); err != nil {
-			w.WriteHeader(http.StatusNoContent)
-		} else {
-			w.WriteHeader(http.StatusTeapot)
+			w.WriteHeader(http.StatusInternalServerError)
 		}
-
-	case "text/plain":
-		fmt.Fprint(w, "I'm a teapot")
 
 	case "text/html":
 		if err := ShowGenericTemplate(w, message); err != nil {
-			Log.Error(err.Error())
+			Log.Error("TeapotHandler: errore template html")
 		}
 
 	default:
+		Log.Warning("TeapotHandler: Accept errato")
 		w.WriteHeader(http.StatusBadRequest)
-
 	}
 }
 
@@ -126,17 +121,19 @@ func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
 		if err := ShowGenericTemplate(w, message); err != nil {
 			Log.Error(err.Error())
 		}
-
 	case "application/json":
 		if err := json.NewEncoder(w).Encode(message); err != nil {
-			w.WriteHeader(http.StatusNoContent)
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 
 	case "application/xml":
 		if err := xml.NewEncoder(w).Encode(message); err != nil {
-			w.WriteHeader(http.StatusNoContent)
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 
+	default:
+		Log.Warning("NotFoundHandler: Accept errato")
+		w.WriteHeader(http.StatusBadRequest)
 	}
 }
 

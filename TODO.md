@@ -5,8 +5,7 @@
 
 # TODO
 - Aggiungere supporto a servizi di Windows
-    - Implementare serverHandler
-- Evitare forking o altri processi
+    - Evitare forking o altri processi
 
 ## In attesa
 - Implementare progetti
@@ -14,7 +13,8 @@
 - Aggiungere supporto a token (con **mooooolta** calma)
 
 ## Risolti
-~~- Usare una struct generica per risposte a endpoint /about, /version ecc.~~
+- ~~Rotazione log con Lumberjack~~
+- ~~Usare una struct generica per risposte a endpoint /about, /version ecc.~~
 - ~~Aggiungere supporto a [HTTPS](https://github.com/denji/golang-tls)~~
 - ~~Aggiungere elementi a `strings.go`~~
      - ~~Eventualmente aggiungere una template di base con relativa `struct`~~
