@@ -15,27 +15,27 @@ func ComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 		Docenti  Comunicati `json:"docenti" xml:"docenti"`
 	}
 
+	w.WriteHeader(http.StatusOK)
 	switch RequestMime(r.Header) {
-
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		w.WriteHeader(http.StatusOK)
 		if err := json.NewEncoder(w).Encode(all{Genitori, Studenti, Docenti}); err != nil {
-			panic(err)
+			Log.Error("ComunicatiHandler: errore encoding json")
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 
 	case "application/xml":
-		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		w.WriteHeader(http.StatusOK)
+		w.Header().Set("Content-Type", "application/xml; charset=UTF-8")
 		if err := xml.NewEncoder(w).Encode(all{Genitori, Studenti, Docenti}); err != nil {
-			panic(err)
+			Log.Error("ComunicatiHandler: errore encoding xml")
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 
 	case "text/html":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		w.WriteHeader(http.StatusOK)
 		if err := json.NewEncoder(w).Encode(all{Genitori, Studenti, Docenti}); err != nil {
-			panic(err)
+			Log.Error("ComunicatiHandler: errore encoding html")
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 
 	default:
@@ -57,27 +57,28 @@ func GenitoriComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	w.WriteHeader(http.StatusOK)
 	switch RequestMime(r.Header) {
 
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		w.WriteHeader(http.StatusOK)
 		if err := json.NewEncoder(w).Encode(GetByName("genitori")[:localCount]); err != nil {
-			panic(err)
+			Log.Error("GenitoriComunicatiHandler: errore encoding json")
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 
 	case "application/xml":
-		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		w.WriteHeader(http.StatusOK)
+		w.Header().Set("Content-Type", "application/xml; charset=UTF-8")
 		if err := xml.NewEncoder(w).Encode(GetByName("genitori")[:localCount]); err != nil {
-			panic(err)
+			Log.Error("GenitoriComunicatiHandler: errore encoding xml")
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 
 	case "text/html":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		w.WriteHeader(http.StatusOK)
 		if err := json.NewEncoder(w).Encode(GetByName("genitori")[:localCount]); err != nil {
-			panic(err)
+			Log.Error("GenitoriComunicatiHandler: errore encoding html")
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 
 	default:
@@ -98,27 +99,27 @@ func StudentiComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	w.WriteHeader(http.StatusOK)
 	switch RequestMime(r.Header) {
-
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		w.WriteHeader(http.StatusOK)
 		if err := json.NewEncoder(w).Encode(GetByName("studenti")[:localCount]); err != nil {
-			panic(err)
+			Log.Error("StudentiComunicatiHandler: errore encoding json")
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 
 	case "application/xml":
-		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		w.WriteHeader(http.StatusOK)
+		w.Header().Set("Content-Type", "application/xml; charset=UTF-8")
 		if err := xml.NewEncoder(w).Encode(GetByName("studenti")[:localCount]); err != nil {
-			panic(err)
+			Log.Error("StudentiComunicatiHandler: errore encoding xml")
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 
 	case "text/html":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		w.WriteHeader(http.StatusOK)
 		if err := json.NewEncoder(w).Encode(GetByName("studenti")[:localCount]); err != nil {
-			panic(err)
+			Log.Error("StudentiComunicatiHandler: errore encoding html")
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 
 	default:
@@ -139,27 +140,27 @@ func DocentiComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	w.WriteHeader(http.StatusOK)
 	switch RequestMime(r.Header) {
-
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		w.WriteHeader(http.StatusOK)
 		if err := json.NewEncoder(w).Encode(GetByName("docenti")[:localCount]); err != nil {
-			panic(err)
+			Log.Error("DocentiComunicatiHandler: errore encoding json")
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 
 	case "application/xml":
-		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		w.WriteHeader(http.StatusOK)
+		w.Header().Set("Content-Type", "application/xml; charset=UTF-8")
 		if err := xml.NewEncoder(w).Encode(GetByName("docenti")[:localCount]); err != nil {
-			panic(err)
+			Log.Error("DocentiComunicatiHandler: errore encoding xml")
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 
 	case "text/html":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		w.WriteHeader(http.StatusOK)
 		if err := json.NewEncoder(w).Encode(GetByName("docenti")[:localCount]); err != nil {
-			panic(err)
+			Log.Error("DocentiComunicatiHandler: errore encoding html")
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 
 	default:
@@ -174,5 +175,5 @@ func ProgettiHandler(w http.ResponseWriter, r *http.Request) {
 		PathImmagine string `json:"immagine" toml:"immagine"`
 		Descr        string `json:"descrizione" toml:"descrizione"`
 	}
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusNotImplemented)
 }

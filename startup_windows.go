@@ -3,10 +3,10 @@
 package main
 
 import (
-	"gopkg.in/hlandau/easyconfig.v1"
-	"gopkg.in/hlandau/service.v2"
 	"flag"
 	"fmt"
+	"gopkg.in/hlandau/easyconfig.v1"
+	"gopkg.in/hlandau/service.v2"
 	"os"
 )
 
@@ -43,7 +43,7 @@ func main() {
 			StartServers()
 
 			smgr.SetStarted()
-			smgr.SetStatus("webapi-dav in esecuzione")
+			//smgr.SetStatus("webapi-dav in esecuzione")
 
 			<-smgr.StopChan()
 

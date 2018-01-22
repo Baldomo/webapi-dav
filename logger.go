@@ -42,8 +42,9 @@ func InitLogger(before func()) {
 	if GetConfig().Log.Enabled {
 		l := &lumberjack.Logger{
 			Filename: GetConfig().Log.LogFile,
-			MaxSize:  10,
+			MaxSize:  5,
 			MaxAge:   30,
+			Compress: true,
 		}
 		fileBackend = logging.NewLogBackend(l, "", 0)
 

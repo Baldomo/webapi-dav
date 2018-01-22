@@ -44,7 +44,7 @@ func (fw *FileWatcher) Watch() {
 			case event := <-w.Event:
 				Log.Info(event.String())
 				fw.OnEvent()
-				if fw.Notify && event.Op == watcher.Create {
+				if fw.Notify {
 					switch fw.Type {
 					case ComunicatiWatcher:
 						fw.notifyComunicato(event)
@@ -68,12 +68,16 @@ func (fw *FileWatcher) Watch() {
 }
 
 func (fw FileWatcher) notifyComunicato(event watcher.Event) {
-	var tipo = ""
-	if strings.Contains(event.Path, "genitori") {
+	var (
+		tipo    = ""
+		dirPath = ""
+	)
+	dirPath = strings.Replace(event.Path, event.FileInfo.Name(), "", -1)
+	if strings.Contains(dirPath, "genitori") {
 		tipo = TipoGenitori
-	} else if strings.Contains(event.Path, "docenti") {
+	} else if strings.Contains(dirPath, "docenti") {
 		tipo = TipoDocenti
-	} else if strings.Contains(event.Path, "studenti") {
+	} else if strings.Contains(dirPath, "studenti") {
 		tipo = TipoStudenti
 	}
 	NotifyComunicato(event.FileInfo.Name(), tipo)
