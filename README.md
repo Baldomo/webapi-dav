@@ -106,15 +106,16 @@ VirtualHost per redirezionamento richieste HTTPS:
 ---
 
 #### Logging
-| Nome               | Tipo    | Valori                    | Descrizione |
-|--------------------|---------|---------------------------|-------------|
-| `log_in_terminale` | boolean | `true, false`             | Definisce se stampare i log sul terminale |
-| `salva_su_file`    | boolean | `true, false`             | Definisce se stampare i log su un file |
-| `file_log`         | string  | "/percorso/"              | Percorso del file di log, se non esiste sarà creato. |
-| `livello_log`      | string  | "verbose, error, warning" | Definisce il livello di verbosità dei log, con "verbose" il massimo (ogni evento sarà tracciato) e "error" il minimo (solo gli errori interni saranno tracciati) |
+| Nome          | Tipo    | Valori                    | Descrizione |
+|---------------|---------|---------------------------|-------------|
+| `abilitato`   | boolean | `true, false`             | Avvia il servizio di logging |
+| `file_log`    | string  | "/percorso/"              | Percorso del file di log, se non esiste sarà creato. |
+| `livello_log` | string  | "verbose, error, warning" | Definisce il livello di verbosità dei log, con "verbose" il massimo (ogni evento sarà tracciato) e "error" il minimo (solo gli errori interni saranno tracciati) |
 
 ##### Note:
-Se sia `log_in_terminale` che `salva_su_file` sono `false`, nessun evento sarà tracciato
+- Se il logging è disabilitato, nessun evento sarà tracciato
+- I log ruotano automaticamente ogni 30 giorni o ogni 5 MB occupati per file, dopodichè saranno
+    rinominati con la data corrente e compattati in un archivio zip
 
 ---
 
@@ -140,8 +141,7 @@ comunicati_studenti = "comunicati-studenti"
 comunicati_docenti = "comunicati-docenti"
 
 [logging]
-log_in_terminale = true
-salva_su_file = false
+abilitato = true
 file_log = "webapi.log"
 livello_log = "verbose"
 ```
@@ -167,8 +167,7 @@ Esempio di `config.json` (in quella di default le cartelle non sono specificate)
     "comunicati_docenti": "comunicati-docenti",
   },
   "logging": {
-    "log_in_terminale": true,
-    "salva_su_file": false,
+    "abilitato": true
     "file_log": "webapi.log",
     "livello_log": "verbose"
   }
@@ -203,6 +202,24 @@ Esempio di risposta di singolo comunicato in XML:
     <URL>http://liceodavinci.tv/sitoLiceo/comunicati/comunicati-studenti/...</URL>
 </Comunicato>
 ```
+
+## Altro
+Version, About, ecc: risposta JSON:
+```json
+{
+  "codice": 200,
+  "info": "Leonardo Baldin, v0.3.0, (c) 2017"
+}
+```
+Risposta XML:
+```xml
+<APIMessage>
+    <Codice>200</Codice>
+    <Info>Leonardo Baldin, v0.3.0, (c) 2017</I
+    nfo>
+</APIMessage>
+```
+
 
 ## Progetti
 Ancora da implementare
