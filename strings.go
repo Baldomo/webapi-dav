@@ -13,8 +13,8 @@ type Operation struct {
 }
 
 type APIMessage struct {
-	Code uint   `json:"codice" xml:"codice"`
-	Info string `json:"info" xml:"info"`
+	Code uint   `json:"codice" xml:"Codice"`
+	Info string `json:"info" xml:"Info"`
 }
 
 const (

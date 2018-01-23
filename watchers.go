@@ -8,10 +8,6 @@ import (
 
 type WatcherType uint64
 
-const (
-	ComunicatiWatcher WatcherType = iota
-)
-
 type Watcher interface {
 	Watch()
 }
@@ -45,10 +41,7 @@ func (fw *FileWatcher) Watch() {
 				Log.Info(event.String())
 				fw.OnEvent()
 				if fw.Notify {
-					switch fw.Type {
-					case ComunicatiWatcher:
-						fw.notifyComunicato(event)
-					}
+					fw.notifyComunicato(event)
 				}
 			case err := <-w.Error:
 				Log.Error(err.Error())
