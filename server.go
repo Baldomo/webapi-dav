@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"runtime"
 	"syscall"
 	"time"
 )
@@ -77,7 +78,11 @@ func NewServerHTTPS() *http.Server {
 func Shutdown(s *http.Server) {
 	signals = make(chan os.Signal, 1)
 
-	signal.Notify(signals, os.Interrupt, syscall.SIGTERM)
+	if runtime.GOOS == "windows" {
+		signal.Notify(signals, os.Interrupt)
+	} else {
+		signal.Notify(signals, os.Interrupt, syscall.SIGTERM)
+	}
 
 	<-signals
 
@@ -132,17 +137,21 @@ func shutdown(s *http.Server, logger *logging.Logger) {
 	}
 }
 
-func StartServers() {
+func StartServers() <-chan struct{} {
 	/*if GetConfig().Conn.FastCGI {
 		router := NewRouter()
 		Log.Fatal(fcgi.Serve(nil, router))
 	}*/
+	out := make(chan struct{})
 	if GetConfig().HTTPS.Enabled {
 		startHTTPS()
 	}
 	if GetConfig().HTTP.Enabled {
 		startHTTP()
 	}
+	out <- struct{}{}
+	close(out)
+	return out
 }
 
 func startHTTP() {
