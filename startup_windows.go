@@ -5,15 +5,40 @@ package main
 import (
 	"flag"
 	"fmt"
-	"gopkg.in/hlandau/easyconfig.v1"
-	"gopkg.in/hlandau/service.v2"
+	"github.com/nightlyone/lockfile"
 	"os"
+	"path/filepath"
+	"time"
+)
+
+const (
+	pidfile = "webapi.pid"
 )
 
 func main() {
-	easyconfig.ParseFatal(nil, nil)
+	configPtr := flag.String("config", "./config.toml", "Indirizzo del file di configurazione, in .toml o .json")
 	versionPtr := flag.Bool("version", false, "Mostra la versione attuale del programma")
+	closePtr := flag.Bool("close", false, "Termina l'esecuzione del programma")
 	flag.Parse()
+
+	if *closePtr {
+		ex, _ := os.Executable()
+		lock, errLock := lockfile.New(filepath.Join(filepath.Dir(ex), pidfile))
+		if errLock != nil {
+			panic(errLock)
+		}
+
+		process, errProc := lock.GetOwner()
+		if errProc != nil {
+			// Owner dead ErrDeadOwner
+			os.Exit(1)
+		} else {
+			process.Signal(os.Interrupt)
+			time.Sleep(3 * time.Second)
+			process.Kill()
+			os.Exit(0)
+		}
+	}
 
 	if *versionPtr {
 		fmt.Println("DaVinci API v" + VersionNumber)
@@ -21,35 +46,16 @@ func main() {
 		os.Exit(0)
 	}
 
-	service.Main(&service.Info{
-		Title:       "WebAPI Dav",
-		Name:        "webapi-dav",
-		Description: "Servizio per gestione web API",
+	err := LoadPrefs(*configPtr)
+	if err != nil {
+		panic(err)
+	}
 
-		RunFunc: func(smgr service.Manager) error {
+	lockProcess()
 
-			err := smgr.DropPrivileges()
-			if err != nil {
-				return err
-			}
+	InitLogger(initServer)
 
-			err = LoadPrefs("config.toml")
-			if err != nil {
-				return err
-			}
-
-			InitLogger(initServer)
-
-			StartServers()
-
-			smgr.SetStarted()
-			//smgr.SetStatus("webapi-dav in esecuzione")
-
-			<-smgr.StopChan()
-
-			return nil
-		},
-	})
+	StartServers()
 }
 
 func initServer() {
@@ -87,4 +93,17 @@ func initServer() {
 	go PrefWatcher.Watch()
 	Log.Info("Avvio completato.")
 	Log.Info("---------------------------------")
+}
+
+func lockProcess() {
+	ex, _ := os.Executable()
+	lock, err := lockfile.New(filepath.Join(filepath.Dir(ex), pidfile))
+	if err != nil {
+		panic(err)
+	}
+
+	err = lock.TryLock()
+	if err != nil {
+		os.Exit(1)
+	}
 }
