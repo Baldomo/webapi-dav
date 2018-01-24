@@ -4,7 +4,8 @@
 - [![0.1.0](http://progressed.io/bar/100?title=v0.1.0)](https://bitbucket.org/Baldomo/webapi-dav/commits/03d5f82f2d93)
 
 # TODO
-- Finire implementazione close `startup_windows.go#24`
+- Finire interfaccia database
+- Finire implementazione close `startup_windows.go#24` (protocollo custom)
     - Evitare forking o altri processi
 
 ## In attesa
