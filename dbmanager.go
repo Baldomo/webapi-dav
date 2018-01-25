@@ -22,9 +22,14 @@ func GetAgenda() error {
 	if err != nil {
 		return err
 	}
+	db.Prepare("")
 	db.Close()
 
 	return nil
+}
+
+func GetFromDate() ([]*Event, error) {
+	return nil, nil
 }
 
 func (e *Event) FillMissingInfo() (*Event, error) {
