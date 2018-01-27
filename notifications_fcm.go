@@ -1,9 +1,14 @@
 package main
 
 import (
-	"github.com/appleboy/go-fcm"
 	"fmt"
+	"github.com/appleboy/go-fcm"
 	"net/url"
+)
+
+const (
+	apikey   = "AAAA_mxAYMw:APA91bFGCkamxX8_BkjIQP4mWdSc7ZI_3QarBGYW205oGFVyYTuFZipU8WKzO1tDfypspEQrsAcnbW4Wk4720lBhKRrBhCPELFp9YH8Wfujo4KW_QLUwG3pO2E44M6_emEEllthkHPhU"
+	duration = 86400
 )
 
 var (
@@ -15,16 +20,16 @@ func NotifyComunicato(filename string, tipo string) {
 		To: fmt.Sprintf("/topics/comunicati-%s", tipo),
 		Notification: &fcm.Notification{
 			Title: fmt.Sprintf("Comunicati %s", tipo),
-			Body: fmt.Sprintf("Nuovo comunicato: %s", filename),
+			Body:  fmt.Sprintf("Nuovo comunicato: %s", filename),
 		},
 		Data: map[string]interface{}{
 			"": fmt.Sprintf(urlPrefix + "comunicati-" + tipo + "/" + url.PathEscape(filename)),
 		},
-
+		TimeToLive: func(i uint) *uint { return &i }(duration),
 	}
 
 	if client == nil {
-		client, _ = fcm.NewClient("AAAA_mxAYMw:APA91bFGCkamxX8_BkjIQP4mWdSc7ZI_3QarBGYW205oGFVyYTuFZipU8WKzO1tDfypspEQrsAcnbW4Wk4720lBhKRrBhCPELFp9YH8Wfujo4KW_QLUwG3pO2E44M6_emEEllthkHPhU")
+		client, _ = fcm.NewClient(apikey)
 	}
 	resp, err := client.Send(message)
 	if err != nil {

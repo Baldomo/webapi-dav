@@ -116,8 +116,9 @@ func (sh *ServerHandler) startHTTPS() {
 	return
 }
 
-func (sh *ServerHandler) restart() error {
-	if err := sh.Shutdown(&struct{}{}, &struct{}{}); err != nil {
+func (sh *ServerHandler) restart(_, _ *struct{}) error {
+	err := sh.Shutdown(&struct{}{}, &struct{}{})
+	if err != nil {
 		return err
 	}
 	sh.Start()
