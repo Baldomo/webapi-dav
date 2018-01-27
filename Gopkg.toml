@@ -33,3 +33,7 @@
 [[constraint]]
   branch = "master"
   name = "github.com/nightlyone/lockfile"
+
+[[constraint]]
+  name = "github.com/go-sql-driver/mysql"
+  version = "1.3.0"

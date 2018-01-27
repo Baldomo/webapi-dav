@@ -32,8 +32,8 @@ type ConfigWatcher struct {
 
 func (fw *FileWatcher) Watch() {
 	w := watcher.New()
-	//w.SetMaxEvents(1)
-	w.FilterOps(watcher.Create)
+	w.SetMaxEvents(1)
+	w.FilterOps(watcher.Create, watcher.Write)
 	go func() {
 		for {
 			select {
@@ -78,7 +78,7 @@ func (fw FileWatcher) notifyComunicato(event watcher.Event) {
 
 func (cw *WebContentWatcher) Watch() {
 	w := watcher.New()
-	//w.SetMaxEvents(1)
+	w.SetMaxEvents(1)
 	go func() {
 		for {
 			select {
@@ -104,13 +104,15 @@ func (cw *WebContentWatcher) Watch() {
 
 func (cfgw *ConfigWatcher) Watch() {
 	w := watcher.New()
-	//w.SetMaxEvents(1)
+	w.SetMaxEvents(1)
 	go func() {
 		for {
 			select {
 			case event := <-w.Event:
-				Log.Info(event.String())
-				cfgw.OnEvent()
+				if event.FileInfo.Name() == GetConfigFilename() {
+					Log.Info(event.String())
+					cfgw.OnEvent()
+				}
 			case err := <-w.Error:
 				Log.Error(err.Error())
 			case <-w.Closed:

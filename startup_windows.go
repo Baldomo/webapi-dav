@@ -6,37 +6,34 @@ import (
 	"flag"
 	"fmt"
 	"github.com/nightlyone/lockfile"
+	"net/rpc"
 	"os"
 	"path/filepath"
-	"time"
 )
 
 const (
 	pidfile = "webapi.pid"
 )
 
+var SH = new(ServerHandler)
+
 func main() {
 	configPtr := flag.String("config", "./config.toml", "Indirizzo del file di configurazione, in .toml o .json")
 	versionPtr := flag.Bool("version", false, "Mostra la versione attuale del programma")
-	closePtr := flag.Bool("close", false, "Termina l'esecuzione del programma")
+	stopPtr := flag.Bool("stop", false, "Termina l'esecuzione del programma")
 	flag.Parse()
 
-	if *closePtr {
-		ex, _ := os.Executable()
-		lock, errLock := lockfile.New(filepath.Join(filepath.Dir(ex), pidfile))
-		if errLock != nil {
-			panic(errLock)
+	if *stopPtr {
+		client, err := rpc.Dial("tcp", ":2202")
+		if err != nil {
+			fmt.Print(err.Error())
+			os.Exit(1)
 		}
 
-		process, errProc := lock.GetOwner()
-		if errProc != nil {
-			// Owner dead ErrDeadOwner
+		err = client.Call("ServerHandler.Shutdown", &struct{}{}, &struct{}{})
+		if err != nil {
+			fmt.Print(err.Error())
 			os.Exit(1)
-		} else {
-			process.Signal(os.Interrupt)
-			time.Sleep(3 * time.Second)
-			process.Kill()
-			os.Exit(0)
 		}
 	}
 
@@ -55,7 +52,7 @@ func main() {
 
 	InitLogger(initServer)
 
-	StartServers()
+	SH.Start()
 }
 
 func initServer() {
@@ -73,7 +70,7 @@ func initServer() {
 			RefreshHTML()
 		}}
 		PrefWatcher = ConfigWatcher{GetConfigPath(), func() {
-			LoadPrefs(GetConfigPath())
+			ReloadPrefs()
 		}}
 	)
 	Log.Info("---------- DaVinci API ----------")

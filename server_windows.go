@@ -4,22 +4,22 @@ import (
 	"context"
 	"crypto/tls"
 	"github.com/gorilla/mux"
-	"github.com/op/go-logging"
+	"net"
 	"net/http"
-	"os"
-	"os/signal"
-	"runtime"
-	"syscall"
+	"net/rpc"
 	"time"
 )
 
-type serverHandler struct {
-	servers []*http.Server
-	done    chan struct{}
+type ServerHandler struct {
+	Started chan struct{}
+	Closing chan struct{}
+
+	http  *http.Server
+	https *http.Server
+	ipc   *rpc.Server
 }
 
 var (
-	signals chan os.Signal
 	timeout = 15 * time.Second
 )
 
@@ -75,46 +75,99 @@ func NewServerHTTPS() *http.Server {
 	}
 }
 
-func Shutdown(s *http.Server) {
-	signals = make(chan os.Signal, 1)
-
-	if runtime.GOOS == "windows" {
-		signal.Notify(signals, os.Interrupt)
-	} else {
-		signal.Notify(signals, os.Interrupt, syscall.SIGTERM)
+func (sh *ServerHandler) Start() {
+	sh.Started = make(chan struct{}, 1)
+	defer close(sh.Started)
+	if GetConfig().HTTPS.Enabled {
+		sh.startHTTPS()
 	}
 
-	<-signals
+	if GetConfig().HTTP.Enabled {
+		sh.startHTTP()
+	}
 
-	shutdown(s, Log)
+	sh.ipc = rpc.NewServer()
+	sh.ipc.RegisterName("ServerHandler", sh)
+	l, err := net.Listen("tcp", ":2202")
+	if err != nil {
+		Log.Critical("Impossibile avviare servizio IPC")
+	}
+	sh.ipc.Accept(l)
+	sh.Started <- struct{}{}
 }
 
-func shutdown(s *http.Server, logger *logging.Logger) {
+func (sh *ServerHandler) startHTTP() {
+	sh.http = NewServer()
+	go func() {
+		if err := sh.http.ListenAndServe(); err != nil {
+			Log.Fatal(err)
+		}
+	}()
+	return
+}
+
+func (sh *ServerHandler) startHTTPS() {
+	sh.https = NewServerHTTPS()
+	go func() {
+		if err := sh.https.ListenAndServeTLS(GetConfig().HTTPS.Cert, GetConfig().HTTPS.Key); err != nil {
+			Log.Fatal(err)
+		}
+	}()
+	return
+}
+
+func (sh *ServerHandler) restart() error {
+	if err := sh.Shutdown(&struct{}{}, &struct{}{}); err != nil {
+		return err
+	}
+	sh.Start()
+	return nil
+}
+
+func (sh *ServerHandler) Shutdown(_, _ *struct{}) error {
+	sh.Closing = make(chan struct{}, 1)
+	sh.Closing <- struct{}{}
+	close(sh.Closing)
+	errHttp := shutdown(sh.http)
+	if errHttp != nil {
+		Log.Error(errHttp.Error())
+		return errHttp
+	}
+
+	errHttps := shutdown(sh.https)
+	if errHttps != nil {
+		Log.Error(errHttps.Error())
+		return errHttps
+	}
+
+	return nil
+}
+
+func shutdown(s *http.Server) error {
 	if s == nil {
-		return
+		return nil
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
-	logger.Warningf("Conclusione richieste con timeout %s", timeout)
+	Log.Warningf("Conclusione richieste con timeout %s", timeout)
 
 	if err := s.Shutdown(ctx); err != nil {
-		logger.Error(err.Error())
+		Log.Error(err.Error())
 	} else {
 		if s != nil {
-			logger.Info("Concluse richieste in arrivo")
+			Log.Info("Concluse richieste in arrivo")
 
 			select {
 			case <-ctx.Done():
 				if err := ctx.Err(); err != nil {
-					logger.Error(err.Error())
-					return
+					return err
 				}
 			default:
 				if deadline, ok := ctx.Deadline(); ok {
 					secs := (time.Until(deadline) + time.Second/2) / time.Second
-					logger.Warningf("Spegnimento server con timeout %vs", secs)
+					Log.Warningf("Spegnimento server con timeout %vs", secs)
 				}
 
 				done := make(chan error)
@@ -124,8 +177,7 @@ func shutdown(s *http.Server, logger *logging.Logger) {
 				}()
 
 				if err := <-done; err != nil {
-					logger.Error(err.Error())
-					return
+					return err
 				}
 			}
 		}
@@ -133,49 +185,8 @@ func shutdown(s *http.Server, logger *logging.Logger) {
 
 	if deadline, ok := ctx.Deadline(); ok {
 		secs := (time.Until(deadline) + time.Second/2) / time.Second
-		logger.Warningf("Completato spegnimento in %vs", secs)
+		Log.Warningf("Completato spegnimento in %vs", secs)
 	}
-}
 
-func StartServers() <-chan struct{} {
-	/*if GetConfig().Conn.FastCGI {
-		router := NewRouter()
-		Log.Fatal(fcgi.Serve(nil, router))
-	}*/
-	out := make(chan struct{})
-	if GetConfig().HTTPS.Enabled {
-		startHTTPS()
-	}
-	if GetConfig().HTTP.Enabled {
-		startHTTP()
-	}
-	out <- struct{}{}
-	close(out)
-	return out
-}
-
-func startHTTP() {
-	httpServer := NewServer()
-	go func() {
-		if err := httpServer.ListenAndServe(); err != nil {
-			Log.Fatal(err)
-		}
-	}()
-	Shutdown(httpServer)
-	return
-}
-
-func startHTTPS() {
-	httpsServer := NewServerHTTPS()
-	go func() {
-		if err := httpsServer.ListenAndServeTLS(GetConfig().HTTPS.Cert, GetConfig().HTTPS.Key); err != nil {
-			Log.Fatal(err)
-		}
-	}()
-	Shutdown(httpsServer)
-	return
-}
-
-func Restart(s *http.Server, name string) {
-	Log.Info("Riavvio server %s in corso...", name)
+	return nil
 }

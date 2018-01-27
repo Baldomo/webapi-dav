@@ -48,8 +48,9 @@ type logPrefs struct {
 }
 
 var (
-	currentFilePath = ""
-	currentFiletype = "none"
+	currentFilePath     = ""
+	currentFullFilePath = ""
+	currentFiletype     = "none"
 
 	filetypes = []string{
 		".json",
@@ -90,7 +91,8 @@ var (
 func LoadPrefs(path string) error {
 	preferences = defaultPrefs
 	absPath, err := filepath.Abs(path)
-	currentFilePath = absPath
+	currentFullFilePath = absPath
+	currentFilePath = filepath.Dir(absPath)
 	if err != nil {
 		return err
 	}
@@ -187,10 +189,18 @@ func formatPrefs() {
 	}
 }
 
+func ReloadPrefs() {
+	LoadPrefs(currentFullFilePath)
+}
+
 func GetConfig() *config {
 	return &preferences
 }
 
 func GetConfigPath() string {
 	return currentFilePath
+}
+
+func GetConfigFilename() string {
+	return filepath.Base(currentFullFilePath)
 }

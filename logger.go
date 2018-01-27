@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"runtime"
 	"strings"
 	"syscall"
 	"time"
@@ -18,6 +19,13 @@ var (
 	fileBackend logging.Backend
 
 	Log = logging.MustGetLogger("webapi-dav")
+
+	lumber = &lumberjack.Logger{
+		Filename: GetConfig().Log.LogFile,
+		MaxSize:  5,
+		MaxAge:   30,
+		Compress: true,
+	}
 )
 
 func EventLogger(inner http.Handler, name string) http.Handler {
@@ -40,23 +48,29 @@ func InitLogger(before func()) {
 	var backendFileFormatted logging.LeveledBackend
 
 	if GetConfig().Log.Enabled {
-		l := &lumberjack.Logger{
-			Filename: GetConfig().Log.LogFile,
-			MaxSize:  5,
-			MaxAge:   30,
-			Compress: true,
-		}
-		fileBackend = logging.NewLogBackend(l, "", 0)
 
-		sign := make(chan os.Signal, 1)
-		signal.Notify(sign, os.Interrupt, syscall.SIGTERM)
-		go func() {
-			for {
-				<-sign
-				Log.Warning("Salvataggio log...")
-				l.Close()
-			}
-		}()
+		fileBackend = logging.NewLogBackend(lumber, "", 0)
+
+		if runtime.GOOS == "windows" {
+			go func() {
+				for {
+					<-SH.Closing
+					Log.Warning("Salvataggio log...")
+					lumber.Close()
+				}
+			}()
+		} else {
+			sign := make(chan os.Signal, 1)
+			signal.Notify(sign, os.Interrupt, syscall.SIGTERM)
+			go func() {
+				for {
+					<-sign
+					Log.Warning("Salvataggio log...")
+					lumber.Close()
+				}
+			}()
+		}
+
 	} else {
 		fileBackend = logging.NewLogBackend(ioutil.Discard, "", 0)
 	}
