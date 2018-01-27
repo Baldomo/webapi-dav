@@ -5,13 +5,41 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/nightlyone/lockfile"
 	"os"
+	"path/filepath"
 )
+
+const (
+	pidfile = "webapi.pid"
+)
+
+var SH = new(ServerHandler)
 
 func main() {
 	configPtr := flag.String("config", "./config.toml", "Indirizzo del file di configurazione, in .toml o .json")
 	versionPtr := flag.Bool("version", false, "Mostra la versione attuale del programma")
+	stopPtr := flag.Bool("stop", false, "Termina l'esecuzione del programma")
 	flag.Parse()
+
+	if *stopPtr {
+		ex, _ := os.Executable()
+		lock, errLock := lockfile.New(filepath.Join(filepath.Dir(ex), pidfile))
+		if errLock != nil {
+			panic(errLock)
+		}
+
+		proc, errProc := lock.GetOwner()
+		if errProc != nil {
+			// Owner dead ErrDeadOwner
+			os.Exit(1)
+		} else {
+			proc.Signal(os.Interrupt)
+			//time.Sleep(3 * time.Second)
+			//process.Kill()
+			os.Exit(0)
+		}
+	}
 
 	if *versionPtr {
 		fmt.Println("DaVinci API v" + VersionNumber)
@@ -24,9 +52,11 @@ func main() {
 		panic(err)
 	}
 
+	lockProcess()
+
 	InitLogger(initServer)
 
-	StartServers()
+	SH.Start()
 }
 
 func initServer() {
@@ -64,4 +94,17 @@ func initServer() {
 	go PrefWatcher.Watch()
 	Log.Info("Avvio completato.")
 	Log.Info("---------------------------------")
+}
+
+func lockProcess() {
+	ex, _ := os.Executable()
+	lock, err := lockfile.New(filepath.Join(filepath.Dir(ex), pidfile))
+	if err != nil {
+		panic(err)
+	}
+
+	err = lock.TryLock()
+	if err != nil {
+		os.Exit(1)
+	}
 }

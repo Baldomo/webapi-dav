@@ -14,6 +14,14 @@ import (
 	"time"
 )
 
+type ServerHandler struct {
+	Started chan struct{}
+	Closing chan struct{}
+
+	http  *http.Server
+	https *http.Server
+}
+
 var (
 	signals chan os.Signal
 	timeout = 15 * time.Second
@@ -71,6 +79,42 @@ func NewServerHTTPS() *http.Server {
 	}
 }
 
+func (sh *ServerHandler) Start() {
+	sh.Started = make(chan struct{}, 1)
+	defer close(sh.Started)
+	if GetConfig().HTTPS.Enabled {
+		sh.startHTTPS()
+	}
+
+	if GetConfig().HTTP.Enabled {
+		sh.startHTTP()
+	}
+
+	sh.Started <- struct{}{}
+}
+
+func (sh *ServerHandler) startHTTP() {
+	sh.http = NewServer()
+	go func() {
+		if err := sh.http.ListenAndServe(); err != nil {
+			//Log.Fatal(err)
+		}
+	}()
+	Shutdown(sh.http)
+	return
+}
+
+func (sh *ServerHandler) startHTTPS() {
+	sh.https = NewServerHTTPS()
+	go func() {
+		if err := sh.https.ListenAndServeTLS(GetConfig().HTTPS.Cert, GetConfig().HTTPS.Key); err != nil {
+			//Log.Fatal(err)
+		}
+	}()
+	Shutdown(sh.https)
+	return
+}
+
 func Shutdown(s *http.Server) {
 	signals = make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt, syscall.SIGTERM)
@@ -125,47 +169,4 @@ func shutdown(s *http.Server, logger *logging.Logger) {
 		secs := (time.Until(deadline) + time.Second/2) / time.Second
 		logger.Warningf("Completato spegnimento in %vs", secs)
 	}
-}
-
-func StartServers() <-chan struct{} {
-	/*if GetConfig().Conn.FastCGI {
-		router := NewRouter()
-		Log.Fatal(fcgi.Serve(nil, router))
-	}*/
-	out := make(chan struct{})
-	if GetConfig().HTTPS.Enabled {
-		startHTTPS()
-	}
-	if GetConfig().HTTP.Enabled {
-		startHTTP()
-	}
-	out <- struct{}{}
-	close(out)
-	return out
-}
-
-func startHTTP() {
-	httpServer := NewServer()
-	go func() {
-		if err := httpServer.ListenAndServe(); err != nil {
-			Log.Fatal(err)
-		}
-	}()
-	Shutdown(httpServer)
-	return
-}
-
-func startHTTPS() {
-	httpsServer := NewServerHTTPS()
-	go func() {
-		if err := httpsServer.ListenAndServeTLS(GetConfig().HTTPS.Cert, GetConfig().HTTPS.Key); err != nil {
-			Log.Fatal(err)
-		}
-	}()
-	Shutdown(httpsServer)
-	return
-}
-
-func Restart(s *http.Server, name string) {
-	Log.Info("Riavvio server %s in corso...", name)
 }
