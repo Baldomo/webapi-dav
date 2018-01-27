@@ -44,7 +44,7 @@ func initServer() {
 			RefreshHTML()
 		}}
 		PrefWatcher = ConfigWatcher{GetConfigPath(), func() {
-			LoadPrefs(GetConfigPath())
+			ReloadPrefs()
 		}}
 	)
 	Log.Info("---------- DaVinci API ----------")
