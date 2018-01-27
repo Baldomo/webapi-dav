@@ -5,8 +5,7 @@
 
 # TODO
 - Finire interfaccia database
-- Finire implementazione close `startup_windows.go#24` (protocollo custom)
-    - Evitare forking o altri processi
+- Fixare ReloadPrefs in `preferences.go`
 
 ## In attesa
 - Implementare progetti
@@ -14,6 +13,8 @@
 - Aggiungere supporto a token (con **mooooolta** calma)
 
 ## Risolti
+- ~~Finire implementazione close `startup_windows.go#24` (protocollo custom)~~
+    - ~~Evitare forking o altri processi~~
 - ~~Rotazione log con Lumberjack~~
 - ~~Usare una struct generica per risposte a endpoint /about, /version ecc.~~
 - ~~Aggiungere supporto a [HTTPS](https://github.com/denji/golang-tls)~~
