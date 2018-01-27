@@ -6,15 +6,15 @@ import (
 	"time"
 )
 
-const(
+const (
 	agendaTable = "npjmx_jevents_vevdetail"
-	timeFormat = "0000-00-00 00:00:00"
+	timeFormat  = "0000-00-00 00:00:00"
 )
 
 type Event struct {
 	Date    []time.Time `json:"date" xml:"Date"`
-	Title   string		`json:"titolo" xml:"Titolo"`
-	Content string		`json:"contenuto" xml:"Contenuto"`
+	Title   string      `json:"titolo" xml:"Titolo"`
+	Content string      `json:"contenuto" xml:"Contenuto"`
 }
 
 func GetAgenda() error {
