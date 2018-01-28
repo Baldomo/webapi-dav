@@ -90,6 +90,9 @@ func initServer() {
 	LoadComunicati(TipoDocenti)
 	go DocentiWatcher.Watch()
 
+	//Log.Info("Caricamento orario...")
+	//LoadOrario("./orario.xml")
+
 	Log.Info("Caricamento config...")
 	go PrefWatcher.Watch()
 	Log.Info("Avvio completato.")
