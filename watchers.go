@@ -6,8 +6,6 @@ import (
 	"time"
 )
 
-type WatcherType uint64
-
 type Watcher interface {
 	Watch()
 }
@@ -17,7 +15,6 @@ type FileWatcher struct {
 	Store   interface{}
 	OnEvent func()
 	Notify  bool
-	Type    WatcherType
 }
 
 type WebContentWatcher struct {
