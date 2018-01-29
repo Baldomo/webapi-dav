@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/xml"
-	"fmt"
 	"io/ioutil"
 	"strings"
 	"time"
@@ -47,7 +46,7 @@ type xmlAttivita struct {
 }
 
 var (
-	Orario    *Table
+	orario    *Table
 	xmlOrario xmlTable
 )
 
@@ -60,7 +59,9 @@ func (a xmlAttivita) Attivita() Attivita {
 		return Attivita{}
 	}
 
-	inizio, errIn := time.Parse("08h00", a.Inizio)
+	s := strings.Replace(a.Inizio, "h", ":", -1)
+	s += "AM"
+	inizio, errIn := time.Parse(time.Kitchen, s)
 	if errIn != nil {
 		return Attivita{}
 	}
@@ -101,7 +102,10 @@ func LoadOrario(path string) {
 		Log.Error(err.Error())
 		return
 	}
-	fmt.Println(xmlOrario)
 
-	Orario = xmlOrario.Table()
+	orario = xmlOrario.Table()
+}
+
+func GetOrario() *Table {
+	return orario
 }
