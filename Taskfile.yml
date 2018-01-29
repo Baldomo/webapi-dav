@@ -77,6 +77,7 @@ init-playground:
     - rm -rf playground
     - echo "Creazione playground..."
     - mkdir playground
+    - cp orario.xml playground
     - cp config.toml playground
     - cp {{fromSlash "build/webapi-dav-*"}} playground
     - cp -r static playground

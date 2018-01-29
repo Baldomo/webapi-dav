@@ -39,6 +39,7 @@ type dirs struct {
 	Studenti string `json:"comunicati_studenti" toml:"comunicati_studenti"`
 	Docenti  string `json:"comunicati_docenti" toml:"comunicati_docenti"`
 	Progetti string `json:"progetti" toml:"progetti"`
+	Orario   string `json:"orario" toml:"orario"`
 }
 
 type logPrefs struct {
@@ -79,6 +80,7 @@ var (
 			"",
 			"",
 			"",
+			"./orario.xml",
 		},
 		logPrefs{
 			true,
