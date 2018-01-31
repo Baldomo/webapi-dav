@@ -5,6 +5,7 @@
 
 # TODO
 - Finire interfaccia database
+- Endpoint orario in `routes.go#95`
 - Fixare ReloadPrefs in `preferences.go`
 
 ## In attesa

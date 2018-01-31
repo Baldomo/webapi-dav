@@ -1,7 +1,9 @@
-package main
+package sezioni
 
 import (
 	"io/ioutil"
+	"leonardobaldin/webapi-dav/config"
+	"leonardobaldin/webapi-dav/log"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -32,7 +34,7 @@ const (
 	TipoStudenti = "studenti"
 	TipoDocenti  = "docenti"
 
-	urlPrefix = "http://www.liceodavinci.tv/sitoLiceo/images/comunicati/"
+	UrlPrefix = "http://www.liceodavinci.tv/sitoLiceo/images/comunicati/"
 )
 
 func NewComunicato(nome string, data time.Time, tipo string) *Comunicato {
@@ -43,7 +45,7 @@ func NewComunicato(nome string, data time.Time, tipo string) *Comunicato {
 		strings.Replace(tipo, "/", "", -1)
 	}
 	com.Tipo = tipo
-	com.URL = urlPrefix + "comunicati-" + tipo + "/" + url.PathEscape(nome)
+	com.URL = UrlPrefix + "comunicati-" + tipo + "/" + url.PathEscape(nome)
 
 	return com
 }
@@ -54,7 +56,7 @@ func fetchComunicati(dir string, tipo string) Comunicati {
 	absPath, _ := filepath.Abs(dir)
 	files, err := ioutil.ReadDir(absPath)
 	if err != nil {
-		Log.Fatal(err)
+		log.Log.Fatal(err)
 	}
 
 	buf := make(Comunicati, len(files))
@@ -74,7 +76,7 @@ func fetchComunicati(dir string, tipo string) Comunicati {
 	sort.Slice(buf, func(i, j int) bool {
 		return buf[i].Data.After(buf[j].Data)
 	})
-	Log.Infof("Caricamento comunicati %s completato", tipo)
+	log.Log.Infof("Caricamento comunicati %s completato", tipo)
 	return buf
 }
 
@@ -82,13 +84,13 @@ func LoadComunicati(tipo string) {
 	switch tipo {
 
 	case TipoGenitori:
-		Genitori = fetchComunicati(GetConfig().Dirs.Genitori, TipoGenitori)
+		Genitori = fetchComunicati(config.GetConfig().Dirs.Genitori, TipoGenitori)
 
 	case TipoDocenti:
-		Docenti = fetchComunicati(GetConfig().Dirs.Docenti, TipoDocenti)
+		Docenti = fetchComunicati(config.GetConfig().Dirs.Docenti, TipoDocenti)
 
 	case TipoStudenti:
-		Studenti = fetchComunicati(GetConfig().Dirs.Studenti, TipoStudenti)
+		Studenti = fetchComunicati(config.GetConfig().Dirs.Studenti, TipoStudenti)
 
 	default:
 		return

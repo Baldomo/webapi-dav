@@ -2,6 +2,9 @@ package main
 
 import (
 	"github.com/radovskyb/watcher"
+	"leonardobaldin/webapi-dav/config"
+	. "leonardobaldin/webapi-dav/log"
+	"leonardobaldin/webapi-dav/sezioni"
 	"strings"
 	"time"
 )
@@ -74,11 +77,11 @@ func (fw FileWatcher) notifyComunicato(event watcher.Event) {
 	)
 	dirPath = strings.Replace(event.Path, event.FileInfo.Name(), "", -1)
 	if strings.Contains(dirPath, "genitori") {
-		tipo = TipoGenitori
+		tipo = sezioni.TipoGenitori
 	} else if strings.Contains(dirPath, "docenti") {
-		tipo = TipoDocenti
+		tipo = sezioni.TipoDocenti
 	} else if strings.Contains(dirPath, "studenti") {
-		tipo = TipoStudenti
+		tipo = sezioni.TipoStudenti
 	}
 	NotifyComunicato(event.FileInfo.Name(), tipo)
 }
@@ -116,7 +119,7 @@ func (cfgw *ConfigWatcher) Watch() {
 		for {
 			select {
 			case event := <-w.Event:
-				if event.FileInfo.Name() == GetConfigFilename() {
+				if event.FileInfo.Name() == config.GetConfigFilename() {
 					Log.Info(event.String())
 					cfgw.OnEvent()
 				}

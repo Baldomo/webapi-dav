@@ -1,9 +1,10 @@
-package main
+package log
 
 import (
 	"github.com/op/go-logging"
 	"gopkg.in/natefinch/lumberjack.v2"
 	"io/ioutil"
+	"leonardobaldin/webapi-dav/config"
 	"net/http"
 	"os"
 	"os/signal"
@@ -21,7 +22,7 @@ var (
 	Log = logging.MustGetLogger("webapi-dav")
 
 	lumber = &lumberjack.Logger{
-		Filename: GetConfig().Log.LogFile,
+		Filename: config.GetConfig().Log.LogFile,
 		MaxSize:  5,
 		MaxAge:   30,
 		Compress: true,
@@ -47,19 +48,11 @@ func EventLogger(inner http.Handler, name string) http.Handler {
 func InitLogger(before func()) {
 	var backendFileFormatted logging.LeveledBackend
 
-	if GetConfig().Log.Enabled {
+	if config.GetConfig().Log.Enabled {
 
 		fileBackend = logging.NewLogBackend(lumber, "", 0)
 
-		if runtime.GOOS == "windows" {
-			go func() {
-				for {
-					<-SH.Closing
-					Log.Warning("Salvataggio log...")
-					lumber.Close()
-				}
-			}()
-		} else {
+		if runtime.GOOS != "windows" {
 			sign := make(chan os.Signal, 1)
 			signal.Notify(sign, os.Interrupt, syscall.SIGTERM)
 			go func() {
@@ -75,7 +68,7 @@ func InitLogger(before func()) {
 		fileBackend = logging.NewLogBackend(ioutil.Discard, "", 0)
 	}
 
-	switch strings.ToLower(GetConfig().Log.LogLevel) {
+	switch strings.ToLower(config.GetConfig().Log.LogLevel) {
 	case "verbose":
 		backendFileFormatted = logging.AddModuleLevel(logging.NewBackendFormatter(fileBackend, formatLong))
 		backendFileFormatted.SetLevel(logging.INFO, "")
@@ -93,4 +86,9 @@ func InitLogger(before func()) {
 	logging.SetBackend(backendFileFormatted)
 
 	before()
+}
+
+func CloseLogger() {
+	Log.Warning("Salvataggio log...")
+	lumber.Close()
 }
