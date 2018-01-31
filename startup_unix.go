@@ -6,6 +6,11 @@ import (
 	"flag"
 	"fmt"
 	"github.com/nightlyone/lockfile"
+	. "leonardobaldin/webapi-dav/config"
+	. "leonardobaldin/webapi-dav/log"
+	"leonardobaldin/webapi-dav/server"
+	"leonardobaldin/webapi-dav/sezioni"
+	"leonardobaldin/webapi-dav/utils"
 	"os"
 	"path/filepath"
 )
@@ -13,8 +18,6 @@ import (
 const (
 	pidfile = "webapi.pid"
 )
-
-var SH = new(ServerHandler)
 
 func main() {
 	configPtr := flag.String("config", "./config.toml", "Indirizzo del file di configurazione, in .toml o .json")
@@ -42,8 +45,8 @@ func main() {
 	}
 
 	if *versionPtr {
-		fmt.Println("DaVinci API v" + VersionNumber)
-		fmt.Println("Leonardo Baldin, " + VersionDate)
+		fmt.Println("DaVinci API v" + utils.VersionNumber)
+		fmt.Println("Leonardo Baldin, " + utils.VersionDate)
 		os.Exit(0)
 	}
 
@@ -56,22 +59,22 @@ func main() {
 
 	InitLogger(initServer)
 
-	SH.Start()
+	server.Handler.Start()
 }
 
 func initServer() {
 	var (
-		GenitoriWatcher = FileWatcher{GetConfig().Dirs.Genitori, Genitori, func() {
-			LoadComunicati(TipoGenitori)
+		GenitoriWatcher = FileWatcher{GetConfig().Dirs.Genitori, sezioni.Genitori, func() {
+			sezioni.LoadComunicati(sezioni.TipoGenitori)
 		}, true, ComunicatiWatcher}
-		StudentiWatcher = FileWatcher{GetConfig().Dirs.Studenti, Studenti, func() {
-			LoadComunicati(TipoStudenti)
+		StudentiWatcher = FileWatcher{GetConfig().Dirs.Studenti, sezioni.Studenti, func() {
+			sezioni.LoadComunicati(sezioni.TipoStudenti)
 		}, true, ComunicatiWatcher}
-		DocentiWatcher = FileWatcher{GetConfig().Dirs.Docenti, Docenti, func() {
-			LoadComunicati(TipoDocenti)
+		DocentiWatcher = FileWatcher{GetConfig().Dirs.Docenti, sezioni.Docenti, func() {
+			sezioni.LoadComunicati(sezioni.TipoDocenti)
 		}, true, ComunicatiWatcher}
 		HTMLWatcher = WebContentWatcher{GetConfig().Dirs.HTML, func() {
-			RefreshHTML()
+			server.RefreshHTML()
 		}}
 		PrefWatcher = ConfigWatcher{GetConfigPath(), func() {
 			ReloadPrefs()
@@ -83,15 +86,15 @@ func initServer() {
 	go HTMLWatcher.Watch()
 
 	Log.Info("Caricamento comunicati...")
-	LoadComunicati(TipoGenitori)
+	sezioni.LoadComunicati(sezioni.TipoGenitori)
 	go GenitoriWatcher.Watch()
-	LoadComunicati(TipoStudenti)
+	sezioni.LoadComunicati(sezioni.TipoStudenti)
 	go StudentiWatcher.Watch()
-	LoadComunicati(TipoDocenti)
+	sezioni.LoadComunicati(sezioni.TipoDocenti)
 	go DocentiWatcher.Watch()
 
 	Log.Info("Caricamento orario...")
-	LoadOrario(GetConfig().Dirs.Orario)
+	sezioni.LoadOrario(GetConfig().Dirs.Orario)
 
 	Log.Info("Caricamento config...")
 	go PrefWatcher.Watch()

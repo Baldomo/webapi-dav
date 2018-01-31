@@ -1,7 +1,8 @@
-package main
+package utils
 
 import (
 	"html/template"
+	"leonardobaldin/webapi-dav/log"
 	"net/http"
 )
 
@@ -60,7 +61,7 @@ func GetOp(nome string) *Operation {
 	if val, ok := ops[nome]; ok {
 		return val
 	} else {
-		Log.Errorf("GetOp: ", "Valore non presente %s", nome)
+		log.Log.Errorf("GetOp: ", "Valore non presente %s", nome)
 		return nil
 	}
 }
