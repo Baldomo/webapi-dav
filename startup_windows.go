@@ -6,7 +6,6 @@ import (
 	"flag"
 	"fmt"
 	"github.com/nightlyone/lockfile"
-	. "leonardobaldin/webapi-dav/config"
 	"leonardobaldin/webapi-dav/server"
 	"leonardobaldin/webapi-dav/sezioni"
 	"leonardobaldin/webapi-dav/utils"
@@ -61,13 +60,13 @@ func initServer() {
 	var (
 		GenitoriWatcher = FileWatcher{GetConfig().Dirs.Genitori, sezioni.Genitori, func() {
 			sezioni.LoadComunicati(sezioni.TipoGenitori)
-		}, true, ComunicatiWatcher}
+		}, true}
 		StudentiWatcher = FileWatcher{GetConfig().Dirs.Studenti, sezioni.Studenti, func() {
 			sezioni.LoadComunicati(sezioni.TipoStudenti)
-		}, true, ComunicatiWatcher}
-		DocentiWatcher = FileWatcher{GetConfig().Dirs.Docenti, sezioni.Docenti, func() {
+		}, true}
+		DocentiWatcher = FileWatcher{GetConfig().Dirs.Docenti, sezioni.docenti, func() {
 			sezioni.LoadComunicati(sezioni.TipoDocenti)
-		}, true, ComunicatiWatcher}
+		}, true}
 		HTMLWatcher = WebContentWatcher{GetConfig().Dirs.HTML, func() {
 			server.RefreshHTML()
 		}}

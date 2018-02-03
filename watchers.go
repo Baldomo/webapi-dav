@@ -3,17 +3,12 @@ package main
 import (
 	"github.com/radovskyb/watcher"
 	"leonardobaldin/webapi-dav/config"
-	. "leonardobaldin/webapi-dav/log"
 	"leonardobaldin/webapi-dav/sezioni"
 	"strings"
 	"time"
 )
 
 type WatcherType uint64
-
-const (
-	ComunicatiWatcher WatcherType = iota
-)
 
 type Watcher interface {
 	Watch()
@@ -24,7 +19,6 @@ type FileWatcher struct {
 	Store   interface{}
 	OnEvent func()
 	Notify  bool
-	Type    WatcherType
 }
 
 type WebContentWatcher struct {
@@ -48,10 +42,7 @@ func (fw *FileWatcher) Watch() {
 				Log.Info(event.String())
 				fw.OnEvent()
 				if fw.Notify {
-					switch fw.Type {
-					case ComunicatiWatcher:
-						fw.notifyComunicato(event)
-					}
+					fw.notifyComunicato(event)
 				}
 			case err := <-w.Error:
 				Log.Error(err.Error())
