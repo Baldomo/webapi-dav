@@ -6,6 +6,8 @@ import (
 	"flag"
 	"fmt"
 	"github.com/nightlyone/lockfile"
+	"leonardobaldin/webapi-dav/config"
+	. "leonardobaldin/webapi-dav/log"
 	"leonardobaldin/webapi-dav/server"
 	"leonardobaldin/webapi-dav/sezioni"
 	"leonardobaldin/webapi-dav/utils"
@@ -44,7 +46,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	err := LoadPrefs(*configPtr)
+	err := config.LoadPrefs(*configPtr)
 	if err != nil {
 		panic(err)
 	}
@@ -58,20 +60,20 @@ func main() {
 
 func initServer() {
 	var (
-		GenitoriWatcher = FileWatcher{GetConfig().Dirs.Genitori, sezioni.Genitori, func() {
+		GenitoriWatcher = FileWatcher{config.GetConfig().Dirs.Genitori, sezioni.Genitori, func() {
 			sezioni.LoadComunicati(sezioni.TipoGenitori)
 		}, true}
-		StudentiWatcher = FileWatcher{GetConfig().Dirs.Studenti, sezioni.Studenti, func() {
+		StudentiWatcher = FileWatcher{config.GetConfig().Dirs.Studenti, sezioni.Studenti, func() {
 			sezioni.LoadComunicati(sezioni.TipoStudenti)
 		}, true}
-		DocentiWatcher = FileWatcher{GetConfig().Dirs.Docenti, sezioni.docenti, func() {
+		DocentiWatcher = FileWatcher{config.GetConfig().Dirs.Docenti, sezioni.Docenti, func() {
 			sezioni.LoadComunicati(sezioni.TipoDocenti)
 		}, true}
-		HTMLWatcher = WebContentWatcher{GetConfig().Dirs.HTML, func() {
+		HTMLWatcher = WebContentWatcher{config.GetConfig().Dirs.HTML, func() {
 			server.RefreshHTML()
 		}}
-		PrefWatcher = ConfigWatcher{GetConfigPath(), func() {
-			ReloadPrefs()
+		PrefWatcher = ConfigWatcher{config.GetConfigPath(), func() {
+			config.ReloadPrefs()
 		}}
 	)
 	Log.Info("---------- DaVinci API ----------")
@@ -88,7 +90,7 @@ func initServer() {
 	go DocentiWatcher.Watch()
 
 	Log.Info("Caricamento orario...")
-	sezioni.LoadOrario(GetConfig().Dirs.Orario)
+	sezioni.LoadOrario(config.GetConfig().Dirs.Orario)
 
 	Log.Info("Caricamento config...")
 	go PrefWatcher.Watch()

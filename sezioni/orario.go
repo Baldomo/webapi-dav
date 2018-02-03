@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"leonardobaldin/webapi-dav/log"
 	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -79,7 +80,16 @@ func (i *inizio) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) erro
 	if err := decoder.DecodeElement(&content, &start); err != nil {
 		return err
 	}
-	content = strings.Replace(content, "h", ":", -1) + "AM"
+
+	var meridian = "AM"
+	if h, errS := strconv.Atoi(content[:2]); errS != nil {
+		return errS
+	} else {
+		if h >= 12 {
+			meridian = "PM"
+		}
+	}
+	content = strings.Replace(content, "h", ":", -1) + meridian
 	*i = inizio(content)
 	return nil
 }
