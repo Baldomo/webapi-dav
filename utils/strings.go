@@ -52,6 +52,9 @@ var (
 		"comunicati-genitori-arg": {"GET", "/api/comunicati/genitori/5", "Restituirà gli ultimi n comunicati per i genitori", "/comunicati/genitori/{n: numero}"},
 		"comunicati-studenti":     {"GET", "/api/comunicati/studenti", "Restituirà la lista dei comunicati per gli studenti", "/comunicati/studenti"},
 		"comunicati-studenti-arg": {"GET", "/api/comunicati/studenti/5", "Restituirà gli ultimi n comunicati per gli studenti", "/comunicati/studenti/{n: numero}"},
+		"docenti":                 {"GET", "/api/comunicati/docenti", "Restituirà la lista dei docenti del liceo", "/docenti"},
+		"orario":                  {"GET", "/api/orario", "Restituirà l'orario completo di tutte le classi (PESANTE)", "/orario"},
+		"orario-classe":           {"GET", "/api/orario/classe/4b", "Restituirà l'orario della classe specificata", "/orario/classe/{c: classe}"},
 		"teapot":                  {"GET", "/api/teapot", "Restituirà codice HTTP 418. Utile solamente a capire se la API è online e funzionante", "/teapot"},
 		"version":                 {"GET", "/api/version", "Restituirà la versione dell'API in uso", "/version"},
 	}

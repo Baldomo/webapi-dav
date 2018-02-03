@@ -82,6 +82,14 @@ var routes = Routes{
 		DocentiComunicatiHandler,
 	},
 
+	// Utilità
+	Route{
+		"Docenti_List",
+		"GET",
+		"/api/docenti",
+		DocentiHandler,
+	},
+
 	// Orario
 	Route{
 		"Orario_Table",
@@ -92,9 +100,21 @@ var routes = Routes{
 	/*Route{
 		"Orario_Table_Giorno",
 		"GET",
-		`/api/orario/{giorno:(?:(?:(luned)|(marted)|(mercoled)|(gioved)|(venerd))([i|ì])(?!\w))|(sabato(?!\w))}`,
+		`/api/orario/{giorno:(?:(?:(luned)|(marted)|(mercoled)|(gioved)|(venerd))([i|ì]))|(sabato)}`,
 		OrarioGiornoHandler,
 	},*/
+	Route{
+		"Orario_Table_Classe",
+		"GET",
+		"/api/orario/classe/{classe:[1-5][a-zA-Z]}",
+		OrarioClasseHandler,
+	},
+	Route{
+		"Orario_Table_Docente",
+		"GET",
+		"/api/orario/docente/{cognome:[a-zA-Z]+}",
+		OrarioDocenteHandler,
+	},
 
 	// Progetti
 	Route{
