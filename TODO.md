@@ -5,15 +5,14 @@
 
 # TODO
 - Finire interfaccia database
-- Endpoint orario in `routes.go#95`
 - Fixare ReloadPrefs in `preferences.go`
 
 ## In attesa
 - Implementare progetti
 - Aggiungere routes dinamiche a config
-- Aggiungere supporto a token (con **mooooolta** calma)
 
 ## Risolti
+- ~~Endpoint orario in `routes.go#95`~~
 - ~~Finire implementazione close `startup_windows.go#24` (protocollo custom)~~
     - ~~Evitare forking o altri processi~~
 - ~~Rotazione log con Lumberjack~~
