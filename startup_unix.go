@@ -6,6 +6,11 @@ import (
 	"flag"
 	"fmt"
 	"github.com/nightlyone/lockfile"
+	com "leonardobaldin/webapi-dav/comunicati"
+	"leonardobaldin/webapi-dav/config"
+	"leonardobaldin/webapi-dav/orario"
+	"leonardobaldin/webapi-dav/server"
+	"leonardobaldin/webapi-dav/utils"
 	"os"
 	"path/filepath"
 )
@@ -13,8 +18,6 @@ import (
 const (
 	pidfile = "webapi.pid"
 )
-
-var SH = new(ServerHandler)
 
 func main() {
 	configPtr := flag.String("config", "./config.toml", "Indirizzo del file di configurazione, in .toml o .json")
@@ -42,12 +45,12 @@ func main() {
 	}
 
 	if *versionPtr {
-		fmt.Println("DaVinci API v" + VersionNumber)
-		fmt.Println("Leonardo Baldin, " + VersionDate)
+		fmt.Println("DaVinci API v" + utils.VersionNumber)
+		fmt.Println("Leonardo Baldin, " + utils.VersionDate)
 		os.Exit(0)
 	}
 
-	err := LoadPrefs(*configPtr)
+	err := config.LoadPrefs(*configPtr)
 	if err != nil {
 		panic(err)
 	}
@@ -56,25 +59,25 @@ func main() {
 
 	InitLogger(initServer)
 
-	SH.Start()
+	server.Handler.Start()
 }
 
 func initServer() {
 	var (
-		GenitoriWatcher = FileWatcher{GetConfig().Dirs.Genitori, Genitori, func() {
-			LoadComunicati(TipoGenitori)
-		}, true, ComunicatiWatcher}
-		StudentiWatcher = FileWatcher{GetConfig().Dirs.Studenti, Studenti, func() {
-			LoadComunicati(TipoStudenti)
-		}, true, ComunicatiWatcher}
-		DocentiWatcher = FileWatcher{GetConfig().Dirs.Docenti, Docenti, func() {
-			LoadComunicati(TipoDocenti)
-		}, true, ComunicatiWatcher}
-		HTMLWatcher = WebContentWatcher{GetConfig().Dirs.HTML, func() {
-			RefreshHTML()
+		GenitoriWatcher = FileWatcher{config.GetConfig().Dirs.Genitori, com.Genitori, func() {
+			com.LoadComunicati(com.TipoGenitori)
+		}, true}
+		StudentiWatcher = FileWatcher{config.GetConfig().Dirs.Studenti, com.Studenti, func() {
+			com.LoadComunicati(com.TipoStudenti)
+		}, true}
+		DocentiWatcher = FileWatcher{config.GetConfig().Dirs.Docenti, com.Docenti, func() {
+			com.LoadComunicati(com.TipoDocenti)
+		}, true}
+		HTMLWatcher = WebContentWatcher{config.GetConfig().Dirs.HTML, func() {
+			server.RefreshHTML()
 		}}
-		PrefWatcher = ConfigWatcher{GetConfigPath(), func() {
-			ReloadPrefs()
+		PrefWatcher = ConfigWatcher{config.GetConfigPath(), func() {
+			config.ReloadPrefs()
 		}}
 	)
 	Log.Info("---------- DaVinci API ----------")
@@ -83,12 +86,15 @@ func initServer() {
 	go HTMLWatcher.Watch()
 
 	Log.Info("Caricamento comunicati...")
-	LoadComunicati(TipoGenitori)
+	com.LoadComunicati(com.TipoGenitori)
 	go GenitoriWatcher.Watch()
-	LoadComunicati(TipoStudenti)
+	com.LoadComunicati(com.TipoStudenti)
 	go StudentiWatcher.Watch()
-	LoadComunicati(TipoDocenti)
+	com.LoadComunicati(com.TipoDocenti)
 	go DocentiWatcher.Watch()
+
+	Log.Info("Caricamento orario...")
+	orario.LoadOrario(config.GetConfig().Dirs.Orario)
 
 	Log.Info("Caricamento config...")
 	go PrefWatcher.Watch()

@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/appleboy/go-fcm"
+	"leonardobaldin/webapi-dav/comunicati"
+	. "leonardobaldin/webapi-dav/log"
 	"net/url"
 )
 
@@ -23,7 +25,7 @@ func NotifyComunicato(filename string, tipo string) {
 			Body:  fmt.Sprintf("Nuovo comunicato: %s", filename),
 		},
 		Data: map[string]interface{}{
-			"": fmt.Sprintf(urlPrefix + "comunicati-" + tipo + "/" + url.PathEscape(filename)),
+			"": fmt.Sprintf(comunicati.UrlPrefix + "comunicati-" + tipo + "/" + url.PathEscape(filename)),
 		},
 		TimeToLive: func(i uint) *uint { return &i }(duration),
 	}

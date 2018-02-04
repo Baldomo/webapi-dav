@@ -91,7 +91,6 @@ VirtualHost per redirezionamento richieste HTTPS:
 | `abilitato`          | boolean  | `true, false`  | Avvia il server in modalità HTTP |
 | `porta`              | string   | "numero porta" | Indica la porta che il server userà per le connessioni HTTP in entrata. |
 
-
 ---
 
 #### Cartelle
@@ -101,7 +100,8 @@ VirtualHost per redirezionamento richieste HTTPS:
 | `comunicati_genitori` | string  | "/percorso/"       | Percorso della cartella comunicati genitori |
 | `comunicati_studenti` | string  | "/percorso/"       | Percorso della cartella comunicati studenti |
 | `comunicati_docenti`  | string  | "/percorso/"       | Percorso della cartella comunicati docenti |
-| `progetti`            | string  | "/percorso/"       | Percorso della cartella progetti (non ancora implementato) |
+| `progetti`            | string  | "/percorso/"       | Percorso della cartella progetti (**non ancora implementato**) |
+| `orario`              | string  | "/percorso/"       | Percorso del file esportato dal gestionale dell'orario, contenente la tabella Attività in XML |
 
 ---
 
@@ -139,6 +139,7 @@ html = "static/"
 comunicati_genitori = "comunicati-genitori"
 comunicati_studenti = "comunicati-studenti"
 comunicati_docenti = "comunicati-docenti"
+orario = "orario.xml"
 
 [logging]
 abilitato = true
@@ -165,6 +166,7 @@ Esempio di `config.json` (in quella di default le cartelle non sono specificate)
     "comunicati_genitori": "comunicati-genitori",
     "comunicati_studenti": "comunicati-studenti",
     "comunicati_docenti": "comunicati-docenti",
+    "orario": "orario.xml"
   },
   "logging": {
     "abilitato": true
