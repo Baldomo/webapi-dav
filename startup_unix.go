@@ -6,10 +6,10 @@ import (
 	"flag"
 	"fmt"
 	"github.com/nightlyone/lockfile"
+	com "leonardobaldin/webapi-dav/comunicati"
 	"leonardobaldin/webapi-dav/config"
-	. "leonardobaldin/webapi-dav/log"
+	"leonardobaldin/webapi-dav/orario"
 	"leonardobaldin/webapi-dav/server"
-	"leonardobaldin/webapi-dav/sezioni"
 	"leonardobaldin/webapi-dav/utils"
 	"os"
 	"path/filepath"
@@ -64,14 +64,14 @@ func main() {
 
 func initServer() {
 	var (
-		GenitoriWatcher = FileWatcher{config.GetConfig().Dirs.Genitori, sezioni.Genitori, func() {
-			sezioni.LoadComunicati(sezioni.TipoGenitori)
+		GenitoriWatcher = FileWatcher{config.GetConfig().Dirs.Genitori, com.Genitori, func() {
+			com.LoadComunicati(com.TipoGenitori)
 		}, true}
-		StudentiWatcher = FileWatcher{config.GetConfig().Dirs.Studenti, sezioni.Studenti, func() {
-			sezioni.LoadComunicati(sezioni.TipoStudenti)
+		StudentiWatcher = FileWatcher{config.GetConfig().Dirs.Studenti, com.Studenti, func() {
+			com.LoadComunicati(com.TipoStudenti)
 		}, true}
-		DocentiWatcher = FileWatcher{config.GetConfig().Dirs.Docenti, sezioni.Docenti, func() {
-			sezioni.LoadComunicati(sezioni.TipoDocenti)
+		DocentiWatcher = FileWatcher{config.GetConfig().Dirs.Docenti, com.Docenti, func() {
+			com.LoadComunicati(com.TipoDocenti)
 		}, true}
 		HTMLWatcher = WebContentWatcher{config.GetConfig().Dirs.HTML, func() {
 			server.RefreshHTML()
@@ -86,15 +86,15 @@ func initServer() {
 	go HTMLWatcher.Watch()
 
 	Log.Info("Caricamento comunicati...")
-	sezioni.LoadComunicati(sezioni.TipoGenitori)
+	com.LoadComunicati(com.TipoGenitori)
 	go GenitoriWatcher.Watch()
-	sezioni.LoadComunicati(sezioni.TipoStudenti)
+	com.LoadComunicati(com.TipoStudenti)
 	go StudentiWatcher.Watch()
-	sezioni.LoadComunicati(sezioni.TipoDocenti)
+	com.LoadComunicati(com.TipoDocenti)
 	go DocentiWatcher.Watch()
 
 	Log.Info("Caricamento orario...")
-	sezioni.LoadOrario(config.GetConfig().Dirs.Orario)
+	orario.LoadOrario(config.GetConfig().Dirs.Orario)
 
 	Log.Info("Caricamento config...")
 	go PrefWatcher.Watch()

@@ -1,4 +1,4 @@
-package sezioni
+package orario
 
 import (
 	"encoding/xml"
@@ -28,19 +28,12 @@ type attivita struct {
 	Sede       string `xml:"SEDE" json:"sede"`
 }
 
-type docenti []docente
-type docente struct {
-	Nome    string `xml:"TABLE>Attivita>DOC_NOME"`
-	Cognome string `xml:"TABLE>Attivita>DOC_COGN"`
-}
-
 type durata string
 type classe string
 type inizio string
 
 var (
 	orario *table
-	doc    docenti
 
 	reClasse = regexp.MustCompile("[1-5][a-zA-Z]")
 )
@@ -109,23 +102,8 @@ func LoadOrario(path string) {
 		return
 	}
 
-	var doctemp docenti
-	for _, att := range orario.Attivita {
-		doctemp = append(doctemp, docente{att.DocNome, att.DocCognome})
-	}
-
-	for _, d := range doctemp {
-		skip := false
-		for _, u := range doc {
-			if d == u {
-				skip = true
-				break
-			}
-		}
-		if !skip {
-			doc = append(doc, d)
-		}
-	}
+	loadDocenti()
+	loadClassi()
 }
 
 func GetOrario() *table {
@@ -170,18 +148,4 @@ func GetByDocCogn(cogn string) *[]attivita {
 		}
 	}
 	return &a
-}
-
-func GetAllDocenti() *docenti {
-	return &doc
-}
-
-func GetDocentiCogn(cogn string) *docenti {
-	var d docenti
-	for _, docente := range doc {
-		if strings.ToLower(docente.Cognome) == strings.ToLower(cogn) {
-			d = append(d, docente)
-		}
-	}
-	return &d
 }

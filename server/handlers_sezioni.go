@@ -4,8 +4,9 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"github.com/gorilla/mux"
+	com "leonardobaldin/webapi-dav/comunicati"
 	. "leonardobaldin/webapi-dav/log"
-	"leonardobaldin/webapi-dav/sezioni"
+	"leonardobaldin/webapi-dav/orario"
 	"leonardobaldin/webapi-dav/utils"
 	"net/http"
 	"strconv"
@@ -15,13 +16,13 @@ import (
 
 func ComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 	all := struct {
-		Genitori sezioni.Comunicati `json:"genitori" xml:"genitori"`
-		Studenti sezioni.Comunicati `json:"studenti" xml:"studenti"`
-		Docenti  sezioni.Comunicati `json:"docenti" xml:"docenti"`
+		Genitori com.Comunicati `json:"genitori" xml:"genitori"`
+		Studenti com.Comunicati `json:"studenti" xml:"studenti"`
+		Docenti  com.Comunicati `json:"docenti" xml:"docenti"`
 	}{
-		sezioni.Genitori,
-		sezioni.Studenti,
-		sezioni.Docenti,
+		com.Genitori,
+		com.Studenti,
+		com.Docenti,
 	}
 
 	switch utils.RequestMime(r.Header) {
@@ -63,18 +64,18 @@ func GenitoriComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	count, countPresent := vars["count"]
 	if !countPresent {
-		localCount = sezioni.GetLenByName("genitori")
+		localCount = com.GetLenByName("genitori")
 	} else {
 		localCount, _ = strconv.Atoi(count)
-		if localCount > sezioni.GetLenByName("genitori") {
-			localCount = sezioni.GetLenByName("genitori")
+		if localCount > com.GetLenByName("genitori") {
+			localCount = com.GetLenByName("genitori")
 		}
 	}
 
 	switch utils.RequestMime(r.Header) {
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		if err := json.NewEncoder(w).Encode(sezioni.GetByName("genitori")[:localCount]); err != nil {
+		if err := json.NewEncoder(w).Encode(com.GetByName("genitori")[:localCount]); err != nil {
 			Log.Error("GenitoriComunicatiHandler: errore encoding json")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -83,7 +84,7 @@ func GenitoriComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 
 	case "application/xml":
 		w.Header().Set("Content-Type", "application/xml; charset=UTF-8")
-		if err := xml.NewEncoder(w).Encode(sezioni.GetByName("genitori")[:localCount]); err != nil {
+		if err := xml.NewEncoder(w).Encode(com.GetByName("genitori")[:localCount]); err != nil {
 			Log.Error("GenitoriComunicatiHandler: errore encoding xml")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -92,7 +93,7 @@ func GenitoriComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 
 	case "text/html":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		if err := json.NewEncoder(w).Encode(sezioni.GetByName("genitori")[:localCount]); err != nil {
+		if err := json.NewEncoder(w).Encode(com.GetByName("genitori")[:localCount]); err != nil {
 			Log.Error("GenitoriComunicatiHandler: errore encoding html")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -109,18 +110,18 @@ func StudentiComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	count, countPresent := vars["count"]
 	if !countPresent {
-		localCount = sezioni.GetLenByName("studenti")
+		localCount = com.GetLenByName("studenti")
 	} else {
 		localCount, _ = strconv.Atoi(count)
-		if localCount > sezioni.GetLenByName("studenti") {
-			localCount = sezioni.GetLenByName("studenti")
+		if localCount > com.GetLenByName("studenti") {
+			localCount = com.GetLenByName("studenti")
 		}
 	}
 
 	switch utils.RequestMime(r.Header) {
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		if err := json.NewEncoder(w).Encode(sezioni.GetByName("studenti")[:localCount]); err != nil {
+		if err := json.NewEncoder(w).Encode(com.GetByName("studenti")[:localCount]); err != nil {
 			Log.Error("StudentiComunicatiHandler: errore encoding json")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -129,7 +130,7 @@ func StudentiComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 
 	case "application/xml":
 		w.Header().Set("Content-Type", "application/xml; charset=UTF-8")
-		if err := xml.NewEncoder(w).Encode(sezioni.GetByName("studenti")[:localCount]); err != nil {
+		if err := xml.NewEncoder(w).Encode(com.GetByName("studenti")[:localCount]); err != nil {
 			Log.Error("StudentiComunicatiHandler: errore encoding xml")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -138,7 +139,7 @@ func StudentiComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 
 	case "text/html":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		if err := json.NewEncoder(w).Encode(sezioni.GetByName("studenti")[:localCount]); err != nil {
+		if err := json.NewEncoder(w).Encode(com.GetByName("studenti")[:localCount]); err != nil {
 			Log.Error("StudentiComunicatiHandler: errore encoding html")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -155,18 +156,18 @@ func DocentiComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	count, countPresent := vars["count"]
 	if !countPresent {
-		localCount = sezioni.GetLenByName("docenti")
+		localCount = com.GetLenByName("docenti")
 	} else {
 		localCount, _ = strconv.Atoi(count)
-		if localCount > sezioni.GetLenByName("docenti") {
-			localCount = sezioni.GetLenByName("docenti")
+		if localCount > com.GetLenByName("docenti") {
+			localCount = com.GetLenByName("docenti")
 		}
 	}
 
 	switch utils.RequestMime(r.Header) {
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		if err := json.NewEncoder(w).Encode(sezioni.GetByName("docenti")[:localCount]); err != nil {
+		if err := json.NewEncoder(w).Encode(com.GetByName("docenti")[:localCount]); err != nil {
 			Log.Error("DocentiComunicatiHandler: errore encoding json")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -175,7 +176,7 @@ func DocentiComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 
 	case "application/xml":
 		w.Header().Set("Content-Type", "application/xml; charset=UTF-8")
-		if err := xml.NewEncoder(w).Encode(sezioni.GetByName("docenti")[:localCount]); err != nil {
+		if err := xml.NewEncoder(w).Encode(com.GetByName("docenti")[:localCount]); err != nil {
 			Log.Error("DocentiComunicatiHandler: errore encoding xml")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -184,7 +185,7 @@ func DocentiComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 
 	case "text/html":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		if err := json.NewEncoder(w).Encode(sezioni.GetByName("docenti")[:localCount]); err != nil {
+		if err := json.NewEncoder(w).Encode(com.GetByName("docenti")[:localCount]); err != nil {
 			Log.Error("DocentiComunicatiHandler: errore encoding html")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -197,11 +198,12 @@ func DocentiComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // Utilità
+
 func DocentiHandler(w http.ResponseWriter, r *http.Request) {
 	switch utils.RequestMime(r.Header) {
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		if err := json.NewEncoder(w).Encode(sezioni.GetAllDocenti()); err != nil {
+		if err := json.NewEncoder(w).Encode(orario.GetAllDocenti()); err != nil {
 			Log.Error("OrarioHandler: errore encoding json")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -210,7 +212,7 @@ func DocentiHandler(w http.ResponseWriter, r *http.Request) {
 
 	case "application/xml":
 		w.Header().Set("Content-Type", "application/xml; charset=UTF-8")
-		if err := xml.NewEncoder(w).Encode(sezioni.GetAllDocenti()); err != nil {
+		if err := xml.NewEncoder(w).Encode(orario.GetAllDocenti()); err != nil {
 			Log.Error("OrarioHandler: errore encoding xml")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -219,7 +221,41 @@ func DocentiHandler(w http.ResponseWriter, r *http.Request) {
 
 	case "text/html":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		if err := json.NewEncoder(w).Encode(sezioni.GetAllDocenti()); err != nil {
+		if err := json.NewEncoder(w).Encode(orario.GetAllDocenti()); err != nil {
+			Log.Error("OrarioHandler: errore encoding json")
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			w.WriteHeader(http.StatusOK)
+		}
+
+	default:
+		w.WriteHeader(http.StatusBadRequest)
+	}
+}
+
+func ClassiHandler(w http.ResponseWriter, r *http.Request) {
+	switch utils.RequestMime(r.Header) {
+	case "application/json":
+		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+		if err := json.NewEncoder(w).Encode(orario.GetAllClassi()); err != nil {
+			Log.Error("OrarioHandler: errore encoding json")
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			w.WriteHeader(http.StatusOK)
+		}
+
+	case "application/xml":
+		w.Header().Set("Content-Type", "application/xml; charset=UTF-8")
+		if err := xml.NewEncoder(w).Encode(orario.GetAllClassi()); err != nil {
+			Log.Error("OrarioHandler: errore encoding xml")
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			w.WriteHeader(http.StatusOK)
+		}
+
+	case "text/html":
+		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+		if err := json.NewEncoder(w).Encode(orario.GetAllClassi()); err != nil {
 			Log.Error("OrarioHandler: errore encoding json")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -237,7 +273,7 @@ func OrarioHandler(w http.ResponseWriter, r *http.Request) {
 	switch utils.RequestMime(r.Header) {
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		if err := json.NewEncoder(w).Encode(sezioni.GetOrario()); err != nil {
+		if err := json.NewEncoder(w).Encode(orario.GetOrario()); err != nil {
 			Log.Error("OrarioHandler: errore encoding json")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -246,7 +282,7 @@ func OrarioHandler(w http.ResponseWriter, r *http.Request) {
 
 	case "application/xml":
 		w.Header().Set("Content-Type", "application/xml; charset=UTF-8")
-		if err := xml.NewEncoder(w).Encode(sezioni.GetOrario()); err != nil {
+		if err := xml.NewEncoder(w).Encode(orario.GetOrario()); err != nil {
 			Log.Error("OrarioHandler: errore encoding xml")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -255,7 +291,7 @@ func OrarioHandler(w http.ResponseWriter, r *http.Request) {
 
 	case "text/html":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		if err := json.NewEncoder(w).Encode(sezioni.GetOrario()); err != nil {
+		if err := json.NewEncoder(w).Encode(orario.GetOrario()); err != nil {
 			Log.Error("OrarioHandler: errore encoding json")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -272,7 +308,7 @@ func OrarioGiornoHandler(w http.ResponseWriter, r *http.Request) {
 	switch utils.RequestMime(r.Header) {
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		if err := json.NewEncoder(w).Encode(sezioni.GetByGiorno(giorno)); err != nil {
+		if err := json.NewEncoder(w).Encode(orario.GetByGiorno(giorno)); err != nil {
 			Log.Error("OrarioHandler: errore encoding json")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -281,7 +317,7 @@ func OrarioGiornoHandler(w http.ResponseWriter, r *http.Request) {
 
 	case "application/xml":
 		w.Header().Set("Content-Type", "application/xml; charset=UTF-8")
-		if err := xml.NewEncoder(w).Encode(sezioni.GetByGiorno(giorno)); err != nil {
+		if err := xml.NewEncoder(w).Encode(orario.GetByGiorno(giorno)); err != nil {
 			Log.Error("OrarioHandler: errore encoding xml")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -290,7 +326,7 @@ func OrarioGiornoHandler(w http.ResponseWriter, r *http.Request) {
 
 	case "text/html":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		if err := json.NewEncoder(w).Encode(sezioni.GetByGiorno(giorno)); err != nil {
+		if err := json.NewEncoder(w).Encode(orario.GetByGiorno(giorno)); err != nil {
 			Log.Error("OrarioHandler: errore encoding json")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -308,7 +344,7 @@ func OrarioClasseHandler(w http.ResponseWriter, r *http.Request) {
 	switch utils.RequestMime(r.Header) {
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		if err := json.NewEncoder(w).Encode(sezioni.GetByClasse(classe)); err != nil {
+		if err := json.NewEncoder(w).Encode(orario.GetByClasse(classe)); err != nil {
 			Log.Error("OrarioClasseHandler: errore encoding json")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -316,7 +352,7 @@ func OrarioClasseHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	case "application/xml":
 		w.Header().Set("Content-Type", "application/xml; charset=UTF-8")
-		if err := xml.NewEncoder(w).Encode(sezioni.GetByClasse(classe)); err != nil {
+		if err := xml.NewEncoder(w).Encode(orario.GetByClasse(classe)); err != nil {
 			Log.Error("OrarioClasseHandler: errore encoding xml")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -324,7 +360,7 @@ func OrarioClasseHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	case "text/html":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		if err := json.NewEncoder(w).Encode(sezioni.GetByClasse(classe)); err != nil {
+		if err := json.NewEncoder(w).Encode(orario.GetByClasse(classe)); err != nil {
 			Log.Error("OrarioClasseHandler: errore encoding html")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -342,7 +378,7 @@ func OrarioDocenteHandler(w http.ResponseWriter, r *http.Request) {
 	switch utils.RequestMime(r.Header) {
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		if err := json.NewEncoder(w).Encode(sezioni.GetByDocCogn(cogn)); err != nil {
+		if err := json.NewEncoder(w).Encode(orario.GetByDocCogn(cogn)); err != nil {
 			Log.Error("OrarioHandler: errore encoding json")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -351,7 +387,7 @@ func OrarioDocenteHandler(w http.ResponseWriter, r *http.Request) {
 
 	case "application/xml":
 		w.Header().Set("Content-Type", "application/xml; charset=UTF-8")
-		if err := xml.NewEncoder(w).Encode(sezioni.GetByDocCogn(cogn)); err != nil {
+		if err := xml.NewEncoder(w).Encode(orario.GetByDocCogn(cogn)); err != nil {
 			Log.Error("OrarioHandler: errore encoding xml")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -360,7 +396,7 @@ func OrarioDocenteHandler(w http.ResponseWriter, r *http.Request) {
 
 	case "text/html":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		if err := json.NewEncoder(w).Encode(sezioni.GetByDocCogn(cogn)); err != nil {
+		if err := json.NewEncoder(w).Encode(orario.GetByDocCogn(cogn)); err != nil {
 			Log.Error("OrarioHandler: errore encoding json")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
