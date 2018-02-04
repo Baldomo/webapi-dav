@@ -45,6 +45,7 @@ var (
 
 	ops = map[string]*Operation{
 		"about":                   {"GET", "/api/about", "Restituirà informazioni generali sulla API", "/about"},
+		"classi":                  {"GET", "/api/classi", "Restituirà la lista di tutte le classi del liceo", "/classi"},
 		"comunicati":              {"GET", "/api/comunicati", "Restituirà la lista completa di comunicati", "/comunicati"},
 		"comunicati-docenti":      {"GET", "/api/comunicati/docenti", "Restituirà la lista dei comunicati per i docenti", "/comunicati/docenti"},
 		"comunicati-docenti-arg":  {"GET", "/api/comunicati/docenti/5", "Restituirà gli ultimi  n comunicati per i docenti", "/comunicati/docenti/{n: numero}"},

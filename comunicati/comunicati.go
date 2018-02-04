@@ -1,4 +1,4 @@
-package sezioni
+package comunicati
 
 import (
 	"io/ioutil"

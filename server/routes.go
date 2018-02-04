@@ -89,6 +89,12 @@ var routes = Routes{
 		"/api/docenti",
 		DocentiHandler,
 	},
+	Route{
+		"Classi_List",
+		"GET",
+		"/api/classi",
+		ClassiHandler,
+	},
 
 	// Orario
 	Route{
