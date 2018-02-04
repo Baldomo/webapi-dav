@@ -1,7 +1,8 @@
-package main
+package utils
 
 import (
 	"html/template"
+	"leonardobaldin/webapi-dav/log"
 	"net/http"
 )
 
@@ -44,6 +45,7 @@ var (
 
 	ops = map[string]*Operation{
 		"about":                   {"GET", "/api/about", "Restituirà informazioni generali sulla API", "/about"},
+		"classi":                  {"GET", "/api/classi", "Restituirà la lista di tutte le classi del liceo", "/classi"},
 		"comunicati":              {"GET", "/api/comunicati", "Restituirà la lista completa di comunicati", "/comunicati"},
 		"comunicati-docenti":      {"GET", "/api/comunicati/docenti", "Restituirà la lista dei comunicati per i docenti", "/comunicati/docenti"},
 		"comunicati-docenti-arg":  {"GET", "/api/comunicati/docenti/5", "Restituirà gli ultimi  n comunicati per i docenti", "/comunicati/docenti/{n: numero}"},
@@ -51,6 +53,9 @@ var (
 		"comunicati-genitori-arg": {"GET", "/api/comunicati/genitori/5", "Restituirà gli ultimi n comunicati per i genitori", "/comunicati/genitori/{n: numero}"},
 		"comunicati-studenti":     {"GET", "/api/comunicati/studenti", "Restituirà la lista dei comunicati per gli studenti", "/comunicati/studenti"},
 		"comunicati-studenti-arg": {"GET", "/api/comunicati/studenti/5", "Restituirà gli ultimi n comunicati per gli studenti", "/comunicati/studenti/{n: numero}"},
+		"docenti":                 {"GET", "/api/docenti", "Restituirà la lista dei docenti del liceo", "/docenti"},
+		"orario":                  {"GET", "/api/orario", "Restituirà l'orario completo di tutte le classi (PESANTE)", "/orario"},
+		"orario-classe":           {"GET", "/api/orario/classe/4b", "Restituirà l'orario della classe specificata", "/orario/classe/{c: classe}"},
 		"teapot":                  {"GET", "/api/teapot", "Restituirà codice HTTP 418. Utile solamente a capire se la API è online e funzionante", "/teapot"},
 		"version":                 {"GET", "/api/version", "Restituirà la versione dell'API in uso", "/version"},
 	}
@@ -60,7 +65,7 @@ func GetOp(nome string) *Operation {
 	if val, ok := ops[nome]; ok {
 		return val
 	} else {
-		Log.Errorf("GetOp: ", "Valore non presente %s", nome)
+		log.Log.Errorf("GetOp: ", "Valore non presente %s", nome)
 		return nil
 	}
 }

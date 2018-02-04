@@ -2,9 +2,14 @@ package main
 
 import (
 	"github.com/radovskyb/watcher"
+	com "leonardobaldin/webapi-dav/comunicati"
+	"leonardobaldin/webapi-dav/config"
+	. "leonardobaldin/webapi-dav/log"
 	"strings"
 	"time"
 )
+
+type WatcherType uint64
 
 type Watcher interface {
 	Watch()
@@ -64,11 +69,11 @@ func (fw FileWatcher) notifyComunicato(event watcher.Event) {
 	)
 	dirPath = strings.Replace(event.Path, event.FileInfo.Name(), "", -1)
 	if strings.Contains(dirPath, "genitori") {
-		tipo = TipoGenitori
+		tipo = com.TipoGenitori
 	} else if strings.Contains(dirPath, "docenti") {
-		tipo = TipoDocenti
+		tipo = com.TipoDocenti
 	} else if strings.Contains(dirPath, "studenti") {
-		tipo = TipoStudenti
+		tipo = com.TipoStudenti
 	}
 	NotifyComunicato(event.FileInfo.Name(), tipo)
 }
@@ -106,7 +111,7 @@ func (cfgw *ConfigWatcher) Watch() {
 		for {
 			select {
 			case event := <-w.Event:
-				if event.FileInfo.Name() == GetConfigFilename() {
+				if event.FileInfo.Name() == config.GetConfigFilename() {
 					Log.Info(event.String())
 					cfgw.OnEvent()
 				}

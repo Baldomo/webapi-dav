@@ -1,7 +1,9 @@
-package main
+package config
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
 	"github.com/BurntSushi/toml"
 	"io/ioutil"
 	"os"
@@ -39,6 +41,7 @@ type dirs struct {
 	Studenti string `json:"comunicati_studenti" toml:"comunicati_studenti"`
 	Docenti  string `json:"comunicati_docenti" toml:"comunicati_docenti"`
 	Progetti string `json:"progetti" toml:"progetti"`
+	Orario   string `json:"orario" toml:"orario"`
 }
 
 type logPrefs struct {
@@ -79,6 +82,7 @@ var (
 			"",
 			"",
 			"",
+			"./orario.xml",
 		},
 		logPrefs{
 			true,
@@ -135,7 +139,7 @@ func LoadPrefs(path string) error {
 		}
 
 	case "none":
-		return Error("preferences: ", "File configurazione non valido: %s", path)
+		return errors.New("preferences: File configurazione non valido: " + path)
 	}
 
 	formatPrefs()
@@ -154,17 +158,17 @@ func formatPrefs() {
 	}
 	if preferences.HTTPS.Enabled {
 		if preferences.HTTPS.Cert == "" {
-			Log.Fatal("Certificato non specificato!")
+			fmt.Println("Certificato non specificato!")
 		}
 		if preferences.HTTPS.Key == "" {
-			Log.Fatal("Chiave non specificata!")
+			fmt.Println("Chiave non specificata!")
 		}
 
 	}
 
 	// Dirs
 	if _, err := os.Stat(preferences.Dirs.HTML); os.IsNotExist(err) || preferences.Dirs.HTML == "" {
-		Log.Fatal("Cartella contenuti HTML non specificata")
+		fmt.Println("Cartella contenuti HTML non specificata")
 	}
 
 	// Logging
@@ -184,7 +188,7 @@ func formatPrefs() {
 			break
 
 		default:
-			Log.Warning(`formatPrefs: Il livello del log può essere "verbose", "warning" o "error", ignoro opzione, default: "warning"`)
+			fmt.Println(`formatPrefs: Il livello del log può essere "verbose", "warning" o "error", ignoro opzione, default: "warning"`)
 		}
 	}
 }

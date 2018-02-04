@@ -17,7 +17,8 @@
     "comunicati_genitori": "comunicati-genitori",
     "comunicati_studenti": "comunicati-studenti",
     "comunicati_docenti": "comunicati-docenti",
-    "progetti": "progetti"
+    "progetti": "progetti",
+    "orario": "orario.xml"
   },
   "logging": {
     "abilitato": true,

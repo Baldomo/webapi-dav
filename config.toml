@@ -17,6 +17,7 @@ comunicati_genitori = "comunicati-genitori"
 comunicati_studenti = "comunicati-studenti"
 comunicati_docenti = "comunicati-docenti"
 progetti = "progetti"  # TODO: da implementare
+orario = "orario.xml"
 
 [logging]
 abilitato = true
