@@ -4,8 +4,8 @@ import "strings"
 
 type docenti []docente
 type docente struct {
-	Nome    string `xml:"TABLE>Attivita>DOC_NOME"`
-	Cognome string `xml:"TABLE>Attivita>DOC_COGN"`
+	Nome    string
+	Cognome string
 }
 
 var (
@@ -13,6 +13,7 @@ var (
 )
 
 func loadDocenti() {
+	doc = nil
 	var doctemp docenti
 	for _, att := range orario.Attivita {
 		doctemp = append(doctemp, docente{att.DocNome, att.DocCognome})
