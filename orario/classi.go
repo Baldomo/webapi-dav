@@ -5,6 +5,7 @@ var (
 )
 
 func loadClassi() {
+	classi = nil
 	var classitemp []classe
 	for _, att := range orario.Attivita {
 		classitemp = append(classitemp, att.Classe)
@@ -13,7 +14,7 @@ func loadClassi() {
 	for _, c := range classitemp {
 		skip := false
 		for _, u := range classi {
-			if c == u {
+			if c == u || c.String() == "" {
 				skip = true
 				break
 			}

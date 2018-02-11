@@ -92,6 +92,7 @@ func (i inizio) String() string {
 }
 
 func LoadOrario(path string) {
+	orario = nil
 	raw, err := ioutil.ReadFile(path)
 	if err != nil {
 		log.Log.Error(err.Error())
