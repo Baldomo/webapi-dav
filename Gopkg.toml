@@ -19,20 +19,17 @@
   version = "0.1.1"
 
 [[constraint]]
-  name = "gopkg.in/hlandau/service.v2"
-  version = "2.0.16"
-
-[[constraint]]
-  name = "gopkg.in/hlandau/easyconfig.v1"
-  version = "1.0.16"
-
-[[constraint]]
   name = "gopkg.in/natefinch/lumberjack.v2"
   version = "2.1.0"
 
 [[constraint]]
   branch = "master"
   name = "github.com/nightlyone/lockfile"
+
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/jmoiron/sqlx"
 
 [[constraint]]
   name = "github.com/go-sql-driver/mysql"
