@@ -15,8 +15,8 @@ import (
 )
 
 var (
-	formatLong  = logging.MustStringFormatter("[%{level}%{time: 15:04:05.999} %{shortfile}] %{message}")
-	formatShort = logging.MustStringFormatter("[%{time:0102 15:04:05.999}] %{message}")
+	formatLong = logging.MustStringFormatter("[%{level}%{time: 15:04:05.999} %{shortfile}] %{message}")
+	//formatShort = logging.MustStringFormatter("[%{time:0102 15:04:05.999}] %{message}")
 	fileBackend logging.Backend
 
 	Log = logging.MustGetLogger("webapi-dav")
@@ -40,6 +40,7 @@ func EventLogger(inner http.Handler, name string) http.Handler {
 				r.RequestURI + " " +
 				name + " " +
 				time.Since(start).String() + " " +
+				r.RemoteAddr + " " +
 				r.UserAgent(),
 		)
 	})
