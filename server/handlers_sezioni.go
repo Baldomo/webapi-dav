@@ -374,11 +374,16 @@ func OrarioClasseHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func OrarioDocenteHandler(w http.ResponseWriter, r *http.Request) {
-	cogn, _ := mux.Vars(r)["cognome"]
+	var data orario.Docente
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&data)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+	}
 	switch utils.RequestMime(r.Header) {
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		if err := json.NewEncoder(w).Encode(orario.GetByDocCogn(cogn)); err != nil {
+		if err := json.NewEncoder(w).Encode(orario.GetByDoc(data)); err != nil {
 			Log.Error("OrarioHandler: errore encoding json")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -387,7 +392,7 @@ func OrarioDocenteHandler(w http.ResponseWriter, r *http.Request) {
 
 	case "application/xml":
 		w.Header().Set("Content-Type", "application/xml; charset=UTF-8")
-		if err := xml.NewEncoder(w).Encode(orario.GetByDocCogn(cogn)); err != nil {
+		if err := xml.NewEncoder(w).Encode(orario.GetByDoc(data)); err != nil {
 			Log.Error("OrarioHandler: errore encoding xml")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -396,7 +401,7 @@ func OrarioDocenteHandler(w http.ResponseWriter, r *http.Request) {
 
 	case "text/html":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		if err := json.NewEncoder(w).Encode(orario.GetByDocCogn(cogn)); err != nil {
+		if err := json.NewEncoder(w).Encode(orario.GetByDoc(data)); err != nil {
 			Log.Error("OrarioHandler: errore encoding json")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {

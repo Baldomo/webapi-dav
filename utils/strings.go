@@ -56,6 +56,7 @@ var (
 		"docenti":                 {"GET", "/api/docenti", "Restituirà la lista dei docenti del liceo", "/docenti"},
 		"orario":                  {"GET", "/api/orario", "Restituirà l'orario completo di tutte le classi (PESANTE)", "/orario"},
 		"orario-classe":           {"GET", "/api/orario/classe/4b", "Restituirà l'orario della classe specificata", "/orario/classe/{c: classe}"},
+		"orario-docente":          {"POST", "/api/orario/docente", "Restituisce l'orario del docente con nome e cognome nella richiesta POST in JSON", "/orario/docente..."},
 		"teapot":                  {"GET", "/api/teapot", "Restituirà codice HTTP 418. Utile solamente a capire se la API è online e funzionante", "/teapot"},
 		"version":                 {"GET", "/api/version", "Restituirà la versione dell'API in uso", "/version"},
 	}

@@ -4,7 +4,6 @@ import (
 	"encoding/xml"
 	"io/ioutil"
 	"leonardobaldin/webapi-dav/log"
-	"regexp"
 	"strconv"
 	"strings"
 )
@@ -29,28 +28,11 @@ type attivita struct {
 }
 
 type durata string
-type classe string
 type inizio string
 
 var (
 	orario *table
-
-	reClasse = regexp.MustCompile("[1-5][a-zA-Z]")
 )
-
-func (c *classe) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) error {
-	var content string
-	if err := decoder.DecodeElement(&content, &start); err != nil {
-		return err
-	}
-	content = reClasse.FindString(content)
-	*c = classe(content)
-	return nil
-}
-
-func (c classe) String() string {
-	return string(c)
-}
 
 func (d *durata) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) error {
 	var content string
@@ -145,6 +127,16 @@ func GetByDocCogn(cogn string) *[]attivita {
 	var a []attivita
 	for _, att := range orario.Attivita {
 		if strings.ToLower(att.DocCognome) == strings.ToLower(cogn) {
+			a = append(a, att)
+		}
+	}
+	return &a
+}
+
+func GetByDoc(doc Docente) *[]attivita {
+	var a []attivita
+	for _, att := range orario.Attivita {
+		if (strings.ToLower(att.DocCognome) == strings.ToLower(doc.Cognome)) && (strings.ToLower(att.DocNome) == strings.ToLower(doc.Nome)) {
 			a = append(a, att)
 		}
 	}

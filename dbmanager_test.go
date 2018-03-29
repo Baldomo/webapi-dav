@@ -20,8 +20,7 @@ func TestEvent_FillEmptyFields(t *testing.T) {
 					Fine:   time.Now(),
 				},
 			},
-		},
-		{
+		}, {
 			"select description from npjmx_jevents_vevdetail where summary=:summary and dtstart=:dtstart and dtend=:dtend",
 			Event{
 				Title: "Missing Content event",
@@ -30,8 +29,7 @@ func TestEvent_FillEmptyFields(t *testing.T) {
 					Fine:   time.Now(),
 				},
 			},
-		},
-		{
+		}, {
 			"select dtstart,dtend from npjmx_jevents_vevdetail where summary=:summary and description=:description",
 			Event{
 				Title:   "Missing Date event",
