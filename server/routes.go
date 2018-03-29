@@ -117,8 +117,8 @@ var routes = Routes{
 	},
 	Route{
 		"Orario_Table_Docente",
-		"GET",
-		"/api/orario/docente/{cognome:[a-zA-Z]+}",
+		"POST",
+		"/api/orario/docente",
 		OrarioDocenteHandler,
 	},
 

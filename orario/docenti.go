@@ -2,10 +2,10 @@ package orario
 
 import "strings"
 
-type docenti []docente
-type docente struct {
-	Nome    string
-	Cognome string
+type docenti []Docente
+type Docente struct {
+	Nome    string `json:"nome"`
+	Cognome string `json:"cognome"`
 }
 
 var (
@@ -16,7 +16,7 @@ func loadDocenti() {
 	doc = nil
 	var doctemp docenti
 	for _, att := range orario.Attivita {
-		doctemp = append(doctemp, docente{att.DocNome, att.DocCognome})
+		doctemp = append(doctemp, Docente{att.DocNome, att.DocCognome})
 	}
 
 	for _, d := range doctemp {
