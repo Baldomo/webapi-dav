@@ -54,15 +54,6 @@ darwin:
     - env GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o {{fromSlash "build/webapi-dav-mac_amd64"}}{{ .SUFFIX }}
   silent: true
 
-raspberry:
-  desc: Compila il progetto per linux arm
-  vars:
-    SUFFIX: ""
-  cmds:
-    - echo "Compilo webapi-dav-linux_arm64{{ .SUFFIX }}"
-    - env GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o {{fromSlash "build/webapi-dav-linux_arm64"}}{{ .SUFFIX }}
-  silent: true
-
 init-playground:
   deps: [linux]
   desc: |
