@@ -4,16 +4,13 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
-	"strconv"
+	"leonardobaldin/webapi-dav/utils"
 	"strings"
 	"time"
-	"leonardobaldin/webapi-dav/utils"
 )
 
 const (
 	agendaTable = "npjmx_jevents_vevdetail"
-	// timeFormat  = "0000-00-00 00:00:00"
-	// time.Unix(epoch, 0).Format(time.RFC822Z)
 
 	dataSource = "leonardo:leonardo@/agenda"
 
@@ -31,22 +28,22 @@ var (
 )
 
 type EventStream struct {
-	after         int64
-	before        int64
-	titleFilter   []string
-	contentFilter []string
+	After         int64    `json:"dopo"`
+	Before        int64    `json:"prima"`
+	TitleFilter   []string `json:"titolo_filtri"`
+	ContentFilter []string `json:"contenuti_filtri"`
 	events        []Event
 }
 
 type Date struct {
-	Inizio time.Time `json:"inizio" xml:"Inizio"`
-	Fine   time.Time `json:"fine" xml:"Fine"`
+	Inizio time.Time `json:"inizio" xml:"inizio"`
+	Fine   time.Time `json:"fine" xml:"fine"`
 }
 
 type Event struct {
-	Title   string `json:"titolo" xml:"Titolo"`
-	Content string `json:"contenuto" xml:"Contenuto"`
-	Date    `json:"date" xml:"Date"`
+	Title   string `json:"titolo" xml:"titolo"`
+	Content string `json:"contenuto" xml:"contenuto"`
+	Date    `json:"date" xml:"date"`
 }
 
 func GetAgenda() error {
@@ -65,7 +62,6 @@ func (e *Event) FillEmptyFields() error {
 	query := buildQuery(e)
 	fmt.Println(query)
 
-	// errore se risultati query > 1
 	return nil
 }
 
@@ -102,40 +98,29 @@ func buildQuery(e *Event) string {
 		" where " + strings.Join(keyFields, " and ")
 }
 
-func GetInInterval(start time.Time, end time.Time) (*[]Event, error) {
-	var e []Event
-	startUnix := strconv.Itoa(int(start.Unix()))
-	endUnix := strconv.Itoa(int(end.Unix()))
-	err := db.Select(&e,
-		"select "+titleField+","+contentField+","+inizioField+","+fineField+
-			" from "+agendaTable+
-			" where "+inizioField+">="+startUnix+" and "+fineField+"<="+endUnix)
-	return &e, err
-}
-
 func NewEventStream() *EventStream {
 	return &EventStream{
-		after:  0,
-		before: 0,
-		titleFilter: []string{},
-		contentFilter: []string{},
-		events: []Event{},
+		After:         0,
+		Before:        0,
+		TitleFilter:   []string{},
+		ContentFilter: []string{},
+		events:        []Event{},
 	}
 }
 
 func (es *EventStream) GetAfter(epoch int64) *EventStream {
-	if epoch > es.before || epoch == 0 {
+	if es.Before != 0 && (epoch > es.Before || epoch == 0) {
 		return es
 	}
-	es.after = epoch
+	es.After = epoch
 	return es
 }
 
 func (es *EventStream) GetBefore(epoch int64) *EventStream {
-	if epoch < es.after {
+	if epoch < es.After {
 		return es
 	}
-	es.before = epoch
+	es.Before = epoch
 	return es
 }
 
@@ -143,7 +128,7 @@ func (es *EventStream) FilterTitle(filter []string) *EventStream {
 	if len(filter) == 0 {
 		return es
 	}
-	es.titleFilter = filter
+	es.TitleFilter = filter
 	return es
 }
 
@@ -151,38 +136,41 @@ func (es *EventStream) FilterContent(filter []string) *EventStream {
 	if len(filter) == 0 {
 		return es
 	}
-	es.contentFilter = filter
+	es.ContentFilter = filter
 	return es
 }
 
 func (es *EventStream) Close() *[]Event {
-	var query = baseQuery
-	if es.after != 0 {
-		query += inizioField + `>` + utils.I64toa(es.after)
-	}
-	if es.before != 0 {
-		if es.after != 0 {
-			query += " and "
-		}
-		query += fineField + `<` + utils.I64toa(es.before)
-	}
-	if len(es.contentFilter) != 0 {
-		for _, f := range es.contentFilter[:len(es.contentFilter)-1] {
-			query += contentField + ` like "%` + f + `%" and `
-		}
-		query += contentField + ` like "%` + es.contentFilter[len(es.contentFilter)-1] + `%"`
-	}
-	if len(es.titleFilter) != 0 {
-		if len(es.contentFilter) != 0 {
-			query += " and "
-		}
-		for _, f := range es.titleFilter[:len(es.titleFilter)-1] {
-			query += titleField + ` like "%` + f + `%" and `
-		}
-		query += titleField + ` like "%` + es.titleFilter[len(es.titleFilter)-1] + `%"`
-	}
-
-	db.Select(&es.events, query)
+	db.Select(&es.events, es.buildQuery())
 
 	return &es.events
+}
+
+func (es EventStream) buildQuery() string {
+	var parts []string
+
+	if es.After != 0 {
+		parts = append(parts, inizioField+`>`+utils.I64toa(es.After))
+	}
+	if es.Before != 0 {
+		parts = append(parts, fineField+`<`+utils.I64toa(es.Before))
+	}
+	if len(es.ContentFilter) != 0 {
+		var sub string
+		for _, f := range es.ContentFilter[:len(es.ContentFilter)-1] {
+			sub += contentField + ` like "%` + f + `%" and `
+		}
+		sub += contentField + ` like "%` + es.ContentFilter[len(es.ContentFilter)-1] + `%"`
+		parts = append(parts, sub)
+	}
+	if len(es.TitleFilter) != 0 {
+		var sub string
+		for _, f := range es.TitleFilter[:len(es.TitleFilter)-1] {
+			sub += titleField + ` like "%` + f + `%" and `
+		}
+		sub += titleField + ` like "%` + es.TitleFilter[len(es.TitleFilter)-1] + `%"`
+		parts = append(parts, sub)
+	}
+
+	return baseQuery + strings.Join(parts, " and ")
 }

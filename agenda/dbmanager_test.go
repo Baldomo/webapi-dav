@@ -1,6 +1,8 @@
 package agenda
 
 import (
+	"fmt"
+	"leonardobaldin/webapi-dav/utils"
 	"testing"
 	"time"
 )
@@ -23,6 +25,8 @@ var (
 		}, {
 			Title:   "Missing Date event",
 			Content: "Content",
+		}, {
+			Title: "Missing Date and Content event",
 		},
 	}
 
@@ -60,11 +64,11 @@ var (
 )
 
 func TestEvent_FillEmptyFields(t *testing.T) {
-
 	exp := []string{
 		"",
 		"select description from npjmx_jevents_vevdetail where summary=:summary and dtstart=:dtstart and dtend=:dtend",
 		"select dtstart,dtend from npjmx_jevents_vevdetail where summary=:summary and description=:description",
+		"select description,dtstart,dtend from npjmx_jevents_vevdetail where summary=:summary",
 	}
 
 	for i, test := range testMalformedEvents {
@@ -76,7 +80,32 @@ func TestEvent_FillEmptyFields(t *testing.T) {
 }
 
 func TestEventStream_Close(t *testing.T) {
-	exp := []string{
-		"",
+	unixPast := time.Now().AddDate(0, -6, 0).Unix()
+	unixNow := time.Now().Unix()
+
+	var testStream = EventStream{
+		After:  unixPast,
+		Before: unixNow,
+		TitleFilter: []string{
+			"aaaaa",
+			"bbbbb",
+		},
+		ContentFilter: []string{
+			"ccccc",
+		},
+	}
+
+	expected :=
+		baseQuery +
+			fmt.Sprintf(`%s>%s and `, inizioField, utils.I64toa(unixPast)) +
+			fmt.Sprintf(`%s<%s and `, fineField, utils.I64toa(unixNow)) +
+			fmt.Sprintf(`%s like "%%%s%%" and `, contentField, testStream.ContentFilter[0]) +
+			fmt.Sprintf(`%s like "%%%s%%" and `, titleField, testStream.TitleFilter[0]) +
+			fmt.Sprintf(`%s like "%%%s%%"`, titleField, testStream.TitleFilter[1])
+
+	output := testStream.buildQuery()
+
+	if expected != output {
+		t.Errorf("Expected: %s\nGot: %s", expected, output)
 	}
 }
