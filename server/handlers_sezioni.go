@@ -414,6 +414,7 @@ func AgendaHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
 	after, _ := strconv.Atoi(r.Form.Get("after"))
 	before, _ := strconv.Atoi(r.Form.Get("before"))
 	titleContains := r.Form["titleContains"]

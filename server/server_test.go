@@ -7,8 +7,7 @@ import (
 )
 
 func TestServers(t *testing.T) {
-	t.Parallel()
-	tests := []struct {
+	/*tests := []struct {
 		desc         string
 		endpoint     string
 		expectedCode int
@@ -45,7 +44,7 @@ func TestServers(t *testing.T) {
 			http.StatusOK,
 			"GET",
 		},
-	}
+	}*/
 
 	/*go Handler.Start()
 	<-Handler.Started
