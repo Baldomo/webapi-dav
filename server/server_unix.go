@@ -6,7 +6,6 @@ import (
 	"context"
 	"crypto/tls"
 	"github.com/gorilla/mux"
-	"github.com/op/go-logging"
 	"leonardobaldin/webapi-dav/config"
 	"leonardobaldin/webapi-dav/log"
 	"net/http"
@@ -28,7 +27,7 @@ var (
 	signals chan os.Signal
 	timeout = 15 * time.Second
 
-	Handler = new(serverHandler)
+	handler = new(serverHandler)
 )
 
 func NewRouter() *mux.Router {
@@ -49,7 +48,7 @@ func NewRouter() *mux.Router {
 	return router
 }
 
-func NewServer() *http.Server {
+func newServer() *http.Server {
 	return &http.Server{
 		Handler:           NewRouter(),
 		Addr:              config.GetConfig().HTTP.Port,
@@ -60,7 +59,7 @@ func NewServer() *http.Server {
 	}
 }
 
-func NewServerHTTPS() *http.Server {
+func newServerHTTPS() *http.Server {
 	return &http.Server{
 		Handler:           NewRouter(),
 		Addr:              config.GetConfig().HTTPS.Port,
@@ -83,6 +82,7 @@ func NewServerHTTPS() *http.Server {
 	}
 }
 
+func Start() { handler.Start() }
 func (sh *serverHandler) Start() {
 	sh.Started = make(chan struct{}, 1)
 	defer close(sh.Started)
@@ -98,61 +98,67 @@ func (sh *serverHandler) Start() {
 }
 
 func (sh *serverHandler) startHTTP() {
-	sh.http = NewServer()
+	sh.http = newServer()
 	go func() {
 		if err := sh.http.ListenAndServe(); err != nil {
-			//Log.Fatal(err)
+			log.Log.Fatal(err)
 		}
 	}()
-	Shutdown(sh.http)
 	return
 }
 
 func (sh *serverHandler) startHTTPS() {
-	sh.https = NewServerHTTPS()
+	sh.https = newServerHTTPS()
 	go func() {
 		if err := sh.https.ListenAndServeTLS(config.GetConfig().HTTPS.Cert, config.GetConfig().HTTPS.Key); err != nil {
-			//Log.Fatal(err)
+			log.Log.Fatal(err)
 		}
 	}()
-	Shutdown(sh.https)
 	return
 }
 
-func Shutdown(s *http.Server) {
+func Shutdown() { handler.Shutdown() }
+func (sh *serverHandler) Shutdown() {
 	signals = make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt, syscall.SIGTERM)
 	<-signals
 
-	shutdown(s, log.Log)
+	errHttp := shutdown(sh.http)
+	if errHttp != nil {
+		log.Log.Error(errHttp.Error())
+	}
+
+	errHttps := shutdown(sh.https)
+	if errHttps != nil {
+		log.Log.Error(errHttps.Error())
+	}
 }
 
-func shutdown(s *http.Server, logger *logging.Logger) {
+func shutdown(s *http.Server) error {
 	if s == nil {
-		return
+		return nil
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
-	logger.Warningf("Conclusione richieste con timeout %s", timeout)
+	log.Log.Warningf("Conclusione richieste con timeout %s", timeout)
 
 	if err := s.Shutdown(ctx); err != nil {
-		logger.Error(err.Error())
+		log.Log.Error(err.Error())
 	} else {
 		if s != nil {
-			logger.Info("Concluse richieste in arrivo")
+			log.Log.Info("Concluse richieste in arrivo")
 
 			select {
 			case <-ctx.Done():
 				if err := ctx.Err(); err != nil {
-					logger.Error(err.Error())
-					return
+					return err
 				}
 			default:
 				if deadline, ok := ctx.Deadline(); ok {
 					secs := (time.Until(deadline) + time.Second/2) / time.Second
-					logger.Warningf("Spegnimento server con timeout %vs", secs)
+					log.Log.Warningf("Spegnimento server con timeout %vs", secs)
 				}
 
 				done := make(chan error)
@@ -162,8 +168,7 @@ func shutdown(s *http.Server, logger *logging.Logger) {
 				}()
 
 				if err := <-done; err != nil {
-					logger.Error(err.Error())
-					return
+					return err
 				}
 			}
 		}
@@ -171,6 +176,10 @@ func shutdown(s *http.Server, logger *logging.Logger) {
 
 	if deadline, ok := ctx.Deadline(); ok {
 		secs := (time.Until(deadline) + time.Second/2) / time.Second
-		logger.Warningf("Completato spegnimento in %vs", secs)
+		log.Log.Warningf("Completato spegnimento in %vs", secs)
 	}
+
+	log.CloseLogger()
+
+	return nil
 }

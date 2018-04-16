@@ -8,16 +8,6 @@ all:
     - task: darwin
       vars: {SUFFIX: ""}
 
-fcgi:
-  desc: Compila il progetto per compatibilità con FastCGI
-  deps:
-    - task: windows
-      vars: {SUFFIX: .fcgi}
-    - task: linux
-      vars: {SUFFIX: .fcgi}
-    - task: darwin
-      vars: {SUFFIX: .fcgi}
-
 windows:
   desc: Compila il progetto per Windows x64
   vars:
