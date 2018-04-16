@@ -24,7 +24,7 @@ type serverHandler struct {
 var (
 	timeout = 15 * time.Second
 
-	Handler = new(serverHandler)
+	handler = new(serverHandler)
 )
 
 func NewRouter() *mux.Router {
@@ -45,7 +45,7 @@ func NewRouter() *mux.Router {
 	return router
 }
 
-func NewServer() *http.Server {
+func newServer() *http.Server {
 	return &http.Server{
 		Handler:           NewRouter(),
 		Addr:              config.GetConfig().HTTP.Port,
@@ -56,7 +56,7 @@ func NewServer() *http.Server {
 	}
 }
 
-func NewServerHTTPS() *http.Server {
+func newServerHTTPS() *http.Server {
 	return &http.Server{
 		Handler:           NewRouter(),
 		Addr:              config.GetConfig().HTTPS.Port,
@@ -79,6 +79,7 @@ func NewServerHTTPS() *http.Server {
 	}
 }
 
+func Start() { handler.Start() }
 func (sh *serverHandler) Start() {
 	sh.Started = make(chan struct{}, 1)
 	defer close(sh.Started)
@@ -101,7 +102,7 @@ func (sh *serverHandler) Start() {
 }
 
 func (sh *serverHandler) startHTTP() {
-	sh.http = NewServer()
+	sh.http = newServer()
 	go func() {
 		if err := sh.http.ListenAndServe(); err != nil {
 			log.Log.Fatal(err)
@@ -111,7 +112,7 @@ func (sh *serverHandler) startHTTP() {
 }
 
 func (sh *serverHandler) startHTTPS() {
-	sh.https = NewServerHTTPS()
+	sh.https = newServerHTTPS()
 	go func() {
 		if err := sh.https.ListenAndServeTLS(config.GetConfig().HTTPS.Cert, config.GetConfig().HTTPS.Key); err != nil {
 			log.Log.Fatal(err)
@@ -129,6 +130,7 @@ func (sh *serverHandler) restart(_, _ *struct{}) error {
 	return nil
 }
 
+func Shutdown() { handler.Shutdown(&struct{}{}, &struct{}{}) }
 func (sh *serverHandler) Shutdown(_, _ *struct{}) error {
 	sh.Closing = make(chan struct{}, 1)
 	sh.Closing <- struct{}{}

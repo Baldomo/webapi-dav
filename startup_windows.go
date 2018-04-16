@@ -56,7 +56,7 @@ func main() {
 
 	InitLogger(initServer)
 
-	server.Handler.Start()
+	server.Start()
 }
 
 func initServer() {

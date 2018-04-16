@@ -46,8 +46,8 @@ func TestServers(t *testing.T) {
 		},
 	}*/
 
-	/*go Handler.Start()
-	<-Handler.Started
+	/*go handler.Start()
+	<-handler.Started
 
 	for _, test := range tests {
 		req, _ := http.NewRequest(test.method, test.endpoint, nil)
@@ -58,8 +58,8 @@ func TestServers(t *testing.T) {
 
 func executeRequest(req *http.Request) *httptest.ResponseRecorder {
 	rr := httptest.NewRecorder()
-	Handler.https.Handler.ServeHTTP(rr, req)
-	Handler.http.Handler.ServeHTTP(rr, req)
+	handler.https.Handler.ServeHTTP(rr, req)
+	handler.http.Handler.ServeHTTP(rr, req)
 
 	return rr
 }
