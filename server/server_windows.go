@@ -10,11 +10,12 @@ import (
 	"net/http"
 	"net/rpc"
 	"time"
+	"fmt"
 )
 
 type serverHandler struct {
 	Started chan struct{}
-	Closing chan struct{}
+	Stopped chan struct{}
 
 	http  *http.Server
 	https *http.Server
@@ -132,25 +133,32 @@ func (sh *serverHandler) restart(_, _ *struct{}) error {
 
 func Shutdown() { handler.Shutdown(&struct{}{}, &struct{}{}) }
 func (sh *serverHandler) Shutdown(_, _ *struct{}) error {
-	sh.Closing = make(chan struct{}, 1)
-	sh.Closing <- struct{}{}
-	close(sh.Closing)
-	errHttp := shutdown(sh.http)
+	sh.Stopped = make(chan struct{}, 2)
+	errHttp := shutdown(sh.http, sh.Stopped)
 	if errHttp != nil {
 		log.Log.Error(errHttp.Error())
 		return errHttp
 	}
 
-	errHttps := shutdown(sh.https)
+	errHttps := shutdown(sh.https, sh.Stopped)
 	if errHttps != nil {
 		log.Log.Error(errHttps.Error())
 		return errHttps
 	}
 
+	select {
+	case sh.Stopped <- struct{}{}:
+		close(sh.Stopped)
+		return fmt.Errorf("impossibile terminare server automaticamente")
+	default:
+		break
+	}
+
+	close(sh.Stopped)
 	return nil
 }
 
-func shutdown(s *http.Server) error {
+func shutdown(s *http.Server, cchan chan struct{}) error {
 	if s == nil {
 		return nil
 	}
@@ -191,6 +199,7 @@ func shutdown(s *http.Server) error {
 	}
 
 	if deadline, ok := ctx.Deadline(); ok {
+		cchan <- struct{}{}
 		secs := (time.Until(deadline) + time.Second/2) / time.Second
 		log.Log.Warningf("Completato spegnimento in %vs", secs)
 	}
