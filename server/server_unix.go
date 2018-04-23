@@ -17,7 +17,7 @@ import (
 
 type serverHandler struct {
 	Started chan struct{}
-	Closing chan struct{}
+	Stopped chan struct{}
 
 	http  *http.Server
 	https *http.Server
@@ -119,6 +119,7 @@ func (sh *serverHandler) startHTTPS() {
 
 func Shutdown() { handler.Shutdown() }
 func (sh *serverHandler) Shutdown() {
+	sh.Stopped = make(chan struct{}, 2)
 	signals = make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt, syscall.SIGTERM)
 	<-signals
@@ -132,9 +133,18 @@ func (sh *serverHandler) Shutdown() {
 	if errHttps != nil {
 		log.Log.Error(errHttps.Error())
 	}
+
+	select {
+	case sh.Stopped <- struct{}{}:
+		close(sh.Stopped)
+	default:
+		break
+	}
+
+	close(sh.Stopped)
 }
 
-func shutdown(s *http.Server) error {
+func shutdown(s *http.Server, cchan chan struct{}) error {
 	if s == nil {
 		return nil
 	}
@@ -175,6 +185,7 @@ func shutdown(s *http.Server) error {
 	}
 
 	if deadline, ok := ctx.Deadline(); ok {
+		cchan <- struct{}{}
 		secs := (time.Until(deadline) + time.Second/2) / time.Second
 		log.Log.Warningf("Completato spegnimento in %vs", secs)
 	}
