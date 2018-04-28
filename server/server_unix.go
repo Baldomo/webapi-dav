@@ -124,12 +124,12 @@ func (sh *serverHandler) Shutdown() {
 	signal.Notify(signals, os.Interrupt, syscall.SIGTERM)
 	<-signals
 
-	errHttp := shutdown(sh.http)
+	errHttp := shutdown(sh.http, sh.Stopped)
 	if errHttp != nil {
 		log.Log.Error(errHttp.Error())
 	}
 
-	errHttps := shutdown(sh.https)
+	errHttps := shutdown(sh.https, sh.Stopped)
 	if errHttps != nil {
 		log.Log.Error(errHttps.Error())
 	}

@@ -26,7 +26,6 @@
   branch = "master"
   name = "github.com/nightlyone/lockfile"
 
-
 [[constraint]]
   branch = "master"
   name = "github.com/jmoiron/sqlx"
