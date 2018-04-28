@@ -43,6 +43,14 @@ def build(name):
         Builder(commands).start()
 
 
+@cli.command()
+def pack():
+    if not os.path.exists(out_folder):
+        print('folder {} not found'.format(out_folder))
+        exit(1)
+    subprocess.run('cd {} && upx --brute webapi-*'.format(out_folder), shell=True).check_returncode()
+
+
 class Builder(object):
     def __init__(self, args_dict):
         if len(args_dict) == 0 or not args_dict:
@@ -147,6 +155,11 @@ def dummyfiles(numfiles, dirs):
                         raise
             file = open(filepath, 'w+')
             file.truncate(r.randint(4e5, 4e6))
+
+
+@cli.command()
+def test():
+    subprocess.run('go test -v -benchmem ./...', shell=True).check_returncode()
 
 
 if __name__ == '__main__':
