@@ -12,16 +12,12 @@ var (
 		{
 			Title:   "Complete event",
 			Content: "Content",
-			Date: Date{
-				Inizio: time.Now().AddDate(0, 0, -1),
-				Fine:   time.Now(),
-			},
+			Inizio:  time.Now().AddDate(0, 0, -1).Unix(),
+			Fine:    time.Now().Unix(),
 		}, {
-			Title: "Missing Content event",
-			Date: Date{
-				Inizio: time.Now().AddDate(0, 0, -1),
-				Fine:   time.Now(),
-			},
+			Title:  "Missing Content event",
+			Inizio: time.Now().AddDate(0, 0, -1).Unix(),
+			Fine:   time.Now().Unix(),
 		}, {
 			Title:   "Missing Date event",
 			Content: "Content",
@@ -34,31 +30,23 @@ var (
 		{
 			Title:   "Complete event",
 			Content: "Content",
-			Date: Date{
-				Inizio: time.Now().AddDate(0, 0, -1),
-				Fine:   time.Now(),
-			},
+			Inizio:  time.Now().AddDate(0, 0, -1).Unix(),
+			Fine:    time.Now().Unix(),
 		}, {
 			Title:   "Complete event #2",
 			Content: "Content",
-			Date: Date{
-				Inizio: time.Now().AddDate(0, -1, -1),
-				Fine:   time.Now(),
-			},
+			Inizio:  time.Now().AddDate(0, -1, -1).Unix(),
+			Fine:    time.Now().Unix(),
 		}, {
 			Title:   "Complete event #3",
 			Content: "Content",
-			Date: Date{
-				Inizio: time.Now().AddDate(0, -2, -1),
-				Fine:   time.Now(),
-			},
+			Inizio:  time.Now().AddDate(0, -2, -1).Unix(),
+			Fine:    time.Now().Unix(),
 		}, {
 			Title:   "Complete event #4",
 			Content: "Content",
-			Date: Date{
-				Inizio: time.Now().AddDate(-1, 0, -1),
-				Fine:   time.Now(),
-			},
+			Inizio:  time.Now().AddDate(-1, 0, -1).Unix(),
+			Fine:    time.Now().Unix(),
 		},
 	}
 )
@@ -107,5 +95,29 @@ func TestEventStream_Close(t *testing.T) {
 
 	if expected != output {
 		t.Errorf("Expected: %s\nGot: %s", expected, output)
+	}
+}
+
+func TestEventStream_GetBefore(t *testing.T) {
+	expected := &EventStream{
+		Before: int64(951195600),
+	}
+	testTime, _ := time.Parse(time.RFC822Z, "22 Feb 00 05:00 +0000")
+	es := NewEventStream().GetBefore(testTime.Unix())
+
+	if expected.Before != es.Before {
+		t.Errorf("Expected before %d, got %d", expected.Before, es.Before)
+	}
+}
+
+func TestEventStream_GetAfter(t *testing.T) {
+	expected := &EventStream{
+		After: int64(951195600),
+	}
+	testTime, _ := time.Parse(time.RFC822Z, "22 Feb 00 05:00 +0000")
+	es := NewEventStream().GetAfter(testTime.Unix())
+
+	if expected.After != es.After {
+		t.Errorf("Expected after %d, got %d", expected.After, es.After)
 	}
 }

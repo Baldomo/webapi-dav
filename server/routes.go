@@ -119,7 +119,7 @@ var routes = Routes{
 	// Agenda
 	Route{
 		"Agenda",
-		"GET",
+		"POST",
 		"/api/agenda",
 		AgendaHandler,
 	},
