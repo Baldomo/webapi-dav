@@ -103,12 +103,6 @@ var routes = Routes{
 		"/api/orario",
 		OrarioHandler,
 	},
-	/*Route{
-		"Orario_Table_Giorno",
-		"GET",
-		`/api/orario/{giorno:(?:(?:(luned)|(marted)|(mercoled)|(gioved)|(venerd))([i|ì]))|(sabato)}`,
-		OrarioGiornoHandler,
-	},*/
 	Route{
 		"Orario_Table_Classe",
 		"GET",
@@ -117,9 +111,17 @@ var routes = Routes{
 	},
 	Route{
 		"Orario_Table_Docente",
-		"GET",
-		"/api/orario/docente/{cognome:[a-zA-Z]+}",
+		"POST",
+		"/api/orario/docente",
 		OrarioDocenteHandler,
+	},
+
+	// Agenda
+	Route{
+		"Agenda",
+		"POST",
+		"/api/agenda",
+		AgendaHandler,
 	},
 
 	// Progetti

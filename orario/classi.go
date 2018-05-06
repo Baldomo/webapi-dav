@@ -1,10 +1,20 @@
 package orario
 
-var (
-	classi []classe
+import (
+	"encoding/xml"
+	"regexp"
 )
 
+var (
+	classi []classe
+
+	reClasse = regexp.MustCompile("[1-5][a-zA-Z]")
+)
+
+type classe string
+
 func loadClassi() {
+	classi = nil
 	var classitemp []classe
 	for _, att := range orario.Attivita {
 		classitemp = append(classitemp, att.Classe)
@@ -13,7 +23,7 @@ func loadClassi() {
 	for _, c := range classitemp {
 		skip := false
 		for _, u := range classi {
-			if c == u {
+			if c == u || c.String() == "" {
 				skip = true
 				break
 			}
@@ -22,6 +32,20 @@ func loadClassi() {
 			classi = append(classi, c)
 		}
 	}
+}
+
+func (c *classe) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) error {
+	var content string
+	if err := decoder.DecodeElement(&content, &start); err != nil {
+		return err
+	}
+	content = reClasse.FindString(content)
+	*c = classe(content)
+	return nil
+}
+
+func (c classe) String() string {
+	return string(c)
 }
 
 func GetAllClassi() *[]classe {

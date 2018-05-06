@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"crypto/tls"
+	"fmt"
 	"github.com/gorilla/mux"
 	"leonardobaldin/webapi-dav/config"
 	"leonardobaldin/webapi-dav/log"
@@ -14,17 +15,19 @@ import (
 
 type serverHandler struct {
 	Started chan struct{}
-	Closing chan struct{}
+	Stopped chan struct{}
 
 	http  *http.Server
 	https *http.Server
 	ipc   *rpc.Server
+
+	onShutdown []func()
 }
 
 var (
 	timeout = 15 * time.Second
 
-	Handler = new(serverHandler)
+	handler = new(serverHandler)
 )
 
 func NewRouter() *mux.Router {
@@ -45,7 +48,7 @@ func NewRouter() *mux.Router {
 	return router
 }
 
-func NewServer() *http.Server {
+func newServer() *http.Server {
 	return &http.Server{
 		Handler:           NewRouter(),
 		Addr:              config.GetConfig().HTTP.Port,
@@ -56,7 +59,7 @@ func NewServer() *http.Server {
 	}
 }
 
-func NewServerHTTPS() *http.Server {
+func newServerHTTPS() *http.Server {
 	return &http.Server{
 		Handler:           NewRouter(),
 		Addr:              config.GetConfig().HTTPS.Port,
@@ -79,6 +82,7 @@ func NewServerHTTPS() *http.Server {
 	}
 }
 
+func Start() { handler.Start() }
 func (sh *serverHandler) Start() {
 	sh.Started = make(chan struct{}, 1)
 	defer close(sh.Started)
@@ -101,7 +105,7 @@ func (sh *serverHandler) Start() {
 }
 
 func (sh *serverHandler) startHTTP() {
-	sh.http = NewServer()
+	sh.http = newServer()
 	go func() {
 		if err := sh.http.ListenAndServe(); err != nil {
 			log.Log.Fatal(err)
@@ -111,7 +115,7 @@ func (sh *serverHandler) startHTTP() {
 }
 
 func (sh *serverHandler) startHTTPS() {
-	sh.https = NewServerHTTPS()
+	sh.https = newServerHTTPS()
 	go func() {
 		if err := sh.https.ListenAndServeTLS(config.GetConfig().HTTPS.Cert, config.GetConfig().HTTPS.Key); err != nil {
 			log.Log.Fatal(err)
@@ -129,26 +133,43 @@ func (sh *serverHandler) restart(_, _ *struct{}) error {
 	return nil
 }
 
+func OnShutdown(f func()) {
+	handler.onShutdown = append(handler.onShutdown, f)
+}
+
+func Shutdown() { handler.Shutdown(&struct{}{}, &struct{}{}) }
 func (sh *serverHandler) Shutdown(_, _ *struct{}) error {
-	sh.Closing = make(chan struct{}, 1)
-	sh.Closing <- struct{}{}
-	close(sh.Closing)
-	errHttp := shutdown(sh.http)
+	sh.Stopped = make(chan struct{}, 2)
+
+	for _, f := range sh.onShutdown {
+		f()
+	}
+
+	errHttp := shutdown(sh.http, sh.Stopped)
 	if errHttp != nil {
 		log.Log.Error(errHttp.Error())
 		return errHttp
 	}
 
-	errHttps := shutdown(sh.https)
+	errHttps := shutdown(sh.https, sh.Stopped)
 	if errHttps != nil {
 		log.Log.Error(errHttps.Error())
 		return errHttps
 	}
 
+	select {
+	case sh.Stopped <- struct{}{}:
+		close(sh.Stopped)
+		return fmt.Errorf("impossibile terminare server automaticamente")
+	default:
+		break
+	}
+
+	close(sh.Stopped)
 	return nil
 }
 
-func shutdown(s *http.Server) error {
+func shutdown(s *http.Server, cchan chan struct{}) error {
 	if s == nil {
 		return nil
 	}
@@ -189,6 +210,7 @@ func shutdown(s *http.Server) error {
 	}
 
 	if deadline, ok := ctx.Deadline(); ok {
+		cchan <- struct{}{}
 		secs := (time.Until(deadline) + time.Second/2) / time.Second
 		log.Log.Warningf("Completato spegnimento in %vs", secs)
 	}

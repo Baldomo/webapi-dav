@@ -19,8 +19,8 @@ type APIMessage struct {
 }
 
 const (
-	VersionNumber = "0.3.0"
-	VersionDate   = "06/12/2017"
+	VersionNumber = "0.4.0"
+	VersionDate   = "04/02/2018"
 )
 
 var (
@@ -45,6 +45,7 @@ var (
 
 	ops = map[string]*Operation{
 		"about":                   {"GET", "/api/about", "Restituirà informazioni generali sulla API", "/about"},
+		"agenda":                  {"POST", "/api/agenda", "Restituisce eventi dell'agenda filtrati dal contenuto della richiesta POST JSON", "/agenda"},
 		"classi":                  {"GET", "/api/classi", "Restituirà la lista di tutte le classi del liceo", "/classi"},
 		"comunicati":              {"GET", "/api/comunicati", "Restituirà la lista completa di comunicati", "/comunicati"},
 		"comunicati-docenti":      {"GET", "/api/comunicati/docenti", "Restituirà la lista dei comunicati per i docenti", "/comunicati/docenti"},
@@ -56,6 +57,7 @@ var (
 		"docenti":                 {"GET", "/api/docenti", "Restituirà la lista dei docenti del liceo", "/docenti"},
 		"orario":                  {"GET", "/api/orario", "Restituirà l'orario completo di tutte le classi (PESANTE)", "/orario"},
 		"orario-classe":           {"GET", "/api/orario/classe/4b", "Restituirà l'orario della classe specificata", "/orario/classe/{c: classe}"},
+		"orario-docente":          {"POST", "/api/orario/docente", "Restituisce l'orario del docente con nome e cognome nella richiesta POST in JSON", "/orario/docente..."},
 		"teapot":                  {"GET", "/api/teapot", "Restituirà codice HTTP 418. Utile solamente a capire se la API è online e funzionante", "/teapot"},
 		"version":                 {"GET", "/api/version", "Restituirà la versione dell'API in uso", "/version"},
 	}

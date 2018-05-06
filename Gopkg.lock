@@ -33,6 +33,15 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/jmoiron/sqlx"
+  packages = [
+    ".",
+    "reflectx"
+  ]
+  revision = "cf35089a197953c69420c8d0cecda90809764b1d"
+
+[[projects]]
+  branch = "master"
   name = "github.com/nightlyone/lockfile"
   packages = ["."]
   revision = "6a197d5ea61168f2ac821de2b7f011b250904900"
@@ -58,6 +67,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "b745ea7819f85b02ddad5141872407f651ad7b846ce708749bddb61334e6372c"
+  inputs-digest = "37cd9a6d92fc65e69d3cfaaaa327c663354a915edc79b6fe344ed0410a166ee8"
   solver-name = "gps-cdcl"
   solver-version = 1

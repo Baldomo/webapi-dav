@@ -5,6 +5,8 @@ import (
 	com "leonardobaldin/webapi-dav/comunicati"
 	"leonardobaldin/webapi-dav/config"
 	. "leonardobaldin/webapi-dav/log"
+	"os"
+	"path/filepath"
 	"strings"
 	"time"
 )
@@ -17,7 +19,6 @@ type Watcher interface {
 
 type FileWatcher struct {
 	Path    string
-	Store   interface{}
 	OnEvent func()
 	Notify  bool
 }
@@ -33,6 +34,12 @@ type ConfigWatcher struct {
 }
 
 func (fw *FileWatcher) Watch() {
+	if f, err := os.Stat(fw.Path); !f.IsDir() {
+		fw.Path = filepath.Base(fw.Path)
+	} else if err != nil {
+		Log.Critical(err.Error())
+		return
+	}
 	w := watcher.New()
 	w.SetMaxEvents(1)
 	w.FilterOps(watcher.Create, watcher.Write)
@@ -79,6 +86,12 @@ func (fw FileWatcher) notifyComunicato(event watcher.Event) {
 }
 
 func (cw *WebContentWatcher) Watch() {
+	if f, err := os.Stat(cw.Path); !f.IsDir() {
+		cw.Path = filepath.Base(cw.Path)
+	} else if err != nil {
+		Log.Critical(err.Error())
+		return
+	}
 	w := watcher.New()
 	w.SetMaxEvents(1)
 	go func() {
