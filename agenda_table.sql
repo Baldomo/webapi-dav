@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS npjmx_jevents_vevdetail (
   evdet_id INT(12) AUTO_INCREMENT PRIMARY KEY NOT NULL,
-  rawdata LONGTEXT NOT NULL,
+  rawdata LONGTEXT,
   dtstart INT(11) NOT NULL DEFAULT 0,
   dtstartraw VARCHAR(30) NOT NULL DEFAULT '',
   duration INT(11) NOT NULL DEFAULT 0,

@@ -4,20 +4,20 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
+	"leonardobaldin/webapi-dav/log"
 	"leonardobaldin/webapi-dav/utils"
 	"strings"
-	"time"
 )
 
 const (
-	agendaTable = "npjmx_jevents_vevdetail"
+	agendaTable = "agenda.npjmx_jevents_vevdetail"
 
-	dataSource = "leonardo:leonardo@/agenda"
+	dataSource = "leonardo:leonardo@/"
 
-	titleField   = "summary"
-	contentField = "description"
 	inizioField  = "dtstart"
 	fineField    = "dtend"
+	contentField = "description"
+	titleField   = "summary"
 
 	baseQuery = "select " + titleField + "," + contentField + "," + inizioField + "," + fineField +
 		" from " + agendaTable + " where "
@@ -28,34 +28,27 @@ var (
 )
 
 type EventStream struct {
-	After         int64    `json:"dopo"`
-	Before        int64    `json:"prima"`
-	TitleFilter   []string `json:"titolo_filtri"`
-	ContentFilter []string `json:"contenuti_filtri"`
+	After         int64    `json:"dopo,omitempty"`
+	Before        int64    `json:"prima,omitempty"`
+	TitleFilter   []string `json:"filtri_titolo,omitempty"`
+	ContentFilter []string `json:"filtri_contenuto,omitempty"`
 	events        []Event
 }
 
-type Date struct {
-	Inizio time.Time `json:"inizio" xml:"inizio"`
-	Fine   time.Time `json:"fine" xml:"fine"`
-}
-
 type Event struct {
-	Title   string `json:"titolo" xml:"titolo"`
-	Content string `json:"contenuto" xml:"contenuto"`
-	Date    `json:"date" xml:"date"`
+	Inizio  int64  `json:"inizio" xml:"inizio" db:"dtstart"`
+	Fine    int64  `json:"fine" xml:"fine" db:"dtend"`
+	Content string `json:"contenuto" xml:"contenuto" db:"description"`
+	Title   string `json:"titolo" xml:"titolo" db:"summary"`
 }
 
-func GetAgenda() error {
+func Fetch() {
 	var err error
-	db, err = sqlx.Open("mysql", dataSource)
+	db, err = sqlx.Connect("mysql", dataSource)
 	if err != nil {
-		db.Close()
-		return err
+		log.Log.Critical("Errore collegamento a database")
+		log.Log.Critical(err.Error())
 	}
-	db.Close()
-
-	return nil
 }
 
 func (e *Event) FillEmptyFields() error {
@@ -78,12 +71,12 @@ func buildQuery(e *Event) string {
 	} else {
 		keyFields = append(keyFields, contentField+"=:"+contentField)
 	}
-	if e.Date.Inizio.IsZero() {
+	if e.Inizio == 0 {
 		emptyFields = append(emptyFields, inizioField)
 	} else {
 		keyFields = append(keyFields, inizioField+"=:"+inizioField)
 	}
-	if e.Date.Fine.IsZero() {
+	if e.Fine == 0 {
 		emptyFields = append(emptyFields, fineField)
 	} else {
 		keyFields = append(keyFields, fineField+"=:"+fineField)
@@ -141,7 +134,20 @@ func (es *EventStream) FilterContent(filter []string) *EventStream {
 }
 
 func (es *EventStream) Close() *[]Event {
-	db.Select(&es.events, es.buildQuery())
+	rows, err := db.Query(es.buildQuery())
+	defer rows.Close()
+	if err != nil {
+		log.Log.Error(err.Error())
+	}
+
+	for rows.Next() {
+		e := Event{}
+		err = rows.Scan(&e.Title, &e.Content, &e.Inizio, &e.Fine)
+		if err != nil {
+			log.Log.Error(err.Error())
+		}
+		es.events = append(es.events, e)
+	}
 
 	return &es.events
 }

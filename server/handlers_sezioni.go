@@ -410,21 +410,12 @@ func OrarioDocenteHandler(w http.ResponseWriter, r *http.Request) {
 // Agenda
 
 func AgendaHandler(w http.ResponseWriter, r *http.Request) {
-	if err := r.ParseForm(); err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
+	var es agenda.EventStream
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&es)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
 	}
-
-	after, _ := strconv.Atoi(r.Form.Get("after"))
-	before, _ := strconv.Atoi(r.Form.Get("before"))
-	titleContains := r.Form["titleContains"]
-	contentContains := r.Form["contentContains"]
-
-	es := agenda.NewEventStream().
-		GetAfter(int64(after)).
-		GetBefore(int64(before)).
-		FilterTitle(titleContains).
-		FilterContent(contentContains)
 
 	switch utils.RequestMime(r.Header) {
 	case "application/json":

@@ -29,7 +29,7 @@ commands = {
 }
 
 
-@click.group()
+@click.group(chain=True)
 def cli():
     click.echo('')
 
@@ -41,6 +41,8 @@ def build(name):
         Builder({name: commands[name]}).start()
     elif name == 'all':
         Builder(commands).start()
+    elif name == 'this':
+        Builder({name: commands[current_platform]}).start()
 
 
 @cli.command()
@@ -52,7 +54,7 @@ def pack():
 
 
 class Builder(object):
-    def __init__(self, args_dict):
+    def __init__(self, args_dict=None):
         if len(args_dict) == 0 or not args_dict:
             return
         self.args = self.format_commands(args_dict)
@@ -100,8 +102,10 @@ class Builder(object):
             target = 'linux'
         elif 'darwin' in target:
             target = 'darwin'
+        elif 'this' in target:
+            target = current_platform
         else:
-            raise ValueError('only windows, linux and darwin are supported')
+            raise ValueError('only windows, linux and darwin are supported; use "this" to target current platform')
 
         if platform.system() == 'Windows':
             return 'set "GOOS={}" && set "GOARCH=amd64" && '.format(target)

@@ -15,6 +15,7 @@ import (
 	"net/rpc"
 	"os"
 	"path/filepath"
+	"leonardobaldin/webapi-dav/agenda"
 )
 
 const (
@@ -99,6 +100,10 @@ func initServer() {
 
 	Log.Info("Caricamento config...")
 	go PrefWatcher.Watch()
+
+	Log.Info("Collegamento a database...")
+	agenda.Fetch()
+
 	Log.Info("Avvio completato.")
 	Log.Info("---------------------------------")
 }

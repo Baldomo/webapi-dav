@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"crypto/tls"
+	"fmt"
 	"github.com/gorilla/mux"
 	"leonardobaldin/webapi-dav/config"
 	"leonardobaldin/webapi-dav/log"
@@ -10,7 +11,6 @@ import (
 	"net/http"
 	"net/rpc"
 	"time"
-	"fmt"
 )
 
 type serverHandler struct {
@@ -20,6 +20,8 @@ type serverHandler struct {
 	http  *http.Server
 	https *http.Server
 	ipc   *rpc.Server
+
+	onShutdown []func()
 }
 
 var (
@@ -131,9 +133,18 @@ func (sh *serverHandler) restart(_, _ *struct{}) error {
 	return nil
 }
 
+func OnShutdown(f func()) {
+	handler.onShutdown = append(handler.onShutdown, f)
+}
+
 func Shutdown() { handler.Shutdown(&struct{}{}, &struct{}{}) }
 func (sh *serverHandler) Shutdown(_, _ *struct{}) error {
 	sh.Stopped = make(chan struct{}, 2)
+
+	for _, f := range sh.onShutdown {
+		f()
+	}
+
 	errHttp := shutdown(sh.http, sh.Stopped)
 	if errHttp != nil {
 		log.Log.Error(errHttp.Error())
