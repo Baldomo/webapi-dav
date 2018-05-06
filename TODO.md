@@ -1,9 +1,11 @@
 # MILESTONE
-- [![0.3.0](http://progressed.io/bar/100?title=v0.3.0)](https://bitbucket.org/Baldomo/webapi-dav/commits/63207eb6c668d40cb38d59e212539425966ba27e)
-- [![0.2.0](http://progressed.io/bar/100?title=v0.2.0)](https://bitbucket.org/Baldomo/webapi-dav/commits/360a9de8917d)
-- [![0.1.0](http://progressed.io/bar/100?title=v0.1.0)](https://bitbucket.org/Baldomo/webapi-dav/commits/03d5f82f2d93)
+- [![0.4.0](http://progressed.io/bar/100?title=v0.4.0)](https://bitbucket.org/Baldomo/webapi-dav/commits/tag/v0.4.0)
+- [![0.3.0](http://progressed.io/bar/100?title=v0.3.0)](https://bitbucket.org/Baldomo/webapi-dav/commits/tag/v0.3.0)
+- [![0.2.0](http://progressed.io/bar/100?title=v0.2.0)](https://bitbucket.org/Baldomo/webapi-dav/commits/tag/v0.2.0)
+- [![0.1.0](http://progressed.io/bar/100?title=v0.1.0)](https://bitbucket.org/Baldomo/webapi-dav/commits/tag/v0.1.0)
 
 # TODO
+- Aggiungere test per ogni pkg
 - Finire interfaccia database
 - Fixare ReloadPrefs in `preferences.go`
 

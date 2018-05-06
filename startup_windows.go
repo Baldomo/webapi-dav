@@ -15,6 +15,7 @@ import (
 	"net/rpc"
 	"os"
 	"path/filepath"
+	"leonardobaldin/webapi-dav/agenda"
 )
 
 const (
@@ -56,20 +57,23 @@ func main() {
 
 	InitLogger(initServer)
 
-	server.Handler.Start()
+	server.Start()
 }
 
 func initServer() {
 	var (
-		GenitoriWatcher = FileWatcher{config.GetConfig().Dirs.Genitori, com.Genitori, func() {
+		GenitoriWatcher = FileWatcher{config.GetConfig().Dirs.Genitori, func() {
 			com.LoadComunicati(com.TipoGenitori)
 		}, true}
-		StudentiWatcher = FileWatcher{config.GetConfig().Dirs.Studenti, com.Studenti, func() {
+		StudentiWatcher = FileWatcher{config.GetConfig().Dirs.Studenti, func() {
 			com.LoadComunicati(com.TipoStudenti)
 		}, true}
-		DocentiWatcher = FileWatcher{config.GetConfig().Dirs.Docenti, com.Docenti, func() {
+		DocentiWatcher = FileWatcher{config.GetConfig().Dirs.Docenti, func() {
 			com.LoadComunicati(com.TipoDocenti)
 		}, true}
+		OrarioWatcher = FileWatcher{config.GetConfig().Dirs.Orario, func() {
+			orario.LoadOrario(config.GetConfig().Dirs.Orario)
+		}, false}
 		HTMLWatcher = WebContentWatcher{config.GetConfig().Dirs.HTML, func() {
 			server.RefreshHTML()
 		}}
@@ -92,9 +96,14 @@ func initServer() {
 
 	Log.Info("Caricamento orario...")
 	orario.LoadOrario(config.GetConfig().Dirs.Orario)
+	go OrarioWatcher.Watch()
 
 	Log.Info("Caricamento config...")
 	go PrefWatcher.Watch()
+
+	Log.Info("Collegamento a database...")
+	agenda.Fetch()
+
 	Log.Info("Avvio completato.")
 	Log.Info("---------------------------------")
 }
