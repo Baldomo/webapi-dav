@@ -11,6 +11,9 @@ chiave = "id_rsa.nodes"
 abilitato = true
 porta = ":8080"
 
+[db]
+database = "sitoliceo"
+
 [cartelle]
 html = "static"
 comunicati_genitori = "comunicati-genitori"
