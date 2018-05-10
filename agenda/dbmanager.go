@@ -7,24 +7,24 @@ import (
 	"leonardobaldin/webapi-dav/log"
 	"leonardobaldin/webapi-dav/utils"
 	"strings"
+	"leonardobaldin/webapi-dav/config"
 )
 
 const (
-	agendaTable = "agenda.npjmx_jevents_vevdetail"
-
-	dataSource = "leonardo:leonardo@/"
+	dataSource = "apiliceo:apiliceo2018-txc122tr887@/"
 
 	inizioField  = "dtstart"
 	fineField    = "dtend"
 	contentField = "description"
 	titleField   = "summary"
-
-	baseQuery = "select " + titleField + "," + contentField + "," + inizioField + "," + fineField +
-		" from " + agendaTable + " where "
 )
 
 var (
 	db *sqlx.DB
+
+	agendaTable = config.GetConfig().DB.Schema + ".npjmx_jevents_vevdetail"
+	baseQuery = "select " + titleField + "," + contentField + "," + inizioField + "," + fineField +
+		" from " + agendaTable + " where "
 )
 
 type EventStream struct {

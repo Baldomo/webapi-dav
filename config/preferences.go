@@ -15,6 +15,7 @@ type config struct {
 	General general   `json:"generali" toml:"generali"`
 	HTTPS   connhttps `json:"https" toml:"https"`
 	HTTP    connhttp  `json:"http" toml:"http"`
+	DB      db        `json:"db" toml:"db"`
 	Dirs    dirs      `json:"cartelle" toml:"cartelle"`
 	Log     logPrefs  `json:"logging" toml:"logging"`
 }
@@ -42,6 +43,10 @@ type dirs struct {
 	Docenti  string `json:"comunicati_docenti" toml:"comunicati_docenti"`
 	Progetti string `json:"progetti" toml:"progetti"`
 	Orario   string `json:"orario" toml:"orario"`
+}
+
+type db struct {
+	Schema string `json:"database" toml:"database"`
 }
 
 type logPrefs struct {
@@ -75,6 +80,9 @@ var (
 		connhttp{
 			true,
 			":8080",
+		},
+		db{
+			"sitoliceo",
 		},
 		dirs{
 			"./static",
