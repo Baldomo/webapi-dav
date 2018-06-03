@@ -1,6 +1,9 @@
 package orario
 
-import "strings"
+import (
+	"encoding/json"
+	"errors"
+)
 
 type docenti []Docente
 type Docente struct {
@@ -37,12 +40,13 @@ func GetAllDocenti() *docenti {
 	return &doc
 }
 
-func GetDocentiCogn(cogn string) *docenti {
-	var d docenti
-	for _, docente := range doc {
-		if strings.ToLower(docente.Cognome) == strings.ToLower(cogn) {
-			d = append(d, docente)
-		}
+func (doc *Docente) UnmarshalJSON(data []byte) error {
+	if doc.Nome == "" {
+		return errors.New("JSON incompleto - nome mancante")
 	}
-	return &d
+	if doc.Cognome == "" {
+		return errors.New("JSON incompleto - cognome mancante")
+	}
+	json.Unmarshal(data, *doc)
+	return nil
 }

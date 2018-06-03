@@ -36,10 +36,10 @@ type EventStream struct {
 }
 
 type Event struct {
-	Inizio  int64  `json:"inizio" xml:"inizio" db:"dtstart"`
-	Fine    int64  `json:"fine" xml:"fine" db:"dtend"`
-	Content string `json:"contenuto" xml:"contenuto" db:"description"`
-	Title   string `json:"titolo" xml:"titolo" db:"summary"`
+	Inizio  int64  `json:"inizio" db:"dtstart"`
+	Fine    int64  `json:"fine" db:"dtend"`
+	Content string `json:"contenuto" db:"description"`
+	Title   string `json:"titolo" db:"summary"`
 }
 
 func Fetch() {
