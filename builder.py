@@ -57,12 +57,13 @@ class Builder(object):
     def __init__(self, args_dict=None):
         if len(args_dict) == 0 or not args_dict:
             return
-        self.args = self.format_commands(args_dict)
+        self.args = args_dict
+        self.format_commands()
         print(self.args if self.args else 'none')
 
         self.queue = q.Queue()
-        for arg in self.args:
-            self.queue.put(arg)
+        for target, arg in self.args.items():
+            self.queue.put((target, arg))
 
     def start(self):
         threads = [
@@ -82,17 +83,14 @@ class Builder(object):
                 arg = queue.get(block=False)
             except q.Empty:
                 break
-            # print('Building {}'.format(arg.split()[5]))
-            subprocess.Popen(arg, shell=True).wait()
+            # print('Building {}'.format(filenames[arg[0]]))
+            subprocess.Popen(arg[1], shell=True).wait()
             queue.task_done()
             break
 
-    @staticmethod
-    def format_commands(args_dict):
-        fargs = []
-        for target, cmd in args_dict.items():
-            fargs.append(Builder.generate_env_flags(target) + cmd)
-        return fargs
+    def format_commands(self):
+        for target, cmd in self.args.items():
+            self.args[target] = Builder.generate_env_flags(target) + cmd
 
     @staticmethod
     def generate_env_flags(target):

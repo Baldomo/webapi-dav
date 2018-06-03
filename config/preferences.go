@@ -50,7 +50,7 @@ type db struct {
 }
 
 type logPrefs struct {
-	Enabled  bool   `json:"abilitato" tom:"abilitato"`
+	Enabled  bool   `json:"abilitato" toml:"abilitato"`
 	LogFile  string `json:"file_log" toml:"file_log"`
 	LogLevel string `json:"livello_log" toml:"livello_log"`
 }

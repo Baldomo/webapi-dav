@@ -14,12 +14,12 @@ type Operation struct {
 }
 
 type APIMessage struct {
-	Code uint   `json:"codice" xml:"Codice"`
-	Info string `json:"info" xml:"Info"`
+	Code uint   `json:"codice"`
+	Info string `json:"info"`
 }
 
 const (
-	VersionNumber = "0.4.0"
+	VersionNumber = "0.5.0"
 	VersionDate   = "04/02/2018"
 )
 

@@ -93,40 +93,10 @@ func GetOrario() *table {
 	return orario
 }
 
-func GetByGiorno(giorno string) *[]attivita {
-	var a []attivita
-	for _, att := range orario.Attivita {
-		if strings.ToLower(att.Giorno) == strings.ToLower(giorno) {
-			a = append(a, att)
-		}
-	}
-	return &a
-}
-
 func GetByClasse(classe string) *[]attivita {
 	var a []attivita
 	for _, att := range orario.Attivita {
 		if strings.ToLower(att.Classe.String()) == strings.ToLower(classe) {
-			a = append(a, att)
-		}
-	}
-	return &a
-}
-
-func GetByDocNome(nome string) *[]attivita {
-	var a []attivita
-	for _, att := range orario.Attivita {
-		if strings.ToLower(att.DocNome) == strings.ToLower(nome) {
-			a = append(a, att)
-		}
-	}
-	return &a
-}
-
-func GetByDocCogn(cogn string) *[]attivita {
-	var a []attivita
-	for _, att := range orario.Attivita {
-		if strings.ToLower(att.DocCognome) == strings.ToLower(cogn) {
 			a = append(a, att)
 		}
 	}
