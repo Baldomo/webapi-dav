@@ -8,11 +8,10 @@ import (
 	"leonardobaldin/webapi-dav/utils"
 	"strings"
 	"leonardobaldin/webapi-dav/config"
+	"os"
 )
 
 const (
-	dataSource = "apiliceo:apiliceo2018-txc122tr887@/"
-
 	inizioField  = "dtstart"
 	fineField    = "dtend"
 	contentField = "description"
@@ -21,7 +20,7 @@ const (
 
 var (
 	db *sqlx.DB
-
+	dataSource = ""
 	agendaTable = config.GetConfig().DB.Schema + ".npjmx_jevents_vevdetail"
 	baseQuery = "select " + titleField + "," + contentField + "," + inizioField + "," + fineField +
 		" from " + agendaTable + " where "
@@ -44,6 +43,9 @@ type Event struct {
 
 func Fetch() {
 	var err error
+	if dataSource == "" {
+		dataSource = os.Getenv("WEBAPI_USR")+":"+os.Getenv("WEBAPI_PWD")+"@/"
+	}
 	db, err = sqlx.Connect("mysql", dataSource)
 	if err != nil {
 		log.Log.Critical("Errore collegamento a database")

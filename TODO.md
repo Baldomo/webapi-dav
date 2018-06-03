@@ -1,20 +1,20 @@
 # MILESTONE
+- [![0.5.0](http://progressed.io/bar/100?title=v0.5.0)](https://bitbucket.org/Baldomo/webapi-dav/commits/tag/v0.5.0)
 - [![0.4.0](http://progressed.io/bar/100?title=v0.4.0)](https://bitbucket.org/Baldomo/webapi-dav/commits/tag/v0.4.0)
 - [![0.3.0](http://progressed.io/bar/100?title=v0.3.0)](https://bitbucket.org/Baldomo/webapi-dav/commits/tag/v0.3.0)
 - [![0.2.0](http://progressed.io/bar/100?title=v0.2.0)](https://bitbucket.org/Baldomo/webapi-dav/commits/tag/v0.2.0)
 - [![0.1.0](http://progressed.io/bar/100?title=v0.1.0)](https://bitbucket.org/Baldomo/webapi-dav/commits/tag/v0.1.0)
 
 # TODO
-- Delegare credenziali DB a variabile di sistema
 - Aggiungere test per ogni pkg
-- Finire interfaccia database
 - Fixare ReloadPrefs in `preferences.go`
 
 ## In attesa
 - Implementare progetti
-- Aggiungere routes dinamiche a config
 
 ## Risolti
+- ~~Delegare credenziali DB a variabile di sistema~~
+- ~~Finire interfaccia database~~
 - ~~Endpoint orario in `routes.go#95`~~
 - ~~Finire implementazione close `startup_windows.go#24` (protocollo custom)~~
     - ~~Evitare forking o altri processi~~
