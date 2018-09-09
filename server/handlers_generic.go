@@ -1,10 +1,10 @@
 package server
 
 import (
-	"bitbucket.org/Baldomo/webapi-dav/config"
-	. "bitbucket.org/Baldomo/webapi-dav/log"
-	"bitbucket.org/Baldomo/webapi-dav/utils"
 	"encoding/json"
+	"github.com/Baldomo/webapi-dav/config"
+	. "github.com/Baldomo/webapi-dav/log"
+	"github.com/Baldomo/webapi-dav/utils"
 	"html/template"
 	"io/ioutil"
 	"net/http"

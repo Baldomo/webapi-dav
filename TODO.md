@@ -6,6 +6,7 @@
 - [![0.1.0](http://progressed.io/bar/100?title=v0.1.0)](https://bitbucket.org/Baldomo/webapi-dav/commits/tag/v0.1.0)
 
 # TODO
+- Fare in modo che richiesta di evento in una data returni anche eventi in corso/altro endpoint
 - Aggiungere test per ogni pkg
 - Fixare ReloadPrefs in `preferences.go`
 

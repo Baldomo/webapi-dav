@@ -1,7 +1,6 @@
 module github.com/Baldomo/webapi-dav
 
 require (
-	bitbucket.org/Baldomo/webapi-dav v0.4.0
 	github.com/BurntSushi/toml v0.3.0
 	github.com/appleboy/go-fcm v0.0.0-20171025023350-3bc382cee418
 	github.com/go-sql-driver/mysql v1.3.0

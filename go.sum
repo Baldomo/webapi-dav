@@ -1,5 +1,3 @@
-bitbucket.org/Baldomo/webapi-dav v0.4.0 h1:1wc7YZrFyOA2HEnTqn1bKaP5yHUI2oFz9KuLH4jaOgg=
-bitbucket.org/Baldomo/webapi-dav v0.4.0/go.mod h1:43O2XJAIDFCn4U1y0iHV6PKJy+osFO3Augm4sdW1j24=
 github.com/BurntSushi/toml v0.3.0 h1:e1/Ivsx3Z0FVTV0NSOv/aVgbUWyQuzj7DDnFblkRvsY=
 github.com/BurntSushi/toml v0.3.0/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/appleboy/go-fcm v0.0.0-20171025023350-3bc382cee418 h1:4eM9XKyQt4JN+gY3rXy+hWVq96zg+OcFwVvwJ/x3aeQ=
