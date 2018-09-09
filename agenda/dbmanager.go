@@ -1,14 +1,14 @@
 package agenda
 
 import (
+	"bitbucket.org/Baldomo/webapi-dav/config"
+	"bitbucket.org/Baldomo/webapi-dav/log"
+	"bitbucket.org/Baldomo/webapi-dav/utils"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
-	"leonardobaldin/webapi-dav/log"
-	"leonardobaldin/webapi-dav/utils"
-	"strings"
-	"leonardobaldin/webapi-dav/config"
 	"os"
+	"strings"
 )
 
 const (
