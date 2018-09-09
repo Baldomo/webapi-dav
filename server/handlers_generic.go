@@ -1,12 +1,12 @@
 package server
 
 import (
+	"bitbucket.org/Baldomo/webapi-dav/config"
+	. "bitbucket.org/Baldomo/webapi-dav/log"
+	"bitbucket.org/Baldomo/webapi-dav/utils"
 	"encoding/json"
 	"html/template"
 	"io/ioutil"
-	"leonardobaldin/webapi-dav/config"
-	. "leonardobaldin/webapi-dav/log"
-	"leonardobaldin/webapi-dav/utils"
 	"net/http"
 	"path/filepath"
 )
@@ -28,7 +28,10 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func AboutHandler(w http.ResponseWriter, r *http.Request) {
-	var aboutMessage = utils.APIMessage{http.StatusOK, "Leonardo Baldin, v" + utils.VersionNumber + ", (c) 2017"}
+	var aboutMessage = utils.APIMessage{
+		Code: http.StatusOK,
+		Info: "Leonardo Baldin, v" + utils.VersionNumber + ", (c) 2017",
+	}
 
 	switch utils.RequestMime(r.Header) {
 	case "application/json":
