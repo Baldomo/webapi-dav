@@ -1,10 +1,10 @@
 package log
 
 import (
+	"github.com/Baldomo/webapi-dav/config"
 	"github.com/op/go-logging"
 	"gopkg.in/natefinch/lumberjack.v2"
 	"io/ioutil"
-	"leonardobaldin/webapi-dav/config"
 	"net/http"
 	"os"
 	"os/signal"

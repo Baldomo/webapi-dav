@@ -2,7 +2,7 @@ package agenda
 
 import (
 	"fmt"
-	"leonardobaldin/webapi-dav/utils"
+	"github.com/Baldomo/webapi-dav/utils"
 	"testing"
 	"time"
 )

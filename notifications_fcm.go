@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/Baldomo/webapi-dav/comunicati"
+	. "github.com/Baldomo/webapi-dav/log"
 	"github.com/appleboy/go-fcm"
-	"leonardobaldin/webapi-dav/comunicati"
-	. "leonardobaldin/webapi-dav/log"
 	"net/url"
 )
 
