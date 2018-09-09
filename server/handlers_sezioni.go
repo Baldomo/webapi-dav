@@ -2,14 +2,14 @@ package server
 
 import (
 	"encoding/json"
+	"github.com/Baldomo/webapi-dav/agenda"
+	com "github.com/Baldomo/webapi-dav/comunicati"
+	. "github.com/Baldomo/webapi-dav/log"
+	"github.com/Baldomo/webapi-dav/orario"
+	"github.com/Baldomo/webapi-dav/utils"
 	"github.com/gorilla/mux"
-	com "leonardobaldin/webapi-dav/comunicati"
-	. "leonardobaldin/webapi-dav/log"
-	"leonardobaldin/webapi-dav/orario"
-	"leonardobaldin/webapi-dav/utils"
 	"net/http"
 	"strconv"
-	"leonardobaldin/webapi-dav/agenda"
 )
 
 // Comunicati

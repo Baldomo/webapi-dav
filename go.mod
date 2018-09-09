@@ -1,4 +1,4 @@
-module bitbucket.org/Baldomo/ravellinator
+module github.com/Baldomo/webapi-dav
 
 require (
 	bitbucket.org/Baldomo/webapi-dav v0.4.0

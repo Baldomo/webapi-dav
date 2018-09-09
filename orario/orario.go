@@ -2,8 +2,8 @@ package orario
 
 import (
 	"encoding/xml"
+	"github.com/Baldomo/webapi-dav/log"
 	"io/ioutil"
-	"leonardobaldin/webapi-dav/log"
 	"strconv"
 	"strings"
 )

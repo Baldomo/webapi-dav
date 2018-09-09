@@ -5,17 +5,17 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/Baldomo/webapi-dav/agenda"
+	com "github.com/Baldomo/webapi-dav/comunicati"
+	"github.com/Baldomo/webapi-dav/config"
+	. "github.com/Baldomo/webapi-dav/log"
+	"github.com/Baldomo/webapi-dav/orario"
+	"github.com/Baldomo/webapi-dav/server"
+	"github.com/Baldomo/webapi-dav/utils"
 	"github.com/nightlyone/lockfile"
-	com "leonardobaldin/webapi-dav/comunicati"
-	"leonardobaldin/webapi-dav/config"
-	. "leonardobaldin/webapi-dav/log"
-	"leonardobaldin/webapi-dav/orario"
-	"leonardobaldin/webapi-dav/server"
-	"leonardobaldin/webapi-dav/utils"
 	"net/rpc"
 	"os"
 	"path/filepath"
-	"leonardobaldin/webapi-dav/agenda"
 )
 
 const (

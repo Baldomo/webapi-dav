@@ -1,9 +1,9 @@
 package comunicati
 
 import (
+	"github.com/Baldomo/webapi-dav/config"
+	"github.com/Baldomo/webapi-dav/log"
 	"io/ioutil"
-	"leonardobaldin/webapi-dav/config"
-	"leonardobaldin/webapi-dav/log"
 	"net/url"
 	"os"
 	"path/filepath"
