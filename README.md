@@ -1,6 +1,6 @@
 # webapi-dav
 Questa è la documentazione ufficiale di Da Vinci API, contenente utilizzo e configurazione del webserver.
-Ultima versione: v0.3.0
+Ultima versione: v0.5.0
 [Copia del README su Github](https://gist.github.com/Baldomo/5dc1db7a46e00f94ef714b7063f7fa3d)
 
 ## Indice
@@ -134,6 +134,9 @@ chiave = "server.key"
 abilitato = true
 porta = ":8080"
 
+[db]
+database = "sitoliceo"
+
 [cartelle]
 html = "static/"
 comunicati_genitori = "comunicati-genitori"
@@ -161,6 +164,9 @@ Esempio di `config.json` (in quella di default le cartelle non sono specificate)
     "abilitato": true,
     "porta": ":8080"
   },
+  "db": {
+    "database": "sitoliceo",
+  },
   "cartelle": {
     "html": "static/",
     "comunicati_genitori": "comunicati-genitori",
@@ -169,7 +175,7 @@ Esempio di `config.json` (in quella di default le cartelle non sono specificate)
     "orario": "orario.xml"
   },
   "logging": {
-    "abilitato": true
+    "abilitato": true,
     "file_log": "webapi.log",
     "livello_log": "verbose"
   }
