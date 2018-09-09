@@ -1,5 +1,6 @@
 # MILESTONE
 - [![0.5.0](http://progressed.io/bar/100?title=v0.5.0)](https://bitbucket.org/Baldomo/webapi-dav/commits/tag/v0.5.0)
+    - [![0.5.1](http://progressed.io/bar/100?title=v0.5.1)](https://github.com/Baldomo/webapi-dav/releases/tag/v0.5.1)
 - [![0.4.0](http://progressed.io/bar/100?title=v0.4.0)](https://bitbucket.org/Baldomo/webapi-dav/commits/tag/v0.4.0)
 - [![0.3.0](http://progressed.io/bar/100?title=v0.3.0)](https://bitbucket.org/Baldomo/webapi-dav/commits/tag/v0.3.0)
 - [![0.2.0](http://progressed.io/bar/100?title=v0.2.0)](https://bitbucket.org/Baldomo/webapi-dav/commits/tag/v0.2.0)
