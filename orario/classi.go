@@ -8,7 +8,7 @@ import (
 var (
 	classi []classe
 
-	reClasse = regexp.MustCompile("[1-5][a-zA-Z]")
+	reClasse = regexp.MustCompile("^([1-5][a-zA-Z])")
 )
 
 type classe string
