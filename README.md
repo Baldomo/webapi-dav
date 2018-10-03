@@ -201,15 +201,6 @@ Esempio di risposta di singolo comunicato in JSON:
     "url":"http://liceodavinci.tv/sitoLiceo/comunicati/comunicati-studenti/..."
 }
 ```
-Esempio di risposta di singolo comunicato in XML:
-```xml
-<Comunicato>
-    <Nome>177_corsa campestre istituto.pdf</Nome>
-    <Data>2017-11-26T10:30:49.272711528+01:00</Data>
-    <Tipo>studenti</Tipo>
-    <URL>http://liceodavinci.tv/sitoLiceo/comunicati/comunicati-studenti/...</URL>
-</Comunicato>
-```
 
 ## Altro
 Version, About, ecc: risposta JSON:
@@ -219,15 +210,3 @@ Version, About, ecc: risposta JSON:
   "info": "Leonardo Baldin, v0.3.0, (c) 2017"
 }
 ```
-Risposta XML:
-```xml
-<APIMessage>
-    <Codice>200</Codice>
-    <Info>Leonardo Baldin, v0.3.0, (c) 2017</I
-    nfo>
-</APIMessage>
-```
-
-
-## Progetti
-Ancora da implementare
