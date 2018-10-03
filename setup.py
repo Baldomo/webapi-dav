@@ -1,6 +1,5 @@
 from setuptools import setup
 
-
 setup(
     name='webapi-builder',
     version='0.1',

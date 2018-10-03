@@ -1,9 +1,6 @@
 package orario
 
-import (
-	"encoding/json"
-	"errors"
-)
+import "fmt"
 
 type docenti []Docente
 type Docente struct {
@@ -40,13 +37,12 @@ func GetAllDocenti() *docenti {
 	return &doc
 }
 
-func (doc *Docente) UnmarshalJSON(data []byte) error {
+func (doc *Docente) Validate() error {
 	if doc.Nome == "" {
-		return errors.New("JSON incompleto - nome mancante")
+		return fmt.Errorf("JSON incompleto - nome mancante")
 	}
 	if doc.Cognome == "" {
-		return errors.New("JSON incompleto - cognome mancante")
+		return fmt.Errorf("JSON incompleto - cognome mancante")
 	}
-	json.Unmarshal(data, *doc)
 	return nil
 }

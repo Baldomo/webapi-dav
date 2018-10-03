@@ -256,7 +256,6 @@ func OrarioHandler(w http.ResponseWriter, r *http.Request) {
 
 func OrarioClasseHandler(w http.ResponseWriter, r *http.Request) {
 	classe, _ := mux.Vars(r)["classe"]
-
 	switch utils.RequestMime(r.Header) {
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -286,9 +285,10 @@ func OrarioClasseHandler(w http.ResponseWriter, r *http.Request) {
 
 func OrarioDocenteHandler(w http.ResponseWriter, r *http.Request) {
 	var doc orario.Docente
-	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&doc)
-	if err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&doc); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+	}
+	if err := doc.Validate(); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 	}
 	switch utils.RequestMime(r.Header) {
@@ -321,9 +321,7 @@ func OrarioDocenteHandler(w http.ResponseWriter, r *http.Request) {
 
 func AgendaHandler(w http.ResponseWriter, r *http.Request) {
 	var es agenda.EventStream
-	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&es)
-	if err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&es); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 	}
 
@@ -338,16 +336,4 @@ func AgendaHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		w.WriteHeader(http.StatusUnsupportedMediaType)
 	}
-}
-
-// Progetti
-
-func ProgettiHandler(w http.ResponseWriter, r *http.Request) {
-	//TODO prende da file toml/json tutto il necessario, slice di oggetti
-	type progetto struct {
-		Nome         string `json:"nome" toml:"nome"`
-		PathImmagine string `json:"immagine" toml:"immagine"`
-		Descr        string `json:"descrizione" toml:"descrizione"`
-	}
-	w.WriteHeader(http.StatusNotFound)
 }

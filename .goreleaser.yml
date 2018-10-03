@@ -1,0 +1,44 @@
+# This is an example goreleaser.yaml file with some sane defaults.
+# Make sure to check the documentation at http://goreleaser.com
+dist: build
+builds:
+  - main: ./cmd/webapi
+    env:
+      - CGO_ENABLED=0
+    binary: "webapi"
+    goos:
+      - windows
+    goarch:
+      - amd64
+    hooks:
+      post: upx --force build/windows_amd64/webapi.exe
+
+archive:
+  replacements:
+    386: i386
+  name_template: "{{ .Binary }}-{{ .Os }}"
+  files:
+    - config.toml
+    - static/*
+    - orario.xml
+
+release:
+  name_template: "{{ .Version }}"
+  github:
+    owner: Baldomo
+    name: webapi-dav
+  draft: true
+  disable: false
+
+checksum:
+  name_template: 'checksums.txt'
+
+snapshot:
+  name_template: "{{ .Tag }}-{{ .Commit }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'

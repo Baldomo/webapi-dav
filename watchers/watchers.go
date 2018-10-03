@@ -1,4 +1,4 @@
-package main
+package watchers
 
 import (
 	com "github.com/Baldomo/webapi-dav/comunicati"

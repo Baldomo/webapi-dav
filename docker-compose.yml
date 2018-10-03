@@ -1,0 +1,27 @@
+version: '3.6'
+
+services:
+  db:
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password --innodb-use-native-aio=0
+#    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sitoliceo
+    volumes:
+      - ./tools/agenda_dump.sql:/docker-entrypoint-initdb.d/db.sql
+
+  webapi:
+    image: golang-alpine3.8:latest
+    container_name: webapi-dav
+#    restart: always
+    ports:
+      - 8080:8080
+    environment:
+      WEBAPI_USER: root
+      WEBAPI_PWD: root
+      WEBAPI_DB_HOST: /
+    # TODO
+    volumes:
+      - .:/webapi
+    command: ["/webapi/webapi-dav-linux_amd64"]

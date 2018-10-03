@@ -15,16 +15,16 @@ type table struct {
 
 type attivita struct {
 	Num        uint   `xml:"Numero" json:"num"`
-	Durata     durata `xml:"DURATA" json:"durata"`
-	MatCod     string `xml:"MAT_COD" json:"mat_cod"`
-	Materia    string `xml:"MAT_NOME" json:"materia"`
-	DocCognome string `xml:"DOC_COGN" json:"doc_cognome"`
-	DocNome    string `xml:"DOC_NOME" json:"doc_nome"`
+	Durata     durata `xml:"DURATA" json:"durata,omitempty"`
+	MatCod     string `xml:"MAT_COD" json:"mat_cod,omitempty"`
+	Materia    string `xml:"MAT_NOME" json:"materia,omitempty"`
+	DocCognome string `xml:"DOC_COGN" json:"doc_cognome,omitempty"`
+	DocNome    string `xml:"DOC_NOME" json:"doc_nome,omitempty"`
 	Classe     classe `xml:"CLASSE" json:"classe,omitempty"`
-	Aula       string `xml:"AULA" json:"aula"`
-	Giorno     string `xml:"GIORNO" json:"giorno"`
-	Inizio     inizio `xml:"O.INIZIO" json:"inizio"`
-	Sede       string `xml:"SEDE" json:"sede"`
+	Aula       string `xml:"AULA" json:"aula,omitempty"`
+	Giorno     string `xml:"GIORNO" json:"giorno,omitempty"`
+	Inizio     inizio `xml:"O.INIZIO" json:"inizio,omitempty"`
+	Sede       string `xml:"SEDE" json:"sede,omitempty"`
 }
 
 type durata string
@@ -39,6 +39,10 @@ func (d *durata) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) erro
 	if err := decoder.DecodeElement(&content, &start); err != nil {
 		return err
 	}
+	if content == "" {
+		// empty tag
+		return nil
+	}
 	if !strings.HasSuffix(content, "m") {
 		content += "m"
 	}
@@ -52,18 +56,25 @@ func (d durata) String() string {
 
 func (i *inizio) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) error {
 	var content string
-	if err := decoder.DecodeElement(&content, &start); err != nil {
+	var err error
+	if err = decoder.DecodeElement(&content, &start); err != nil {
 		return err
 	}
 
+	if content == "" {
+		// empty tag
+		return nil
+	}
+
 	var meridian = "AM"
-	if h, errS := strconv.Atoi(content[:2]); errS != nil {
-		return errS
-	} else {
+	if h, err := strconv.Atoi(strings.Split(content, "h")[1]); err == nil {
 		if h >= 12 {
 			meridian = "PM"
 		}
+	} else {
+		return err
 	}
+
 	content = strings.Replace(content, "h", ":", -1) + meridian
 	*i = inizio(content)
 	return nil
@@ -106,7 +117,8 @@ func GetByClasse(classe string) *[]attivita {
 func GetByDoc(doc Docente) *[]attivita {
 	var a []attivita
 	for _, att := range orario.Attivita {
-		if (strings.ToLower(att.DocCognome) == strings.ToLower(doc.Cognome)) && (strings.ToLower(att.DocNome) == strings.ToLower(doc.Nome)) {
+		if (strings.ToLower(att.DocCognome) == strings.ToLower(doc.Cognome) || doc.Cognome == "") &&
+			(strings.ToLower(att.DocNome) == strings.ToLower(doc.Nome) || doc.Nome == "") {
 			a = append(a, att)
 		}
 	}
