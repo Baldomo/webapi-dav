@@ -28,7 +28,7 @@ release:
     owner: Baldomo
     name: webapi-dav
   draft: true
-  disable: true
+  disable: false
 
 checksum:
   name_template: 'checksums.txt'
