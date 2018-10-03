@@ -7,54 +7,70 @@ import queue as q
 import random as r
 import shutil as sh
 import subprocess
+from typing import Any, Dict, List, Optional
 from threading import Thread
 
 
-# Builder
-out_folder = 'build/'
-filenames = {
+out_folder: str = 'build/'
+filenames: Dict[str, str] = {
     'windows': 'webapi-dav-windows_amd64.exe',
     'linux': 'webapi-dav-linux_amd64',
     'darwin': 'webapi-dav-mac_amd64'
 }
-commands = {
+package: str = './cmd/webapi'
+commands: Dict[str, str] = {
     'windows':
-        'go build -ldflags="-s -w" -o ' + out_folder + filenames['windows'],
+        'go build -ldflags="-s -w" -o ' + out_folder + filenames['windows'] + ' ' + package,
     'windows-nogui':
-        'go build -ldflags="-s -w -H windowsgui" -o ' + out_folder + filenames['windows'],
+        'go build -ldflags="-s -w -H windowsgui" -o ' + out_folder + filenames['windows'] + ' ' + package,
     'linux':
-        'go build -ldflags="-s -w" -o ' + out_folder + filenames['linux'],
+        'go build -ldflags="-s -w" -o ' + out_folder + filenames['linux'] + ' ' + package,
     'darwin':
-        'go build -ldflags="-s -w" -o ' + out_folder + filenames['darwin']
+        'go build -ldflags="-s -w" -o ' + out_folder + filenames['darwin'] + ' ' + package
 }
 
 
-@click.group(chain=True)
-def cli():
+class AliasedGroup(click.Group):
+    def get_command(self, ctx: click.Context, cmd_name: Any) -> Optional[Any]:
+        rv = click.Group.get_command(self, ctx, cmd_name)
+        if rv is not None:
+            return rv
+        matches = [x for x in self.list_commands(ctx)
+                   if x.startswith(cmd_name)]
+        if not matches:
+            return None
+        elif len(matches) == 1:
+            return click.Group.get_command(self, ctx, matches[0])
+        ctx.fail('Too many matches: %s' % ', '.join(sorted(matches)))
+
+
+@click.group(chain=True, cls=AliasedGroup)
+def cli() -> None:
     click.echo('')
 
 
 @cli.command()
-@click.argument('name', nargs=1)
-def build(name):
-    if name in commands.keys():
-        Builder({name: commands[name]}).start()
-    elif name == 'all':
-        Builder(commands).start()
-    elif name == 'this':
-        Builder({name: commands[current_platform]}).start()
+@click.argument('names', nargs=-1)
+def build(names: List[str]) -> None:
+    for name in names:
+        if name in commands.keys():
+            Builder({name: commands[name]}).start()
+        elif name == 'all':
+            Builder(commands).start()
+        elif name == 'this':
+            Builder({name: commands[current_platform]}).start()
 
 
 @cli.command()
-def pack():
+def pack() -> None:
     if not os.path.exists(out_folder):
         print('folder {} not found'.format(out_folder))
         exit(1)
     subprocess.run('cd {} && upx --brute webapi-*'.format(out_folder), shell=True).check_returncode()
 
 
-class Builder(object):
-    def __init__(self, args_dict=None):
+class Builder:
+    def __init__(self, args_dict: Dict[str, str] = None) -> None:
         if len(args_dict) == 0 or not args_dict:
             return
         self.args = args_dict
@@ -65,7 +81,7 @@ class Builder(object):
         for target, arg in self.args.items():
             self.queue.put((target, arg))
 
-    def start(self):
+    def start(self) -> None:
         threads = [
             Thread(target=Builder.proc, args=(self.queue,)) for _ in self.args
         ]
@@ -77,7 +93,7 @@ class Builder(object):
             threads.pop().join()
 
     @staticmethod
-    def proc(queue):
+    def proc(queue: q.Queue) -> None:
         while 1:
             try:
                 arg = queue.get(block=False)
@@ -88,12 +104,12 @@ class Builder(object):
             queue.task_done()
             break
 
-    def format_commands(self):
+    def format_commands(self) -> None:
         for target, cmd in self.args.items():
             self.args[target] = Builder.generate_env_flags(target) + cmd
 
     @staticmethod
-    def generate_env_flags(target):
+    def generate_env_flags(target: str) -> str:
         if 'windows' in target:
             target = 'windows'
         elif 'linux' in target:
@@ -112,39 +128,79 @@ class Builder(object):
 
 
 # Utils
-playground_folder = 'playground/'
-current_platform = \
+playground_folder: str = 'playground/'
+current_platform: str = \
     'windows' if platform.system() == 'Windows' \
     else 'linux' if platform.system() == 'Linux' \
     else 'darwin'
 
 
 @cli.command()
-def clean():
+def clean() -> None:
     if os.path.exists(playground_folder):
         sh.rmtree(playground_folder)
     if os.path.exists(out_folder):
         sh.rmtree(out_folder)
 
 
-@cli.command()
-def deploy():
+def create_playground(exe: str, overwrite: bool) -> None:
     if os.path.exists(playground_folder):
-        sh.rmtree(playground_folder)
+        if overwrite:
+            sh.rmtree(playground_folder)
+        else:
+            return
     sh.copytree('static', playground_folder + 'static')
     sh.copy2('config.toml', playground_folder)
     sh.copy2('orario.xml', playground_folder)
-    exe = filenames[current_platform]
     sh.copy2(out_folder + exe, playground_folder)
     dummyfiles(100, [
         playground_folder + 'comunicati-studenti',
         playground_folder + 'comunicati-docenti',
         playground_folder + 'comunicati-genitori'
     ])
-    subprocess.run('cd {} && {}'.format(playground_folder, exe), shell=True).check_returncode()
 
 
-def dummyfiles(numfiles, dirs):
+@cli.command()
+@click.argument('target', nargs=1, type=str, required=False, default='this')
+@click.option('--run', '-r', is_flag=True)
+@click.option('--cleanup', '-c', is_flag=True)
+@click.pass_context
+def deploy(ctx: click.Context, target: str, run: bool, cleanup: bool) -> None:
+    ctx.invoke(build, names=[target])
+    if target == 'this':
+        exe: str = filenames[current_platform]
+    else:
+        exe: str = filenames[target]
+    create_playground(exe, True)
+    if run:
+        try:
+            subprocess.run('cd {} && {}'.format(playground_folder, exe), shell=True).check_returncode()
+        finally:
+            if cleanup:
+                ctx.invoke(clean)
+
+
+@cli.command()
+@click.option('--run', '-r', is_flag=True)
+@click.option('--cleanup', '-c', is_flag=True)
+@click.pass_context
+def docker(ctx: click.Context, run: bool, cleanup: bool) -> None:
+    ctx.invoke(build, names=['linux'])
+    exe: str = filenames['linux']
+    create_playground(exe, False)
+    if cleanup:
+        subprocess.run('docker rm webapi-dav && docker rmi $(docker ps -aq)', shell=True)
+    subprocess.run('docker build -t webapi-dav .', shell=True).check_returncode()
+    if run:
+        subprocess.run('docker run -it webapi-dav', shell=True).check_returncode()
+
+
+@cli.command()
+def docker_clean() -> None:
+    subprocess.run('docker rm webapi-dav && docker rmi $(docker ps -aq)', shell=True)
+
+
+def dummyfiles(numfiles: int, dirs: List[str]):
     for reldir in dirs:
         absdir = os.path.abspath(reldir)
         for num in range(numfiles):

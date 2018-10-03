@@ -58,7 +58,7 @@ func AboutHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
-	var message = utils.APIMessage{http.StatusNotFound, "Non trovato"}
+	var message = utils.APIMessage{Code: http.StatusNotFound, Info: "Non trovato"}
 
 	w.WriteHeader(http.StatusNotFound)
 	switch utils.RequestMime(r.Header) {
@@ -81,7 +81,7 @@ func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func TeapotHandler(w http.ResponseWriter, r *http.Request) {
-	var message = utils.APIMessage{http.StatusTeapot, `I'm a teapot`}
+	var message = utils.APIMessage{Code: http.StatusTeapot, Info: `I'm a teapot`}
 
 	w.WriteHeader(http.StatusTeapot)
 	switch utils.RequestMime(r.Header) {
@@ -107,7 +107,7 @@ func TeapotHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func VersionHandler(w http.ResponseWriter, r *http.Request) {
-	var versionMessage = utils.APIMessage{http.StatusOK, "webapi-dav v" + utils.VersionNumber}
+	var versionMessage = utils.APIMessage{Code: http.StatusOK, Info: "webapi-dav v" + utils.VersionNumber}
 
 	switch utils.RequestMime(r.Header) {
 	case "application/json":

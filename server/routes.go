@@ -123,12 +123,4 @@ var routes = Routes{
 		"/api/agenda",
 		AgendaHandler,
 	},
-
-	// Progetti
-	Route{
-		"Progetti_List",
-		"GET",
-		"/api/progetti",
-		ProgettiHandler,
-	},
 }

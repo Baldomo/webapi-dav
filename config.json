@@ -25,7 +25,7 @@
   },
   "logging": {
     "abilitato": true,
-    "file_log": "webapi.log",
+    "file_log": "run.log",
     "livello_log": "verbose"
   }
 }

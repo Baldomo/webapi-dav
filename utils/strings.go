@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"github.com/Baldomo/webapi-dav/log"
 	"html/template"
 	"net/http"
 )
@@ -19,8 +18,8 @@ type APIMessage struct {
 }
 
 const (
-	VersionNumber = "0.5.0"
-	VersionDate   = "04/02/2018"
+	VersionNumber = "0.5.2"
+	VersionDate   = "02/10/2018"
 )
 
 var (
@@ -67,7 +66,6 @@ func GetOp(nome string) *Operation {
 	if val, ok := ops[nome]; ok {
 		return val
 	} else {
-		log.Log.Errorf("GetOp: ", "Valore non presente %s", nome)
 		return nil
 	}
 }

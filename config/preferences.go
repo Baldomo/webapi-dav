@@ -46,7 +46,8 @@ type dirs struct {
 }
 
 type db struct {
-	Schema string `json:"database" toml:"database"`
+	Schema  string `json:"database" toml:"database"`
+	Timeout int64  `json:"timeout" toml:"timeout"`
 }
 
 type logPrefs struct {
@@ -83,6 +84,7 @@ var (
 		},
 		db{
 			"sitoliceo",
+			10,
 		},
 		dirs{
 			"./static",
