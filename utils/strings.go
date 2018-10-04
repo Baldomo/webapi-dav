@@ -31,11 +31,12 @@ var (
 		<meta charset="utf-8">
 		<meta name="og:description" content="{{.Code}} - {{.Info}}">
 		<meta name="twitter:card" content="summary" />
-		<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" 
+			integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 	</head>
 	<body style="">
 	<div class="container">
-		<div class="hero-unit">
+		<div class="jumbotron">
 			<h1>{{.Code}} - {{.Info}}</h1>
 		</div>
 	</div>
