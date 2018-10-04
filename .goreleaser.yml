@@ -5,6 +5,8 @@ builds:
   - main: ./cmd/webapi
     env:
       - CGO_ENABLED=0
+    ldflags:
+      - -s -w -H windowsgui
     binary: "webapi"
     goos:
       - windows

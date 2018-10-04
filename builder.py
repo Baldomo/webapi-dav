@@ -14,6 +14,7 @@ from threading import Thread
 out_folder: str = 'build/'
 filenames: Dict[str, str] = {
     'windows': 'webapi-dav-windows_amd64.exe',
+    'windows-nogui': 'webapi-dav-windows_amd64.exe',
     'linux': 'webapi-dav-linux_amd64',
     'darwin': 'webapi-dav-mac_amd64'
 }
