@@ -17,9 +17,14 @@ type APIMessage struct {
 	Info string `json:"info"`
 }
 
+type templateData struct {
+	Version string
+	Ops     map[string]*Operation
+}
+
 const (
-	VersionNumber = "0.6.0"
-	VersionDate   = "03/10/2018"
+	VersionNumber = "0.6.2"
+	VersionDate   = "08/10/2018"
 )
 
 var (
@@ -62,6 +67,13 @@ var (
 		"version":                 {"GET", "/api/version", "Restituirà la versione dell'API in uso", "/version"},
 	}
 )
+
+func TemplateData() templateData {
+	return templateData{
+		Ops: ops,
+		Version: VersionNumber,
+	}
+}
 
 func GetOp(nome string) *Operation {
 	if val, ok := ops[nome]; ok {

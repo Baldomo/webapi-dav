@@ -53,6 +53,8 @@ def cli() -> None:
 @cli.command()
 @click.argument('names', nargs=-1)
 def build(names: List[str]) -> None:
+    if not os.path.exists(out_folder):
+        os.mkdir(out_folder)
     for name in names:
         if name in commands.keys():
             Builder({name: commands[name]}).start()
