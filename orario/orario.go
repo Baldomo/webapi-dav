@@ -4,7 +4,6 @@ import (
 	"encoding/xml"
 	"github.com/Baldomo/webapi-dav/log"
 	"io/ioutil"
-	"strconv"
 	"strings"
 )
 
@@ -15,7 +14,7 @@ type table struct {
 
 type attivita struct {
 	Num        uint   `xml:"Numero" json:"num"`
-	Durata     durata `xml:"DURATA" json:"durata,omitempty"`
+	Durata     string `xml:"DURATA" json:"durata,omitempty"`
 	MatCod     string `xml:"MAT_COD" json:"mat_cod,omitempty"`
 	Materia    string `xml:"MAT_NOME" json:"materia,omitempty"`
 	DocCognome string `xml:"DOC_COGN" json:"doc_cognome,omitempty"`
@@ -23,66 +22,13 @@ type attivita struct {
 	Classe     classe `xml:"CLASSE" json:"classe,omitempty"`
 	Aula       string `xml:"AULA" json:"aula,omitempty"`
 	Giorno     string `xml:"GIORNO" json:"giorno,omitempty"`
-	Inizio     inizio `xml:"O.INIZIO" json:"inizio,omitempty"`
+	Inizio     string `xml:"O.INIZIO" json:"inizio,omitempty"`
 	Sede       string `xml:"SEDE" json:"sede,omitempty"`
 }
-
-type durata string
-type inizio string
 
 var (
 	orario *table
 )
-
-func (d *durata) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) error {
-	var content string
-	if err := decoder.DecodeElement(&content, &start); err != nil {
-		return err
-	}
-	if content == "" {
-		// empty tag
-		return nil
-	}
-	if !strings.HasSuffix(content, "m") {
-		content += "m"
-	}
-	*d = durata(content)
-	return nil
-}
-
-func (d durata) String() string {
-	return string(d)
-}
-
-func (i *inizio) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) error {
-	var content string
-	var err error
-	if err = decoder.DecodeElement(&content, &start); err != nil {
-		return err
-	}
-
-	if content == "" {
-		// empty tag
-		return nil
-	}
-
-	var meridian = "AM"
-	if h, err := strconv.Atoi(strings.Split(content, "h")[1]); err == nil {
-		if h >= 12 {
-			meridian = "PM"
-		}
-	} else {
-		return err
-	}
-
-	content = strings.Replace(content, "h", ":", -1) + meridian
-	*i = inizio(content)
-	return nil
-}
-
-func (i inizio) String() string {
-	return string(i)
-}
 
 func LoadOrario(path string) {
 	orario = nil

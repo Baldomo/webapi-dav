@@ -28,7 +28,7 @@
     <div class="jumbotron">
         <h1>DaVinci API</h1>
         <img src="http://emoji.fileformat.info/gemoji/bee.png"style="width:24px;height:24px;">
-        <p><em>webapi-dav v0.6.1</em></p>
+        <p><em>webapi-dav v{{.Version}}</em></p>
     </div>
 </div>
 <div class="container">
@@ -62,7 +62,7 @@
                     <th>Descrizione</th>
                 </tr>
 
-            {{ range $_, $value := . }}
+            {{ range $_, $value := .Ops }}
 
                 <tr>
                     <td><a href={{$value.URI}}>{{$value.Title}}</a></td>
