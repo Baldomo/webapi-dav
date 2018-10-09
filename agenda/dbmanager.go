@@ -6,12 +6,12 @@ import (
 	"github.com/Baldomo/webapi-dav/utils"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
-	"os"
 	"strings"
-	"time"
 )
 
 const (
+	dataSource = "apiliceo:apiliceo2018-txc122tr887@/"
+
 	inizioField  = "dtstart"
 	fineField    = "dtend"
 	contentField = "description"
@@ -19,22 +19,19 @@ const (
 )
 
 var (
-	db          *sqlx.DB
-	dataSource  = "apiliceo:apiliceo2018-txc122tr887@/"
-	host        = "/"
+	db *sqlx.DB
+
 	agendaTable = config.GetConfig().DB.Schema + ".npjmx_jevents_vevdetail"
-	baseQuery   = "select " + titleField + "," + contentField + "," + inizioField + "," + fineField +
+	baseQuery = "select " + titleField + "," + contentField + "," + inizioField + "," + fineField +
 		" from " + agendaTable + " where "
 )
 
 type EventStream struct {
-	After          int64    `json:"dopo,omitempty"`
-	Before         int64    `json:"prima,omitempty"`
-	TitleFilter    []string `json:"filtri_titolo,omitempty"`
-	ContentFilter  []string `json:"filtri_contenuto,omitempty"`
-	IncludeOngoing bool     `json:"in_corso,omitempty"`
-
-	events []Event
+	After         int64    `json:"dopo,omitempty"`
+	Before        int64    `json:"prima,omitempty"`
+	TitleFilter   []string `json:"filtri_titolo,omitempty"`
+	ContentFilter []string `json:"filtri_contenuto,omitempty"`
+	events        []Event
 }
 
 type Event struct {
@@ -46,33 +43,10 @@ type Event struct {
 
 func Fetch() {
 	var err error
-	if h, ok := os.LookupEnv("WEBAPI_DB_HOST"); ok {
-		host = h
-	}
-	if dataSource == "" {
-		dataSource = os.Getenv("WEBAPI_USER") + ":" + os.Getenv("WEBAPI_PWD") + "@" + host
-	}
 	db, err = sqlx.Connect("mysql", dataSource)
 	if err != nil {
-		log.Log.Critical("Errore collegamento a database - ricollegamento...")
-		//log.Log.Critical(err.Error())
-		go pollDB(dataSource)
-	}
-}
-
-func pollDB(ds string) {
-	var err error
-	timer := time.NewTimer(time.Duration(config.GetConfig().DB.Timeout) * time.Second)
-	tick := time.NewTicker(time.Second)
-	defer tick.Stop()
-	select {
-	case <-tick.C:
-		db, err = sqlx.Connect("mysql", ds)
-		if err == nil {
-			return
-		}
-	case <-timer.C:
-		return
+		log.Log.Critical("Errore collegamento a database")
+		log.Log.Critical(err.Error())
 	}
 }
 
@@ -119,7 +93,7 @@ func (es *EventStream) FilterContent(filter []string) *EventStream {
 }
 
 func (es *EventStream) Close() *[]Event {
-	rows, err := db.Queryx(es.buildQuery())
+	rows, err := db.Query(es.buildQuery())
 	defer rows.Close()
 	if err != nil {
 		log.Log.Error(err.Error())
@@ -137,29 +111,19 @@ func (es *EventStream) Close() *[]Event {
 	return &es.events
 }
 
-func (es EventStream) buildQuery() (string, []string) {
+func (es EventStream) buildQuery() string {
 	var parts []string
-	var params []string
 
 	if es.After != 0 {
-		if es.IncludeOngoing {
-			parts = append(parts, fineField+`>`+utils.I64toa(es.After))
-		} else {
-			parts = append(parts, inizioField+`>`+utils.I64toa(es.After))
-		}
+		parts = append(parts, inizioField+`>`+utils.I64toa(es.After))
 	}
 	if es.Before != 0 {
-		if es.IncludeOngoing {
-			parts = append(parts, inizioField+`<`+utils.I64toa(es.Before))
-		} else {
-			parts = append(parts, fineField+`<`+utils.I64toa(es.Before))
-		}
+		parts = append(parts, fineField+`<`+utils.I64toa(es.Before))
 	}
 	if len(es.ContentFilter) != 0 {
 		var sub string
 		for _, f := range es.ContentFilter[:len(es.ContentFilter)-1] {
-			sub += contentField + ` like "%?%" and `
-			params = append(params, f)
+			sub += contentField + ` like "%` + f + `%" and `
 		}
 		sub += contentField + ` like "%` + es.ContentFilter[len(es.ContentFilter)-1] + `%"`
 		parts = append(parts, sub)
@@ -167,12 +131,11 @@ func (es EventStream) buildQuery() (string, []string) {
 	if len(es.TitleFilter) != 0 {
 		var sub string
 		for _, f := range es.TitleFilter[:len(es.TitleFilter)-1] {
-			sub += titleField + ` like "%?%" and `
-			params = append(params, f)
+			sub += titleField + ` like "%` + f + `%" and `
 		}
 		sub += titleField + ` like "%` + es.TitleFilter[len(es.TitleFilter)-1] + `%"`
 		parts = append(parts, sub)
 	}
 
-	return baseQuery + strings.Join(parts, " and "), params
+	return baseQuery + strings.Join(parts, " and ")
 }
