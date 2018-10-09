@@ -12,6 +12,7 @@ from threading import Thread
 
 
 out_folder: str = 'build/'
+goreleaser_token: str = '7c71dfc5c3255c918b8ace1b9cc024b1a16acc50'
 filenames: Dict[str, str] = {
     'windows': 'webapi-dav-windows_amd64.exe',
     'windows-nogui': 'webapi-dav-windows_amd64.exe',
@@ -196,6 +197,11 @@ def docker(ctx: click.Context, run: bool, cleanup: bool) -> None:
     subprocess.run('docker build -t webapi-dav .', shell=True).check_returncode()
     if run:
         subprocess.run('docker run -it webapi-dav', shell=True).check_returncode()
+
+
+@cli.command()
+def release() -> None:
+    subprocess.run('set "GITHUB_TOKEN={}"goreleaser --rm-dist'.format(goreleaser_token), shell=True).check_returncode()
 
 
 @cli.command()
