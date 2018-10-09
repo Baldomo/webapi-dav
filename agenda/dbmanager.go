@@ -20,7 +20,7 @@ const (
 
 var (
 	db          *sqlx.DB
-	dataSource  = ""
+	dataSource  = "apiliceo:apiliceo2018-txc122tr887@/"
 	host        = "/"
 	agendaTable = config.GetConfig().DB.Schema + ".npjmx_jevents_vevdetail"
 	baseQuery   = "select " + titleField + "," + contentField + "," + inizioField + "," + fineField +
