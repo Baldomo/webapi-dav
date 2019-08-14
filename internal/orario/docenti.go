@@ -1,11 +1,14 @@
 package orario
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type docenti []Docente
 type Docente struct {
 	Nome    string `json:"nome"`
 	Cognome string `json:"cognome"`
+	Data    string `json:"encrypted,omitempty"`
 }
 
 var (
@@ -16,7 +19,7 @@ func loadDocenti() {
 	doc = nil
 	var doctemp docenti
 	for _, att := range orario.Attivita {
-		doctemp = append(doctemp, Docente{att.DocNome, att.DocCognome})
+		doctemp = append(doctemp, Docente{att.DocNome, att.DocCognome, ""})
 	}
 
 	for _, d := range doctemp {

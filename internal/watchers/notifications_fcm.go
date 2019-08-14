@@ -2,8 +2,8 @@ package watchers
 
 import (
 	"fmt"
-	"github.com/Baldomo/webapi-dav/comunicati"
-	. "github.com/Baldomo/webapi-dav/log"
+	"github.com/Baldomo/webapi-dav/internal/comunicati"
+	. "github.com/Baldomo/webapi-dav/internal/log"
 	"github.com/appleboy/go-fcm"
 	"net/url"
 )

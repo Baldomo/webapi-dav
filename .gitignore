@@ -1,3 +1,7 @@
+# Python venv
+.env/
+venv/
+
 # Vagrant files
 .vagrant/
 
@@ -22,6 +26,3 @@ build/
 
 # Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
 .glide/
-
-# Vendor dir
-vendor/

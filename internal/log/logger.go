@@ -1,7 +1,7 @@
 package log
 
 import (
-	"github.com/Baldomo/webapi-dav/config"
+	"github.com/Baldomo/webapi-dav/internal/config"
 	"github.com/op/go-logging"
 	"gopkg.in/natefinch/lumberjack.v2"
 	"io/ioutil"

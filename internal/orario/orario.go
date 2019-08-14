@@ -2,7 +2,7 @@ package orario
 
 import (
 	"encoding/xml"
-	"github.com/Baldomo/webapi-dav/log"
+	"github.com/Baldomo/webapi-dav/internal/log"
 	"io/ioutil"
 	"strings"
 )

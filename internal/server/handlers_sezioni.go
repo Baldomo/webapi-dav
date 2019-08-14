@@ -2,11 +2,11 @@ package server
 
 import (
 	"encoding/json"
-	"github.com/Baldomo/webapi-dav/agenda"
-	com "github.com/Baldomo/webapi-dav/comunicati"
-	. "github.com/Baldomo/webapi-dav/log"
-	"github.com/Baldomo/webapi-dav/orario"
-	"github.com/Baldomo/webapi-dav/utils"
+	"github.com/Baldomo/webapi-dav/internal/agenda"
+	com "github.com/Baldomo/webapi-dav/internal/comunicati"
+	. "github.com/Baldomo/webapi-dav/internal/log"
+	"github.com/Baldomo/webapi-dav/internal/orario"
+	"github.com/Baldomo/webapi-dav/internal/utils"
 	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
@@ -25,6 +25,7 @@ func ComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 		com.Docenti,
 	}
 
+	defer r.Body.Close()
 	switch utils.RequestMime(r.Header) {
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -53,6 +54,7 @@ func ComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func GenitoriComunicatiHandler(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
 	var localCount int
 	vars := mux.Vars(r)
 	count, countPresent := vars["count"]
@@ -92,6 +94,7 @@ func GenitoriComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func StudentiComunicatiHandler(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
 	var localCount int
 	vars := mux.Vars(r)
 	count, countPresent := vars["count"]
@@ -131,6 +134,7 @@ func StudentiComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func DocentiComunicatiHandler(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
 	var localCount int
 	vars := mux.Vars(r)
 	count, countPresent := vars["count"]
@@ -172,6 +176,7 @@ func DocentiComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 // Utilità
 
 func DocentiHandler(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
 	switch utils.RequestMime(r.Header) {
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -199,6 +204,7 @@ func DocentiHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ClassiHandler(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
 	switch utils.RequestMime(r.Header) {
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -228,6 +234,7 @@ func ClassiHandler(w http.ResponseWriter, r *http.Request) {
 // Orario
 
 func OrarioHandler(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
 	switch utils.RequestMime(r.Header) {
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -255,6 +262,7 @@ func OrarioHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func OrarioClasseHandler(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
 	classe, _ := mux.Vars(r)["classe"]
 	switch utils.RequestMime(r.Header) {
 	case "application/json":
@@ -284,6 +292,7 @@ func OrarioClasseHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func OrarioDocenteHandler(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
 	var doc orario.Docente
 	if err := json.NewDecoder(r.Body).Decode(&doc); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -320,6 +329,7 @@ func OrarioDocenteHandler(w http.ResponseWriter, r *http.Request) {
 // Agenda
 
 func AgendaHandler(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
 	var es agenda.EventStream
 	if err := json.NewDecoder(r.Body).Decode(&es); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
