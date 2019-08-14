@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 import click
 import errno
 import os
@@ -178,7 +178,7 @@ def deploy(ctx: click.Context, target: str, run: bool, cleanup: bool) -> None:
     create_playground(exe, True)
     if run:
         try:
-            subprocess.run('cd {} && {}'.format(playground_folder, exe), shell=True).check_returncode()
+            subprocess.run('cd {} && ./{}'.format(playground_folder, exe), shell=True).check_returncode()
         finally:
             if cleanup:
                 ctx.invoke(clean)
@@ -193,15 +193,15 @@ def docker(ctx: click.Context, run: bool, cleanup: bool) -> None:
     exe: str = filenames['linux']
     create_playground(exe, False)
     if cleanup:
-        subprocess.run('docker rm webapi-dav && docker rmi $(docker ps -aq)', shell=True)
+        subprocess.run('docker rm webapi-dav', shell=True)
     subprocess.run('docker build -t webapi-dav .', shell=True).check_returncode()
     if run:
-        subprocess.run('docker run -it webapi-dav', shell=True).check_returncode()
+        subprocess.run('docker run -it webapi-dav /bin/bash', shell=True).check_returncode()
 
 
 @cli.command()
 def release() -> None:
-    subprocess.run('set "GITHUB_TOKEN={}"goreleaser --rm-dist'.format(goreleaser_token), shell=True).check_returncode()
+    subprocess.run('set "GITHUB_TOKEN={}" goreleaser --rm-dist'.format(goreleaser_token), shell=True).check_returncode()
 
 
 @cli.command()

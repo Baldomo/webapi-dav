@@ -1,8 +1,8 @@
 package comunicati
 
 import (
-	"github.com/Baldomo/webapi-dav/config"
-	"github.com/Baldomo/webapi-dav/log"
+	"github.com/Baldomo/webapi-dav/internal/config"
+	"github.com/Baldomo/webapi-dav/internal/log"
 	"io/ioutil"
 	"net/url"
 	"os"
@@ -37,6 +37,13 @@ const (
 	UrlPrefix = "http://www.liceodavinci.tv/sitoLiceo/images/comunicati/"
 )
 
+func (c *Comunicato) Equals(other *Comunicato) bool {
+	if c.Nome == other.Nome && c.Data.Round(time.Second).Equal(other.Data.Round(time.Second)) && c.Tipo == other.Tipo && c.URL ==other.URL {
+		return true
+	}
+	return false
+}
+
 func NewComunicato(nome string, data time.Time, tipo string) *Comunicato {
 	com := new(Comunicato)
 	com.Nome = nome
@@ -50,7 +57,7 @@ func NewComunicato(nome string, data time.Time, tipo string) *Comunicato {
 	return com
 }
 
-func fetchComunicati(dir string, tipo string) Comunicati {
+func scrape(dir string, tipo string) Comunicati {
 	var wg sync.WaitGroup
 
 	absPath, _ := filepath.Abs(dir)
@@ -84,13 +91,13 @@ func LoadComunicati(tipo string) {
 	switch tipo {
 
 	case TipoGenitori:
-		Genitori = fetchComunicati(config.GetConfig().Dirs.Genitori, TipoGenitori)
+		Genitori = scrape(config.GetConfig().Dirs.Genitori, TipoGenitori)
 
 	case TipoDocenti:
-		Docenti = fetchComunicati(config.GetConfig().Dirs.Docenti, TipoDocenti)
+		Docenti = scrape(config.GetConfig().Dirs.Docenti, TipoDocenti)
 
 	case TipoStudenti:
-		Studenti = fetchComunicati(config.GetConfig().Dirs.Studenti, TipoStudenti)
+		Studenti = scrape(config.GetConfig().Dirs.Studenti, TipoStudenti)
 
 	default:
 		return

@@ -1,9 +1,9 @@
 package watchers
 
 import (
-	com "github.com/Baldomo/webapi-dav/comunicati"
-	"github.com/Baldomo/webapi-dav/config"
-	. "github.com/Baldomo/webapi-dav/log"
+	com "github.com/Baldomo/webapi-dav/internal/comunicati"
+	"github.com/Baldomo/webapi-dav/internal/config"
+	. "github.com/Baldomo/webapi-dav/internal/log"
 	"github.com/radovskyb/watcher"
 	"os"
 	"path/filepath"

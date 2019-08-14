@@ -1,9 +1,9 @@
 package agenda
 
 import (
-	"github.com/Baldomo/webapi-dav/config"
-	"github.com/Baldomo/webapi-dav/log"
-	"github.com/Baldomo/webapi-dav/utils"
+	"github.com/Baldomo/webapi-dav/internal/config"
+	"github.com/Baldomo/webapi-dav/internal/log"
+	"github.com/Baldomo/webapi-dav/internal/utils"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"strings"

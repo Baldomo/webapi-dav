@@ -1,17 +1,15 @@
-// +build linux darwin
-
 package server
 
 import (
 	"context"
 	"crypto/tls"
+	"fmt"
+	"github.com/Baldomo/webapi-dav/internal/config"
+	"github.com/Baldomo/webapi-dav/internal/log"
 	"github.com/gorilla/mux"
-	"github.com/Baldomo/webapi-dav/config"
-	"github.com/Baldomo/webapi-dav/log"
+	"net"
 	"net/http"
-	"os"
-	"os/signal"
-	"syscall"
+	"net/rpc"
 	"time"
 )
 
@@ -21,10 +19,12 @@ type serverHandler struct {
 
 	http  *http.Server
 	https *http.Server
+	ipc   *rpc.Server
+
+	onShutdown []func()
 }
 
 var (
-	signals chan os.Signal
 	timeout = 15 * time.Second
 
 	handler = new(serverHandler)
@@ -94,6 +94,13 @@ func (sh *serverHandler) Start() {
 		sh.startHTTP()
 	}
 
+	sh.ipc = rpc.NewServer()
+	sh.ipc.RegisterName("serverHandler", sh)
+	l, err := net.Listen("tcp", ":2202")
+	if err != nil {
+		log.Log.Critical("Impossibile avviare servizio IPC")
+	}
+	sh.ipc.Accept(l)
 	sh.Started <- struct{}{}
 }
 
@@ -117,31 +124,49 @@ func (sh *serverHandler) startHTTPS() {
 	return
 }
 
-func Shutdown() { handler.Shutdown() }
-func (sh *serverHandler) Shutdown() {
+func (sh *serverHandler) restart(_, _ *struct{}) error {
+	err := sh.Shutdown(&struct{}{}, &struct{}{})
+	if err != nil {
+		return err
+	}
+	sh.Start()
+	return nil
+}
+
+func OnShutdown(f ...func()) {
+	handler.onShutdown = append(handler.onShutdown, f...)
+}
+
+func Shutdown() { handler.Shutdown(&struct{}{}, &struct{}{}) }
+func (sh *serverHandler) Shutdown(_, _ *struct{}) error {
 	sh.Stopped = make(chan struct{}, 2)
-	signals = make(chan os.Signal, 1)
-	signal.Notify(signals, os.Interrupt, syscall.SIGTERM)
-	<-signals
+
+	for _, f := range sh.onShutdown {
+		f()
+	}
 
 	errHttp := shutdown(sh.http, sh.Stopped)
 	if errHttp != nil {
 		log.Log.Error(errHttp.Error())
+		return errHttp
 	}
 
 	errHttps := shutdown(sh.https, sh.Stopped)
 	if errHttps != nil {
 		log.Log.Error(errHttps.Error())
+		return errHttps
 	}
 
 	select {
 	case sh.Stopped <- struct{}{}:
 		close(sh.Stopped)
+		return fmt.Errorf("impossibile terminare server automaticamente")
 	default:
 		break
 	}
 
 	close(sh.Stopped)
+	return nil
 }
 
 func shutdown(s *http.Server, cchan chan struct{}) error {

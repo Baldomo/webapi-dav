@@ -2,9 +2,9 @@ package server
 
 import (
 	"encoding/json"
-	"github.com/Baldomo/webapi-dav/config"
-	. "github.com/Baldomo/webapi-dav/log"
-	"github.com/Baldomo/webapi-dav/utils"
+	"github.com/Baldomo/webapi-dav/internal/config"
+	. "github.com/Baldomo/webapi-dav/internal/log"
+	"github.com/Baldomo/webapi-dav/internal/utils"
 	"html/template"
 	"io/ioutil"
 	"net/http"
@@ -16,6 +16,7 @@ var (
 )
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
 	if indexHtml == "" {
 		absPath, _ := filepath.Abs(filepath.Join(config.GetConfig().Dirs.HTML, "index.html"))
 		raw, _ := ioutil.ReadFile(absPath)
@@ -33,6 +34,7 @@ func AboutHandler(w http.ResponseWriter, r *http.Request) {
 		Info: "Leonardo Baldin, v" + utils.VersionNumber + ", (c) 2017",
 	}
 
+	defer r.Body.Close()
 	switch utils.RequestMime(r.Header) {
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -60,6 +62,7 @@ func AboutHandler(w http.ResponseWriter, r *http.Request) {
 func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
 	var message = utils.APIMessage{Code: http.StatusNotFound, Info: "Non trovato"}
 
+	defer r.Body.Close()
 	w.WriteHeader(http.StatusNotFound)
 	switch utils.RequestMime(r.Header) {
 	case "text/html":
@@ -83,6 +86,7 @@ func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
 func TeapotHandler(w http.ResponseWriter, r *http.Request) {
 	var message = utils.APIMessage{Code: http.StatusTeapot, Info: `I'm a teapot`}
 
+	defer r.Body.Close()
 	w.WriteHeader(http.StatusTeapot)
 	switch utils.RequestMime(r.Header) {
 	case "application/json":
@@ -109,6 +113,7 @@ func TeapotHandler(w http.ResponseWriter, r *http.Request) {
 func VersionHandler(w http.ResponseWriter, r *http.Request) {
 	var versionMessage = utils.APIMessage{Code: http.StatusOK, Info: "webapi-dav v" + utils.VersionNumber}
 
+	defer r.Body.Close()
 	switch utils.RequestMime(r.Header) {
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
