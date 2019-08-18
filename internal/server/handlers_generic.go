@@ -53,9 +53,6 @@ func AboutHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
 		}
 		break
-
-	default:
-		w.WriteHeader(http.StatusUnsupportedMediaType)
 	}
 }
 
@@ -77,9 +74,6 @@ func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 		break
-
-	default:
-		w.WriteHeader(http.StatusUnsupportedMediaType)
 	}
 }
 
@@ -104,9 +98,6 @@ func TeapotHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusTeapot)
 		}
 		break
-
-	default:
-		w.WriteHeader(http.StatusUnsupportedMediaType)
 	}
 }
 
@@ -133,9 +124,6 @@ func VersionHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
 		}
 		break
-
-	default:
-		w.WriteHeader(http.StatusUnsupportedMediaType)
 	}
 }
 

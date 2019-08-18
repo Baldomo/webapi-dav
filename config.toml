@@ -1,14 +1,7 @@
 [generali]
 riavvio_automatico = true  # TODO: da implementare
 
-[https]
-abilitato = false
-porta = ":443"
-certificato = "server.crt"
-chiave = "id_rsa.nodes"
-
 [http]
-abilitato = true
 porta = ":8080"
 
 [db]
