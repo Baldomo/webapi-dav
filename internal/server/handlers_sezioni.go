@@ -46,9 +46,6 @@ func ComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
 		}
 		break
-
-	default:
-		w.WriteHeader(http.StatusUnsupportedMediaType)
 	}
 	return
 }
@@ -87,9 +84,6 @@ func GenitoriComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
 		}
 		break
-
-	default:
-		w.WriteHeader(http.StatusUnsupportedMediaType)
 	}
 }
 
@@ -127,9 +121,6 @@ func StudentiComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
 		}
 		break
-
-	default:
-		w.WriteHeader(http.StatusUnsupportedMediaType)
 	}
 }
 
@@ -167,9 +158,6 @@ func DocentiComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
 		}
 		break
-
-	default:
-		w.WriteHeader(http.StatusUnsupportedMediaType)
 	}
 }
 
@@ -197,9 +185,6 @@ func DocentiHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
 		}
 		break
-
-	default:
-		w.WriteHeader(http.StatusUnsupportedMediaType)
 	}
 }
 
@@ -225,9 +210,6 @@ func ClassiHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
 		}
 		break
-
-	default:
-		w.WriteHeader(http.StatusUnsupportedMediaType)
 	}
 }
 
@@ -255,9 +237,6 @@ func OrarioHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
 		}
 		break
-
-	default:
-		w.WriteHeader(http.StatusUnsupportedMediaType)
 	}
 }
 
@@ -284,9 +263,6 @@ func OrarioClasseHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
 		}
 		break
-
-	default:
-		w.WriteHeader(http.StatusUnsupportedMediaType)
 	}
 
 }
@@ -320,9 +296,6 @@ func OrarioDocenteHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
 		}
 		break
-
-	default:
-		w.WriteHeader(http.StatusUnsupportedMediaType)
 	}
 }
 
@@ -343,7 +316,5 @@ func AgendaHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusOK)
 		}
-	} else {
-		w.WriteHeader(http.StatusUnsupportedMediaType)
 	}
 }

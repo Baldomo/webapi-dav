@@ -13,7 +13,6 @@ import (
 
 type config struct {
 	General general   `json:"generali" toml:"generali"`
-	HTTPS   connhttps `json:"https" toml:"https"`
 	HTTP    connhttp  `json:"http" toml:"http"`
 	DB      db        `json:"db" toml:"db"`
 	Dirs    dirs      `json:"cartelle" toml:"cartelle"`
@@ -24,15 +23,7 @@ type general struct {
 	RestartOnPanic bool `json:"riavvio_automatico" toml:"riavvio_automatico"`
 }
 
-type connhttps struct {
-	Enabled bool   `json:"abilitato" toml:"abilitato"`
-	Port    string `json:"porta" toml:"porta"`
-	Cert    string `json:"certificato" toml:"certificato"`
-	Key     string `json:"chiave" toml:"chiave"`
-}
-
 type connhttp struct {
-	Enabled bool   `json:"abilitato" toml:"abilitato"`
 	Port    string `json:"porta" toml:"porta"`
 }
 
@@ -72,14 +63,7 @@ var (
 		general{
 			false,
 		},
-		connhttps{
-			false,
-			"",
-			"",
-			"",
-		},
 		connhttp{
-			true,
 			":8080",
 		},
 		db{
@@ -160,20 +144,6 @@ func formatPrefs() {
 	//HTTP
 	if !strings.HasPrefix(preferences.HTTP.Port, ":") {
 		preferences.HTTP.Port = ":" + preferences.HTTP.Port
-	}
-
-	// HTTPS
-	if !strings.HasPrefix(preferences.HTTPS.Port, ":") {
-		preferences.HTTPS.Port = ":" + preferences.HTTPS.Port
-	}
-	if preferences.HTTPS.Enabled {
-		if preferences.HTTPS.Cert == "" {
-			fmt.Println("Certificato non specificato!")
-		}
-		if preferences.HTTPS.Key == "" {
-			fmt.Println("Chiave non specificata!")
-		}
-
 	}
 
 	// Dirs

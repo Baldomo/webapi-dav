@@ -1,6 +1,6 @@
 # webapi-dav
 Questa è la documentazione ufficiale di Da Vinci API, contenente utilizzo e configurazione del webserver.
-Ultima versione: v0.5.0
+Ultima versione: v0.6.2
 [Copia del README su Github](https://gist.github.com/Baldomo/5dc1db7a46e00f94ef714b7063f7fa3d)
 
 ## Indice
@@ -77,18 +77,9 @@ VirtualHost per redirezionamento richieste HTTPS:
 
 #### Connessione
 
-##### HTTPS
-| Nome                 | Tipo     | Valori         | Descrizione |
-|----------------------|----------|----------------|-------------|
-| `abilitato`          | boolean  | `true, false`  | Avvia il server in modalità HTTPS - richiede percorsi di certificato e chiave privata del certificato |
-| `porta`              | string   | "numero porta" | Indica la porta che il server userà per le connessioni HTTPS in entrata. |
-| `certificato`        | string   | "/percorso/"   | Indica il percorso del file `.crt` del certificato firmato |
-| `chiave`             | string   | "/percorso/"   | Indica il percorso del file `.key` contenente la chiave con cui è stato firmato il certificato |
-
 ##### HTTP
 | Nome                 | Tipo     | Valori         | Descrizione |
 |----------------------|----------|----------------|-------------|
-| `abilitato`          | boolean  | `true, false`  | Avvia il server in modalità HTTP |
 | `porta`              | string   | "numero porta" | Indica la porta che il server userà per le connessioni HTTP in entrata. |
 
 ---
@@ -124,14 +115,7 @@ VirtualHost per redirezionamento richieste HTTPS:
 Esempio di `config.toml` (in quella di default le cartelle non sono specificate):
 
 ```toml
-[https]
-abilitato = false
-porta = ":443"
-certificato = "server.crt"
-chiave = "server.key"
-
 [http]
-abilitato = true
 porta = ":8080"
 
 [db]
@@ -154,14 +138,7 @@ livello_log = "verbose"
 Esempio di `config.json` (in quella di default le cartelle non sono specificate):
 ```json
 {
-  "https": {
-    "abilitato": false,
-    "porta": ":443",
-    "certificato": "server.crt",
-    "chiave": "server.key"
-  },
   "http": {
-    "abilitato": true,
     "porta": ":8080"
   },
   "db": {

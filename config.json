@@ -2,14 +2,7 @@
   "generali": {
     "riavvio_automatico": true
   },
-  "https": {
-    "abilitato": false,
-    "porta": ":443",
-    "certificato": "server.crt",
-    "chiave": "server.key"
-  },
   "http": {
-    "abilitato": true,
     "porta": ":8080"
   },
   "db": {

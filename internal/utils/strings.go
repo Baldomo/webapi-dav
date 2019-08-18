@@ -54,7 +54,7 @@ var (
 		"classi":                  {"GET", "/api/classi", "Restituirà la lista di tutte le classi del liceo", "/classi"},
 		"comunicati":              {"GET", "/api/comunicati", "Restituirà la lista completa di comunicati", "/comunicati"},
 		"comunicati-docenti":      {"GET", "/api/comunicati/docenti", "Restituirà la lista dei comunicati per i docenti", "/comunicati/docenti"},
-		"comunicati-docenti-arg":  {"GET", "/api/comunicati/docenti/5", "Restituirà gli ultimi  n comunicati per i docenti", "/comunicati/docenti/{n: numero}"},
+		"comunicati-docenti-arg":  {"GET", "/api/comunicati/docenti/5", "Restituirà gli ultimi n comunicati per i docenti", "/comunicati/docenti/{n: numero}"},
 		"comunicati-genitori":     {"GET", "/api/comunicati/genitori", "Restituirà la lista dei comunicati per i genitori", "/comunicati/genitori"},
 		"comunicati-genitori-arg": {"GET", "/api/comunicati/genitori/5", "Restituirà gli ultimi n comunicati per i genitori", "/comunicati/genitori/{n: numero}"},
 		"comunicati-studenti":     {"GET", "/api/comunicati/studenti", "Restituirà la lista dei comunicati per gli studenti", "/comunicati/studenti"},
