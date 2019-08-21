@@ -1,4 +1,4 @@
-///+build build
+//+build build
 
 package main
 
@@ -157,8 +157,7 @@ func deploy() error {
 		apiCmd := exec.Command("./webapi" + file_ext)
 		apiCmd.Dir = "playground"
 		log.Printf("Starting webapi\nUse Ctrl+C (SIGINT) to exit...")
-		apiCmd.Start()
-		apiCmd.Wait()
+		apiCmd.Run()
 	}
 
 	return nil
@@ -259,5 +258,6 @@ func test() error {
 	}
 
 	testCmd := exec.Command("go", args...)
+	testCmd.Stdout = os.Stdout
 	return testCmd.Run()
 }
