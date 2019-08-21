@@ -18,6 +18,8 @@ github.com/nightlyone/lockfile v0.0.0-20170804114028-6a197d5ea611 h1:dJA8OtA0V3X
 github.com/nightlyone/lockfile v0.0.0-20170804114028-6a197d5ea611/go.mod h1:JbxfV1Iifij2yhRjXai0oFrbpxszXHRx1E5RuM26o4Y=
 github.com/op/go-logging v0.0.0-20160211212156-b2cb9fa56473 h1:J1QZwDXgZ4dJD2s19iqR9+U00OWM2kDzbf1O/fmvCWg=
 github.com/op/go-logging v0.0.0-20160211212156-b2cb9fa56473/go.mod h1:HzydrMdWErDVzsI23lYNej1Htcns9BCg93Dk0bBINWk=
+github.com/pseidemann/finish v0.0.0-20190122212907-385f9851b7c7 h1:C33NNQVR1tzZNDKTWmzh/fY3kRZ3gSMpUCzEPRa4HVA=
+github.com/pseidemann/finish v0.0.0-20190122212907-385f9851b7c7/go.mod h1:O9elHah1epAb7DMIgx6rfP/JqSC4SdGRxET2407DqNk=
 github.com/radovskyb/watcher v1.0.2 h1:9L5TsZUbo1nKhQEQPtICVc+x9UZQ6VPdBepLHyGw/bQ=
 github.com/radovskyb/watcher v1.0.2/go.mod h1:78okwvY5wPdzcb1UYnip1pvrZNIVEIh/Cm+ZuvsUYIg=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=

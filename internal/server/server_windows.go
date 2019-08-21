@@ -92,8 +92,6 @@ func (sh *serverHandler) Start() {
 
 	// Blocking: aspetta segnali da attraverso IPC
 	sh.ipc.Accept(l)
-
-	sh.Shutdown(&struct{}{}, &struct{}{})
 }
 
 func (sh *serverHandler) restart(_, _ *struct{}) error {

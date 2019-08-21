@@ -3,25 +3,19 @@
 package server
 
 import (
-	"context"
 	"github.com/Baldomo/webapi-dav/internal/config"
 	"github.com/Baldomo/webapi-dav/internal/log"
 	"github.com/gorilla/mux"
+	"github.com/pseidemann/finish"
 	"net/http"
-	"os"
-	"os/signal"
-	"syscall"
 	"time"
 )
 
 type serverHandler struct {
-	Stopped chan struct{}
-
 	http *http.Server
 }
 
 var (
-	signals chan os.Signal
 	timeout = 15 * time.Second
 
 	handler = new(serverHandler)
@@ -82,75 +76,11 @@ func newServer() *http.Server {
 func Start() { handler.Start() }
 func (sh *serverHandler) Start() {
 	sh.http = newServer()
+
+	fin := finish.New()
+	fin.Add(sh.http, finish.WithTimeout(timeout))
+
 	go sh.http.ListenAndServe()
-
-	sh.Stopped = make(chan struct{}, 2)
-
-	signals = make(chan os.Signal, 1)
-	signal.Notify(signals, os.Interrupt, syscall.SIGTERM)
-	// Blocking: aspetta segnali SIGINT, SIGTERM
-	<-signals
-
-	err := shutdown(sh.http, sh.Stopped)
-	if err != nil {
-		log.Log.Error(err.Error())
-	}
-
-	select {
-	case sh.Stopped <- struct{}{}:
-		close(sh.Stopped)
-	default:
-		break
-	}
-
-	close(sh.Stopped)
-}
-
-func shutdown(s *http.Server, cchan chan struct{}) error {
-	if s == nil {
-		return nil
-	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), timeout)
-	defer cancel()
-
-	log.Log.Warningf("Conclusione richieste con timeout %s", timeout)
-
-	if err := s.Shutdown(ctx); err != nil {
-		log.Log.Error(err.Error())
-	} else {
-		log.Log.Info("Concluse richieste in arrivo")
-
-		select {
-		case <-ctx.Done():
-			if err := ctx.Err(); err != nil {
-				return err
-			}
-		default:
-			if deadline, ok := ctx.Deadline(); ok {
-				secs := (time.Until(deadline) + time.Second/2) / time.Second
-				log.Log.Warningf("Spegnimento server con timeout %vs", secs)
-			}
-
-			done := make(chan error)
-
-			go func() {
-				<-ctx.Done()
-			}()
-
-			if err := <-done; err != nil {
-				return err
-			}
-		}
-	}
-
-	if deadline, ok := ctx.Deadline(); ok {
-		cchan <- struct{}{}
-		secs := (time.Until(deadline) + time.Second/2) / time.Second
-		log.Log.Warningf("Completato spegnimento in %vs", secs)
-	}
-
-	log.CloseLogger()
-
-	return nil
+	// Blocking: finisher aspetta la conclusione delle richieste
+	fin.Wait()
 }

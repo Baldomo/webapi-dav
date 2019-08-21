@@ -11,6 +11,7 @@ require (
 	github.com/mattn/go-sqlite3 v1.9.0 // indirect
 	github.com/nightlyone/lockfile v0.0.0-20170804114028-6a197d5ea611
 	github.com/op/go-logging v0.0.0-20160211212156-b2cb9fa56473
+	github.com/pseidemann/finish v0.0.0-20190122212907-385f9851b7c7
 	github.com/radovskyb/watcher v1.0.2
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0-20170531160350-a96e63847dc3
 	gopkg.in/yaml.v2 v2.2.1 // indirect
