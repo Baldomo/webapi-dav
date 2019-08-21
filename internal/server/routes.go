@@ -37,6 +37,12 @@ var routes = Routes{
 		"/api/teapot",
 		TeapotHandler,
 	},
+	Route{
+		"Swagger",
+		"GET",
+		"/api/openapi.yaml",
+		OpenapiHandler,
+	},
 
 	// Comunicati
 	Route{

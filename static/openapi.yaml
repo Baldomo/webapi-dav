@@ -1,0 +1,474 @@
+openapi: 3.0.2
+
+info:
+  title: webapi-dav
+  description: La API RESTful è un servizio utile per ottenere dati dal [sito principale](http://www.liceodavinci.tv/sitoLiceo)
+  version: 0.6.2
+
+servers:
+- url: http://liceodavinci.tv/api
+
+tags:
+- name: generali
+- name: agenda
+- name: comunicati
+- name: orario
+- name: utilità
+
+paths:
+  /about:
+    get:
+      tags: 
+      - utilità
+      summary: Restituirà informazioni generali sulla API
+      responses:
+        200:
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessage'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /teapot:
+    get:
+      tags:
+      - utilità
+      summary: Restituirà codice HTTP 418. Utile solamente a capire se la API è online e funzionante
+      responses:
+        418:
+          description: I'm a teapot
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessage'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /version:
+    get:
+      tags: 
+      - utilità
+      summary: Restituirà la versione dell'API in uso
+      responses:
+        200:
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessage'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /agenda:
+    post:
+      tags:
+      - agenda
+      summary: Restituisce gli eventi dell'agenda richiesti
+      description: I campi temporali sono definiti in [tempo UNIX](https://en.wikipedia.org/wiki/Unix_time)
+      requestBody:
+        description: Oggetto docente da richiedere
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgendaRequest'
+      responses:
+        200:
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AgendaEvent'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /docenti:
+    get:
+      tags: 
+      - generali
+      summary: Restituirà la lista dei docenti del liceo
+      responses:
+        200:
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Docente'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /classi:
+    get:
+      tags: 
+      - generali
+      summary: Restituirà la lista di tutte le classi del liceo
+      responses:
+        200:
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                type: array
+                example: ['1A','1C','1D','1E','1F','2A','2C','2D','2E','2F','1B','1G','1N','1M','2B','2G','2L','2M','1I','2I','3I','4I','3A','3C','3D','3F','3H','4A','4C','4D','4E','4F','5A','5C','5D','5E','5F','5H','5I','5M','3B','3G','3L','3M','4B','4G','4L','4M','5B','5G','5L','3E','1H','1O','4H','1L','4O','4N']
+                items:
+                  type: string
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /comunicati:
+    get:
+      tags:
+      - comunicati
+      summary: Restituirà la lista completa di comunicati
+      responses:
+        200:
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  genitori:
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/Comunicato'
+                  studenti:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Comunicato'
+                  docenti:
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/Comunicato'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /comunicati/genitori:
+    get:
+      tags:
+      - comunicati
+      summary: Restituirà la lista dei comunicati per i genitori
+      responses:
+        200:
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Comunicato'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /comunicati/genitori/{num}:
+    get:
+      tags:
+      - comunicati
+      summary: Restituirà gli ultimi n comunicati per i genitori
+      parameters:
+      - name: num
+        in: path
+        description: Numero massimo di comunicati richiesti (ultimi N comunicati recenti)
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Comunicato'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /comunicati/docenti:
+    get:
+      tags:
+      - comunicati
+      summary: Restituirà la lista dei comunicati per i docenti
+      responses:
+        200:
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Comunicato'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /comunicati/docenti/{num}:
+    get:
+      tags:
+      - comunicati
+      summary: Restituirà gli ultimi n comunicati per i docenti
+      parameters:
+      - name: num
+        in: path
+        description: Numero massimo di comunicati richiesti (ultimi N comunicati recenti)
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Comunicato'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /comunicati/studenti:
+    get:
+      tags:
+      - comunicati
+      summary: Restituirà la lista dei comunicati per gli studenti
+      responses:
+        200:
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Comunicato'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /comunicati/studenti/{num}:
+    get:
+      tags:
+      - comunicati
+      summary: Restituirà gli ultimi n comunicati per gli studenti
+      parameters:
+      - name: num
+        in: path
+        description: Numero massimo di comunicati richiesti (ultimi N comunicati recenti)
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Comunicato'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /orario:
+    get:
+      tags:
+      - orario
+      summary: Restituirà l'orario completo di tutte le classi
+      responses:
+        200:
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Orario'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+ 
+  /orario/classe/{classe}:
+    get:
+      tags:
+      - orario
+      summary: Restituirà l'orario della classe specificata
+      parameters:
+        - name: classe
+          in: path
+          description: Classe in formato `^[1-5][a-zA-Z]$`
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Attivita'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /orario/docente:
+    post:
+      tags:
+      - orario
+      summary: Restiturà l'orario del docente richiesto
+      requestBody:
+        description: Oggetto docente da richiedere
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Docente'
+      responses:
+        200:
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Attivita'
+        400:
+          $ref: '#/components/responses/BadRequest'
+
+components:
+  schemas:
+    ApiMessage:
+      type: object
+      properties:
+        codice:
+          type: integer
+          format: int32
+          minimum: 0
+        info:
+          type: string
+    Comunicato:
+      type: object
+      properties:
+        nome:
+          type: string
+          example: '569-Procedure_scrutini_luglio_2019.pdf'
+        data:
+          type: string
+          format: date-time
+          example: '2019-07-05T13:33:58.9894203+02:00'
+        tipo:
+          type: string
+          enum: 
+          - 'docenti'
+          - 'genitori'
+          - 'studenti'
+        url:
+          type: string
+          example: 'http://www.liceodavinci.tv/sitoLiceo/images/comunicati/comunicati-docenti/569-Procedure_scrutini_luglio_2019.pdf'
+    Orario:
+      type: object
+      properties:
+        Nome:
+          type: string
+          example: 'Attività'
+        Attivita:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attivita'
+    Attivita:
+      type: object
+      properties:
+        num:
+          type: integer
+          format: int32
+          minimum: 0
+          example: 269
+        durata:
+          type: string
+          example: '1h00'
+        mat_cod:
+          type: string
+          example: 'FIS'
+        materia:
+          type: string
+          example: 'Fisica'
+        doc_cognome:
+          type: string
+          example: 'Bari'
+        doc_nome:
+          type: string
+          example: 'Luisa'
+        classe:
+          type: string
+          example: '5B'
+        aula:
+          type: string
+          example: '41 5p'
+        giorno:
+          type: string
+          example: 'lunedì'
+        inizio:
+          type: string
+          example: '12h05'
+        sede:
+          type: string
+          example: 'Principale (41 5p)'
+    Docente:
+      type: object
+      properties:
+        nome:
+          type: string
+          example: Mario
+        cognome:
+          type: string
+          example: Rossi
+    AgendaRequest:
+      type: object
+      required:
+      - prima
+      - dopo
+      properties:
+        prima:
+          type: integer
+          format: int64
+          description: Tempo prima del quale si cercano gli eventi (che sono finiti prima di questo tempo)
+          minimum: 0
+          example: 1559993200
+        dopo:
+          type: integer
+          format: int64
+          description: Tempo oltre il quale si cercano gli eventi (che sono iniziati dopo questo tempo)
+          minimum: 0
+          example: 1559973500
+    AgendaEvent:
+      type: object
+      properties:
+        inizio:
+          type: integer
+          format: int64
+          minimum: 0
+          example: 1559973600
+        fine:
+          type: integer
+          format: int64
+          minimum: 0
+          example: 1559991600
+        contenuto:
+          type: string
+          example: ''
+        titolo:
+          type: string
+          example: Ultimo giorno di attività didattica ordinaria - anno 2018/2019
+
+  responses:
+    BadRequest:
+      description: Richiesta eseguita con sintassi non valida
+      content: {}
+    InternalServerError:
+      description: Errore interno del server
+      content: {}
+    UnsupportedMediaType:
+      description: Valore di `Accept` non supportato

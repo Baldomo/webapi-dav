@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <title>DaVinci API</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="og:url" content="http://liceodavinci.tv/api">
+    <meta name="og:title" content="DaVinci API">
+    <meta name="og:description" content="Liceo Da Vinci RESTful API">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <style>
+        code {
+            display: block;
+            white-space: pre-line;
+        }
+        .content {
+            padding-bottom: 30px;
+        }
+    </style>
+</head>
+
+<body style="">
+<div class="container">
+    <div class="jumbotron">
+        <h1>DaVinci API</h1>
+        <img src="data:image/png;base64,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" style="width:24px;height:24px;" alt="">
+        <p><em>webapi-dav v{{.Version}}</em></p>
+    </div>
+</div>
+<div class="container">
+    <div id="content" style="margin-left:50px;">
+        <div class="content">
+            <h4 id="introduction">Introduzione</h4>
+            <p>
+                La API RESTful è un servizio utile per ottenere dati dal
+                <a href="http://www.liceodavinci.tv/sitoLiceo" target="_blank">sito principale</a>
+            </p>
+        </div>
+
+        <div class="content">
+            <h4 id="contentnegotiation">Negoziazione contenuti</h4>
+            <p>La API risponderà ai seguenti valori di "Accept:" con contenuti appropriati</p>
+            <ul>
+                <li>
+                    application/json - Il contenuto sarà restituito come oggetto/array JSON
+                    <p><code class="json">{ message: 'message', subtitle: 'subtitle' }</code></p>
+                </li>
+            </ul>
+        </div>
+
+        <div class="content">
+            <h4 id="operations">Operazioni</h4>
+
+            <table class="table" id="endpoints">
+                <tr>
+                    <th>Percorso</th>
+                    <th>Metodo</th>
+                    <th>Descrizione</th>
+                </tr>
+
+            {{ range $_, $value := .Ops }}
+
+                <tr>
+                    <td><a href={{$value.URI}}>{{$value.Title}}</a></td>
+                    <td>{{$value.Method}}</td>
+                    <td>{{$value.Desc}}</td>
+                </tr>
+
+            {{ end }}
+
+            </table>
+        </div>
+
+        <div class="content">
+            <p>Tutti i contributi sono benvenuti.</p>
+
+            <p>Questa homepage è ispirata dal progetto <a href="https://foaas.com" target="_blank">FOAAS</a></p>
+        </div>
+
+    </div>
+</div>
+<div class="container">
+    <div class="jumbotron" style="padding: 60px; margin-bottom: 0">
+        <p>Creato da Leonardo Baldin (2017)</p>
+    </div>
+</div>
+</body>
+</html>

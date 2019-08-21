@@ -85,8 +85,10 @@ func (sh *serverHandler) Start() {
 	go sh.http.ListenAndServe()
 
 	sh.Stopped = make(chan struct{}, 2)
+
 	signals = make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt, syscall.SIGTERM)
+	// Blocking: aspetta segnali SIGINT, SIGTERM
 	<-signals
 
 	err := shutdown(sh.http, sh.Stopped)
