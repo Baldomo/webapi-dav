@@ -28,6 +28,11 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	temp.Execute(w, utils.TemplateData())
 }
 
+func OpenapiHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/yaml")
+	http.ServeFile(w, r, "static/openapi.yaml")
+}
+
 func AboutHandler(w http.ResponseWriter, r *http.Request) {
 	var aboutMessage = utils.APIMessage{
 		Code: http.StatusOK,
