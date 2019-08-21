@@ -1,8 +1,6 @@
 package server
 
 import (
-	"net/http"
-	"net/http/httptest"
 	"testing"
 )
 
@@ -56,13 +54,13 @@ func TestServers(t *testing.T) {
 	}*/
 }
 
-func executeRequest(req *http.Request) *httptest.ResponseRecorder {
-	rr := httptest.NewRecorder()
-	handler.https.Handler.ServeHTTP(rr, req)
-	handler.http.Handler.ServeHTTP(rr, req)
-
-	return rr
-}
+//func executeRequest(req *http.Request) *httptest.ResponseRecorder {
+//	rr := httptest.NewRecorder()
+//	handler.https.Handler.ServeHTTP(rr, req)
+//	handler.http.Handler.ServeHTTP(rr, req)
+//
+//	return rr
+//}
 
 func checkResponseCode(t *testing.T, expected, actual int) {
 	if expected != actual {
