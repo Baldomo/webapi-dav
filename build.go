@@ -1,8 +1,11 @@
-//+build build
+///+build build
 
 package main
 
 import (
+	"archive/tar"
+	"compress/gzip"
+	"crypto/sha256"
 	"flag"
 	"fmt"
 	"io"
@@ -19,9 +22,10 @@ import (
 )
 
 var (
-	out_dir string
-	run     bool
-	goos    string
+	fast   bool
+	goos   string
+	outDir string
+	run    bool
 )
 
 type cmd func() error
@@ -35,9 +39,10 @@ var commands = map[string]cmd{
 }
 
 func main() {
-	flag.StringVar(&out_dir, "out", "build", "specifies build output `directory`")
-	flag.BoolVar(&run, "run", false, "run webapi after deployment")
+	flag.BoolVar(&fast, "fast", false, "skip archiving builds in .tar.gz files and checksum generation")
 	flag.StringVar(&goos, "os", "windows:linux", "systems to build for (separated by column, e.g. `windows:linux:mac`)")
+	flag.StringVar(&outDir, "out", "build", "specifies build output `directory`")
+	flag.BoolVar(&run, "run", false, "run webapi after deployment")
 	flag.Parse()
 
 	command := flag.Arg(0)
@@ -63,9 +68,18 @@ func build() error {
 	osList := strings.Split(goos, ":")
 	for _, osValue := range osList {
 		if v, ok := vars[osValue]; ok {
-			err := buildArtifact(v)
-			if err != nil {
+			if err := buildArtifact(v); err != nil {
 				return err
+			}
+
+			if !fast {
+				if err := packageArtifact(v); err != nil {
+					return err
+				}
+
+				if err := writeChecksum(v); err != nil {
+					return err
+				}
 			}
 		} else {
 			log.Printf("Invalid OS supplied: %s, skipping...\n", osValue)
@@ -79,19 +93,19 @@ func buildArtifact(system string) error {
 	os.Setenv("GOOS", system)
 	os.Setenv("GOARCH", "amd64")
 
-	file_ext := ""
+	fileExt := ""
 	ldflags := "-s -w"
 	if system == "windows" {
-		file_ext = ".exe"
+		fileExt = ".exe"
 		ldflags += " -H windowsgui"
 	}
 
-	out_file := path.Join(out_dir, system, "webapi")
-	out_file += file_ext
+	outFile := path.Join(outDir, system, "webapi")
+	outFile += fileExt
 
 	args := []string{
 		"build",
-		"-o", out_file,
+		"-o", outFile,
 		"-ldflags", ldflags,
 		"./cmd/webapi",
 	}
@@ -101,10 +115,105 @@ func buildArtifact(system string) error {
 	return buildCmd.Run()
 }
 
+func packageArtifact(system string) error {
+	binFile := path.Join(outDir, system, "webapi")
+	if system == "windows" {
+		binFile += ".exe"
+	}
+
+	// outDir/webapi-linux.tar.gz
+	archiveName := fmt.Sprintf("%s-%s.tar.gz", "webapi", system)
+	archivePath := path.Join(outDir, archiveName)
+	file, err := os.OpenFile(archivePath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	gzWriter, err := gzip.NewWriterLevel(file, gzip.BestCompression)
+	if err != nil {
+		return err
+	}
+	defer gzWriter.Close()
+
+	tarWriter := tar.NewWriter(gzWriter)
+	defer tarWriter.Close()
+
+	// Bools define wether to keep the original file path (true) or just the file name (false
+	files := map[string]bool{
+		binFile:               false,
+		"config.toml":         true,
+		"orario.xml":          true,
+		"static/index.html":   true,
+		"static/openapi.yaml": true,
+	}
+
+	log.Printf("tar-zipping artifact %s for %s\n", archiveName, system)
+
+	for filename, keepPath := range files {
+		file, err := os.Open(filename)
+		if err != nil {
+			return err
+		}
+		info, err := file.Stat()
+		if err != nil {
+			return err
+		}
+
+		if !keepPath {
+			filename = path.Base(filename)
+		}
+
+		hdr := &tar.Header{
+			Name:    filename,
+			Mode:    int64(info.Mode()),
+			Size:    info.Size(),
+			ModTime: info.ModTime(),
+		}
+
+		if err := tarWriter.WriteHeader(hdr); err != nil {
+			return err
+		}
+
+		if _, err := io.Copy(tarWriter, file); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func writeChecksum(system string) error {
+	checksumPath := path.Join(outDir, "checksums.txt")
+	checksumFile, err := os.OpenFile(checksumPath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
+	if err != nil {
+		return err
+	}
+	defer checksumFile.Close()
+
+	archiveName := fmt.Sprintf("%s-%s.tar.gz", "webapi", system)
+	archivePath := path.Join(outDir, archiveName)
+	archiveFile, err := os.Open(archivePath)
+	if err != nil {
+		return err
+	}
+	defer archiveFile.Close()
+
+	hasher := sha256.New()
+	if _, err := io.Copy(hasher, archiveFile); err != nil {
+		return err
+	}
+
+	log.Printf("Writing checksum for file %s", archiveName)
+	checksumFile.WriteString(fmt.Sprintf("%x  %s\n", hasher.Sum(nil), archiveName))
+
+	return nil
+}
+
 // Removes built artifacts and deployment directory (playground)
 func clean() error {
 	paths := []string{
-		out_dir,
+		outDir,
 		"playground",
 	}
 
@@ -142,19 +251,19 @@ func deploy() error {
 		return err
 	}
 
-	file_ext := ""
+	fileExt := ""
 	if runtime.GOOS == "windows" {
-		file_ext = ".exe"
+		fileExt = ".exe"
 	}
-	bin_file := path.Join(out_dir, runtime.GOOS, "webapi")
-	bin_file += file_ext
-	err = smartCopy(bin_file, "playground/webapi" + file_ext)
+	binFile := path.Join(outDir, runtime.GOOS, "webapi")
+	binFile += fileExt
+	err = smartCopy(binFile, "playground/webapi"+fileExt)
 	if err != nil {
 		return err
 	}
 
 	if run {
-		apiCmd := exec.Command("./webapi" + file_ext)
+		apiCmd := exec.Command("./webapi" + fileExt)
 		apiCmd.Dir = "playground"
 		log.Printf("Starting webapi\nUse Ctrl+C (SIGINT) to exit...")
 		apiCmd.Run()
