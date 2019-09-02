@@ -24,11 +24,6 @@ per specificare manualmente il percorso del file di configurazione. Anche se il 
 l'estensione corretta, il programma cercherà di interpretarlo e, se valido,
 lo utilizzerà.
 
-## Configurazione
-Sono accettate configurazioni in formato `toml` e `json`. Gli [esempi](#esempi-configurazione)
-contengono la configurazione di default in entrambi i formati.
-Chiavi e parametri:
-
 #### Apache
 L'unico modo (al momento) di poter eseguire il webserver è tramite mod_proxy; moduli richiesti:
 ```apache
@@ -67,6 +62,12 @@ VirtualHost per redirezionamento richieste HTTPS:
     ProxyPassReverse /api http://127.0.0.1:443/api
 </VirtualHost>
 ```
+
+
+## Configurazione
+Sono accettate configurazioni in formato `toml` e `json`. Gli [esempi](#esempi-configurazione)
+contengono la configurazione di default in entrambi i formati.
+Chiavi e parametri:
 
 #### Generali
 | Nome                 | Tipo    | Valori             | Descrizione |
