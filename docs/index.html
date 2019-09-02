@@ -16,8 +16,8 @@
 
 <script>
     window.onload = function() {
-        const ui = SwaggerUIBundle({
-            url: "http://localhost:8080/api/openapi.yaml",
+        window.ui = SwaggerUIBundle({
+            url: "/api/openapi.yaml",
             dom_id: '#swagger-ui',
             deepLinking: true,
             presets: [
@@ -28,7 +28,6 @@
             ],
             layout: "BaseLayout"
         });
-        window.ui = ui;
     }
 </script>
 </body>
