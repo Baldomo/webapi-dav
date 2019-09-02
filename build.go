@@ -144,8 +144,8 @@ func packageArtifact(system string) error {
 		binFile:               false,
 		"config.toml":         true,
 		"orario.xml":          true,
-		"static/index.html":   true,
-		"static/openapi.yaml": true,
+		"docs/index.html":   true,
+		"docs/openapi.yaml": true,
 	}
 
 	log.Printf("tar-zipping artifact %s for %s\n", archiveName, system)
@@ -236,7 +236,7 @@ func deploy() error {
 		"playground/comunicati-docenti",
 	)
 
-	err := smartCopy("static/", "playground/static/")
+	err := smartCopy("docs/", "playground/docs/")
 	if err != nil {
 		return err
 	}

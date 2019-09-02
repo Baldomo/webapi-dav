@@ -30,7 +30,7 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 
 func OpenapiHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/yaml")
-	http.ServeFile(w, r, "static/openapi.yaml")
+	http.ServeFile(w, r, filepath.Join(config.GetConfig().Dirs.HTML, "openapi.yaml"))
 }
 
 func AboutHandler(w http.ResponseWriter, r *http.Request) {

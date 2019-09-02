@@ -9,7 +9,7 @@
     "database": "sitoliceo"
   },
   "cartelle": {
-    "html": "static",
+    "html": "docs",
     "comunicati_genitori": "comunicati-genitori",
     "comunicati_studenti": "comunicati-studenti",
     "comunicati_docenti": "comunicati-docenti",
