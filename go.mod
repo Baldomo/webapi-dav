@@ -2,6 +2,7 @@ module github.com/Baldomo/webapi-dav
 
 require (
 	github.com/BurntSushi/toml v0.3.0
+	github.com/Masterminds/squirrel v1.1.0
 	github.com/appleboy/go-fcm v0.0.0-20171025023350-3bc382cee418
 	github.com/go-sql-driver/mysql v1.3.0
 	github.com/gorilla/context v0.0.0-20160226214623-1ea25387ff6f // indirect

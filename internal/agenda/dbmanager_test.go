@@ -67,19 +67,49 @@ func TestEventStream_Close(t *testing.T) {
 		},
 	}
 
-	expected :=
-		baseQuery +
-			fmt.Sprintf(`%s>%s and `, inizioField, utils.I64toa(unixPast)) +
-			fmt.Sprintf(`%s<%s and `, fineField, utils.I64toa(unixNow)) +
-			fmt.Sprintf(`%s like "%%%s%%" and `, contentField, testStream.ContentFilter[0]) +
-			fmt.Sprintf(`%s like "%%%s%%" and `, titleField, testStream.TitleFilter[0]) +
-			fmt.Sprintf(`%s like "%%%s%%"`, titleField, testStream.TitleFilter[1])
+	//expected :=
+	//	baseQuery +
+	//		fmt.Sprintf(`%s>%s and `, inizioField, utils.I64toa(unixPast)) +
+	//		fmt.Sprintf(`%s<%s and `, fineField, utils.I64toa(unixNow)) +
+	//		fmt.Sprintf(`%s like "%%%s%%" and `, contentField, testStream.ContentFilter[0]) +
+	//		fmt.Sprintf(`%s like "%%%s%%" and `, titleField, testStream.TitleFilter[0]) +
+	//		fmt.Sprintf(`%s like "%%%s%%"`, titleField, testStream.TitleFilter[1])
 
-	output := testStream.buildQuery()
-
-	if expected != output {
-		t.Errorf("Expected: %s\nGot: %s", expected, output)
+	expectedSql := "SELECT summary, description, dtstart, dtend FROM sitoliceo.npjmx_jevents_vevdetail WHERE dtstart > ? AND dtend < ? AND description LIKE ? AND summary LIKE ? AND summary LIKE ?"
+	expectedArgs := []interface{}{
+		utils.I64toa(unixPast),
+		utils.I64toa(unixNow),
+		fmt.Sprint("%", testStream.ContentFilter[0], "%"),
+		fmt.Sprint("%", testStream.TitleFilter[0], "%"),
+		fmt.Sprint("%", testStream.TitleFilter[1], "%"),
 	}
+
+	sql, args := testStream.buildQuery()
+
+	if expectedSql != sql {
+		t.Errorf("\nExpected SQL: %s\nGot: %s", expectedSql, sql)
+	}
+
+	if retCode := checkArgs(expectedArgs, args); retCode > -1 {
+		t.Errorf("\nExpected args[%d]: %v\nGot: %v", retCode, expectedArgs[retCode], args[retCode])
+	} else if retCode == -2 {
+		t.Errorf("\nLength differs: %d and %d\nExpected: %v\nGot: %v", len(expectedArgs), len(args), expectedArgs, args)
+	}
+}
+
+// Restituisce -1 se nessun errore, -2 se errore lunghezza diversa oppure `i` (indice degli elementi differenti)
+func checkArgs(args1, args2 []interface{}) int {
+	if len(args1) != len(args2) {
+		return -2
+	}
+
+	for i, v := range args1 {
+		if v != args2[i] {
+			return i
+		}
+	}
+
+	return -1
 }
 
 func TestEventStream_GetBefore(t *testing.T) {

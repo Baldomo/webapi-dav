@@ -310,7 +310,15 @@ func AgendaHandler(w http.ResponseWriter, r *http.Request) {
 
 	if utils.RequestMime(r.Header) == "application/json" {
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		if err := json.NewEncoder(w).Encode(es.Close()); err != nil {
+
+		events, err := es.Close()
+		if err != nil {
+			Log.Error("AgendaHandler: errore EventStream.Close()")
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		if err := json.NewEncoder(w).Encode(events); err != nil {
 			Log.Error("AgendaHandler: errore encoding json")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {

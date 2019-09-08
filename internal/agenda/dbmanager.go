@@ -1,12 +1,13 @@
 package agenda
 
 import (
+	"fmt"
 	"github.com/Baldomo/webapi-dav/internal/config"
 	"github.com/Baldomo/webapi-dav/internal/log"
 	"github.com/Baldomo/webapi-dav/internal/utils"
+	sq "github.com/Masterminds/squirrel"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
-	"strings"
 )
 
 const (
@@ -22,8 +23,6 @@ var (
 	db *sqlx.DB
 
 	agendaTable = config.GetConfig().DB.Schema + ".npjmx_jevents_vevdetail"
-	baseQuery = "select " + titleField + "," + contentField + "," + inizioField + "," + fineField +
-		" from " + agendaTable + " where "
 )
 
 type EventStream struct {
@@ -92,50 +91,55 @@ func (es *EventStream) FilterContent(filter []string) *EventStream {
 	return es
 }
 
-func (es *EventStream) Close() *[]Event {
+func (es *EventStream) Close() (*[]Event, error) {
 	rows, err := db.Query(es.buildQuery())
-	defer rows.Close()
 	if err != nil {
 		log.Log.Error(err.Error())
+		return &es.events, err
 	}
+	defer rows.Close()
 
 	for rows.Next() {
 		e := Event{}
 		err = rows.Scan(&e.Title, &e.Content, &e.Inizio, &e.Fine)
 		if err != nil {
 			log.Log.Error(err.Error())
+			return &es.events, err
 		}
 		es.events = append(es.events, e)
 	}
 
-	return &es.events
+	return &es.events, nil
 }
 
-func (es EventStream) buildQuery() string {
-	var parts []string
+func (es EventStream) buildQuery() (string, []interface{}) {
+	query := sq.Select(titleField, contentField, inizioField, fineField).
+		From(agendaTable)
 
 	if es.After != 0 {
-		parts = append(parts, inizioField+`>`+utils.I64toa(es.After))
-	}
-	if es.Before != 0 {
-		parts = append(parts, fineField+`<`+utils.I64toa(es.Before))
-	}
-	if len(es.ContentFilter) != 0 {
-		var sub string
-		for _, f := range es.ContentFilter[:len(es.ContentFilter)-1] {
-			sub += contentField + ` like "%` + f + `%" and `
-		}
-		sub += contentField + ` like "%` + es.ContentFilter[len(es.ContentFilter)-1] + `%"`
-		parts = append(parts, sub)
-	}
-	if len(es.TitleFilter) != 0 {
-		var sub string
-		for _, f := range es.TitleFilter[:len(es.TitleFilter)-1] {
-			sub += titleField + ` like "%` + f + `%" and `
-		}
-		sub += titleField + ` like "%` + es.TitleFilter[len(es.TitleFilter)-1] + `%"`
-		parts = append(parts, sub)
+		query = query.Where(sq.Gt{
+			inizioField: utils.I64toa(es.After),
+		})
 	}
 
-	return baseQuery + strings.Join(parts, " and ")
+	if es.Before != 0 {
+		query = query.Where(sq.Lt{
+			fineField: utils.I64toa(es.Before),
+		})
+	}
+
+	if len(es.ContentFilter) > 0 {
+		for _, filter := range es.ContentFilter {
+			query = query.Where(contentField + " LIKE ?", fmt.Sprint("%", filter, "%"))
+		}
+	}
+
+	if len(es.TitleFilter) > 0 {
+		for _, filter := range es.TitleFilter {
+			query = query.Where(titleField + " LIKE ?", fmt.Sprint("%", filter, "%"))
+		}
+	}
+
+	sql, args, _ := query.ToSql()
+	return sql, args
 }
