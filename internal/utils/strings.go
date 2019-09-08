@@ -23,8 +23,8 @@ type templateData struct {
 }
 
 const (
-	VersionNumber = "0.6.2"
-	VersionDate   = "08/10/2018"
+	VersionNumber = "0.7.1"
+	VersionDate   = "08/09/2019"
 )
 
 var (
