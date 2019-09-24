@@ -2,10 +2,11 @@ package watchers
 
 import (
 	"fmt"
+	"net/url"
+
 	"github.com/Baldomo/webapi-dav/internal/comunicati"
 	. "github.com/Baldomo/webapi-dav/internal/log"
 	"github.com/appleboy/go-fcm"
-	"net/url"
 )
 
 const (
@@ -25,7 +26,7 @@ func NotifyComunicato(filename string, tipo string) {
 			Body:  fmt.Sprintf("Nuovo comunicato: %s", filename),
 		},
 		Data: map[string]interface{}{
-			"": fmt.Sprintf(comunicati.UrlPrefix + "comunicati-" + tipo + "/" + url.PathEscape(filename)),
+			"": fmt.Sprint(comunicati.UrlPrefix, "comunicati-", tipo, "/", url.PathEscape(filename)),
 		},
 		TimeToLive: func(i uint) *uint { return &i }(duration),
 	}

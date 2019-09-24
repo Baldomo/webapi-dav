@@ -141,9 +141,9 @@ func packageArtifact(system string) error {
 
 	// Bools define wether to keep the original file path (true) or just the file name (false
 	files := map[string]bool{
-		binFile:               false,
-		"config.toml":         true,
-		"orario.xml":          true,
+		binFile:             false,
+		"config.toml":       true,
+		"orario.xml":        true,
 		"docs/index.html":   true,
 		"docs/openapi.yaml": true,
 	}
