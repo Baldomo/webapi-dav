@@ -26,9 +26,11 @@ var (
 	goos   string
 	outDir string
 	run    bool
+
+	help bool
 )
 
-type cmd func() error
+type cmd func()
 
 // These are the commands made available through the CLI
 var commands = map[string]cmd{
@@ -38,27 +40,54 @@ var commands = map[string]cmd{
 	"test":   test,
 }
 
+var descriptions = map[string]string{
+	"build":  "build and package artifacts",
+	"clean":  "cleanup build output and playground/",
+	"deploy": "create a standard working environment to test the program locally",
+	"test":   "run tests for all packages",
+}
+
 func main() {
 	flag.BoolVar(&fast, "fast", false, "skip archiving builds in .tar.gz files and checksum generation")
 	flag.StringVar(&goos, "os", "windows:linux", "systems to build for (separated by column, e.g. `windows:linux:mac`)")
 	flag.StringVar(&outDir, "out", "build", "specifies build output `directory`")
 	flag.BoolVar(&run, "run", false, "run webapi after deployment")
+	flag.BoolVar(&help, "help", false, "prints usage")
 	flag.Parse()
+
+	flag.Usage = func() {
+		fmt.Printf("Usage: go run build.go [OPTIONS] <COMMAND>\n")
+		fmt.Printf("\nCommands:\n")
+		for param, desc := range descriptions {
+			fmt.Printf("  %s\n    \t%s\n", param, desc)
+		}
+		fmt.Printf("\nFlags:\n")
+		flag.PrintDefaults()
+	}
 
 	command := flag.Arg(0)
 	if command == "" {
-		flag.PrintDefaults()
+		flag.Usage()
 		return
 	}
 
-	err := commands[command]()
+	if invoked, ok := commands[command]; ok {
+		invoked()
+	} else {
+		fmt.Printf("Unknown command: %s\n", command)
+		flag.Usage()
+	}
+}
+
+func must(err error) {
 	if err != nil {
-		log.Fatalf("error executing command %s:\n%v\n", command, err.Error())
+		fmt.Printf("err: %s\n", err)
+		panic(err)
 	}
 }
 
 // Builds binaries for the various OS's
-func build() error {
+func build() {
 	vars := map[string]string{
 		"windows": "windows",
 		"linux":   "linux",
@@ -68,28 +97,20 @@ func build() error {
 	osList := strings.Split(goos, ":")
 	for _, osValue := range osList {
 		if v, ok := vars[osValue]; ok {
-			if err := buildArtifact(v); err != nil {
-				return err
-			}
+			buildArtifact(v)
 
 			if !fast {
-				if err := packageArtifact(v); err != nil {
-					return err
-				}
+				packageArtifact(v)
 
-				if err := writeChecksum(v); err != nil {
-					return err
-				}
+				writeChecksum(v)
 			}
 		} else {
 			log.Printf("Invalid OS supplied: %s, skipping...\n", osValue)
 		}
 	}
-
-	return nil
 }
 
-func buildArtifact(system string) error {
+func buildArtifact(system string) {
 	os.Setenv("GOOS", system)
 	os.Setenv("GOARCH", "amd64")
 
@@ -112,10 +133,11 @@ func buildArtifact(system string) error {
 
 	buildCmd := exec.Command("go", args...)
 	log.Printf("Building package for %s %v\n", system, buildCmd.Args)
-	return buildCmd.Run()
+	err := buildCmd.Run()
+	must(err)
 }
 
-func packageArtifact(system string) error {
+func packageArtifact(system string) {
 	binFile := path.Join(outDir, system, "webapi")
 	if system == "windows" {
 		binFile += ".exe"
@@ -125,16 +147,12 @@ func packageArtifact(system string) error {
 	archiveName := fmt.Sprintf("%s-%s.tar.gz", "webapi", system)
 	archivePath := path.Join(outDir, archiveName)
 	file, err := os.OpenFile(archivePath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
-	if err != nil {
-		return err
-	}
 	defer file.Close()
+	must(err)
 
 	gzWriter, err := gzip.NewWriterLevel(file, gzip.BestCompression)
-	if err != nil {
-		return err
-	}
 	defer gzWriter.Close()
+	must(err)
 
 	tarWriter := tar.NewWriter(gzWriter)
 	defer tarWriter.Close()
@@ -152,13 +170,9 @@ func packageArtifact(system string) error {
 
 	for filename, keepPath := range files {
 		file, err := os.Open(filename)
-		if err != nil {
-			return err
-		}
+		must(err)
 		info, err := file.Stat()
-		if err != nil {
-			return err
-		}
+		must(err)
 
 		if !keepPath {
 			filename = path.Base(filename)
@@ -171,85 +185,64 @@ func packageArtifact(system string) error {
 			ModTime: info.ModTime(),
 		}
 
-		if err := tarWriter.WriteHeader(hdr); err != nil {
-			return err
-		}
+		err = tarWriter.WriteHeader(hdr)
+		must(err)
 
-		if _, err := io.Copy(tarWriter, file); err != nil {
-			return err
-		}
+		_, err = io.Copy(tarWriter, file)
+		must(err)
 	}
-
-	return nil
 }
 
-func writeChecksum(system string) error {
+func writeChecksum(system string) {
 	checksumPath := path.Join(outDir, "checksums.txt")
 	checksumFile, err := os.OpenFile(checksumPath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
-	if err != nil {
-		return err
-	}
 	defer checksumFile.Close()
+	must(err)
 
 	archiveName := fmt.Sprintf("%s-%s.tar.gz", "webapi", system)
 	archivePath := path.Join(outDir, archiveName)
 	archiveFile, err := os.Open(archivePath)
-	if err != nil {
-		return err
-	}
 	defer archiveFile.Close()
+	must(err)
 
 	hasher := sha256.New()
-	if _, err := io.Copy(hasher, archiveFile); err != nil {
-		return err
-	}
+	_, err = io.Copy(hasher, archiveFile)
+	must(err)
 
 	log.Printf("Writing checksum for file %s", archiveName)
-	checksumFile.WriteString(fmt.Sprintf("%x  %s\n", hasher.Sum(nil), archiveName))
-
-	return nil
+	_, err = checksumFile.WriteString(fmt.Sprintf("%x  %s\n", hasher.Sum(nil), archiveName))
+	must(err)
 }
 
 // Removes built artifacts and deployment directory (playground)
-func clean() error {
+func clean() {
 	paths := []string{
 		outDir,
 		"playground",
 	}
 
 	for _, p := range paths {
-		if err := os.RemoveAll(p); err != nil {
-			return err
-		}
+		err := os.RemoveAll(p)
+		must(err)
 	}
-
-	return nil
 }
 
 // Creates a dummy deploy in a local directory, with dummy files and stuff
-func deploy() error {
+func deploy() {
 	// drwxr-xr-x
-	os.Mkdir("playground", os.ModePerm)
+	err := os.Mkdir("playground", os.ModePerm)
+	must(err)
 	dummyFiles(100,
 		"playground/comunicati-genitori",
 		"playground/comunicati-studenti",
 		"playground/comunicati-docenti",
 	)
 
-	err := smartCopy("docs/", "playground/docs/")
-	if err != nil {
-		return err
-	}
+	smartCopy("docs/", "playground/docs/")
 
-	err = smartCopy("config.toml", "playground/config.toml")
-	if err != nil {
-		return err
-	}
+	smartCopy("config.toml", "playground/config.toml")
 
-	err = smartCopy("orario.xml", "playground/orario.xml")
-	if err != nil {
-		return err
-	}
+	smartCopy("orario.xml", "playground/orario.xml")
 
 	fileExt := ""
 	if runtime.GOOS == "windows" {
@@ -257,19 +250,15 @@ func deploy() error {
 	}
 	binFile := path.Join(outDir, runtime.GOOS, "webapi")
 	binFile += fileExt
-	err = smartCopy(binFile, "playground/webapi"+fileExt)
-	if err != nil {
-		return err
-	}
+	smartCopy(binFile, "playground/webapi"+fileExt)
 
 	if run {
 		apiCmd := exec.Command("./webapi" + fileExt)
 		apiCmd.Dir = "playground"
 		log.Printf("Starting webapi\nUse Ctrl+C (SIGINT) to exit...")
-		apiCmd.Run()
+		err := apiCmd.Run()
+		must(err)
 	}
-
-	return nil
 }
 
 func dummyFiles(num int, dirs ...string) {
@@ -279,13 +268,16 @@ func dummyFiles(num int, dirs ...string) {
 
 	rand.Seed(time.Now().UnixNano())
 	for _, dir := range dirs {
-		os.Mkdir(dir, os.ModePerm)
+		err := os.Mkdir(dir, os.ModePerm)
+		must(err)
 
 		for i := 0; i <= num; i++ {
 			filename := fmt.Sprintf("%s/%d.pdf", dir, i)
-			file, _ := os.Create(filename)
-			file.Truncate(randInt64(4e5, 4e6))
-			file.Close()
+			file, err := os.Create(filename)
+			must(err)
+			err = file.Truncate(randInt64(4e5, 4e6))
+			defer file.Close()
+			must(err)
 		}
 	}
 }
@@ -294,71 +286,56 @@ func randInt64(min, max int64) int64 {
 	return min + rand.Int63n(max-min)
 }
 
-func smartCopy(src, dest string) error {
+func smartCopy(src, dest string) {
 	info, err := os.Lstat(src)
-	if err != nil {
-		return err
-	}
+	must(err)
 
 	if info.IsDir() {
-		return dirCopy(src, dest, info)
+		dirCopy(src, dest, info)
+		return
 	}
-	return fileCopy(src, dest, info)
+	fileCopy(src, dest, info)
 }
 
-func fileCopy(src, dest string, info os.FileInfo) error {
-	if err := os.MkdirAll(filepath.Dir(dest), os.ModePerm); err != nil {
-		return err
-	}
+func fileCopy(src, dest string, info os.FileInfo) {
+	err := os.MkdirAll(filepath.Dir(dest), os.ModePerm)
+	must(err)
 
 	f, err := os.Create(dest)
-	if err != nil {
-		return err
-	}
 	defer f.Close()
+	must(err)
 
-	if err = os.Chmod(f.Name(), info.Mode()); err != nil {
-		return err
-	}
+	err = os.Chmod(f.Name(), info.Mode())
+	must(err)
 
 	s, err := os.Open(src)
-	if err != nil {
-		return err
-	}
 	defer s.Close()
+	must(err)
 
 	_, err = io.Copy(f, s)
-	return err
+	must(err)
 }
 
-func dirCopy(srcdir, destdir string, info os.FileInfo) error {
+func dirCopy(srcdir, destdir string, info os.FileInfo) {
 	originalMode := info.Mode()
 
 	// Make dest dir with 0755 so that everything is writable
-	if err := os.MkdirAll(destdir, os.FileMode(0755)); err != nil {
-		return err
-	}
+	err := os.MkdirAll(destdir, os.FileMode(0755))
+	must(err)
 	// Recover dir mode with original one
 	defer os.Chmod(destdir, originalMode)
 
 	contents, err := ioutil.ReadDir(srcdir)
-	if err != nil {
-		return err
-	}
+	must(err)
 
 	for _, content := range contents {
 		contentSrc, contentDest := filepath.Join(srcdir, content.Name()), filepath.Join(destdir, content.Name())
-		if err := smartCopy(contentSrc, contentDest); err != nil {
-			// If any error, exit immediately
-			return err
-		}
+		smartCopy(contentSrc, contentDest)
 	}
-
-	return nil
 }
 
 // Runs tests
-func test() error {
+func test() {
 	args := []string{
 		"test",
 		"-v",
@@ -368,5 +345,6 @@ func test() error {
 
 	testCmd := exec.Command("go", args...)
 	testCmd.Stdout = os.Stdout
-	return testCmd.Run()
+	err := testCmd.Run()
+	must(err)
 }
