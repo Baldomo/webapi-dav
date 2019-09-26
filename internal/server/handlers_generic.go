@@ -2,13 +2,14 @@ package server
 
 import (
 	"encoding/json"
-	"github.com/Baldomo/webapi-dav/internal/config"
-	. "github.com/Baldomo/webapi-dav/internal/log"
-	"github.com/Baldomo/webapi-dav/internal/utils"
 	"html/template"
 	"io/ioutil"
 	"net/http"
 	"path/filepath"
+
+	"github.com/Baldomo/webapi-dav/internal/config"
+	. "github.com/Baldomo/webapi-dav/internal/log"
+	"github.com/Baldomo/webapi-dav/internal/utils"
 )
 
 var (
@@ -23,9 +24,13 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 		indexHtml = string(raw)
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.WriteHeader(http.StatusOK)
 	temp, _ := template.New("index").Parse(indexHtml)
-	temp.Execute(w, utils.TemplateData())
+	err := temp.Execute(w, utils.TemplateData())
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
 }
 
 func OpenapiHandler(w http.ResponseWriter, r *http.Request) {

@@ -70,7 +70,7 @@ var (
 
 func TemplateData() templateData {
 	return templateData{
-		Ops: ops,
+		Ops:     ops,
 		Version: VersionNumber,
 	}
 }
@@ -92,6 +92,5 @@ func ShowGenericTemplate(w http.ResponseWriter, args interface{}) error {
 	if err != nil {
 		return err
 	}
-	temp.Execute(w, args)
-	return nil
+	return temp.Execute(w, args)
 }

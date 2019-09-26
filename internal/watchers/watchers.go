@@ -1,14 +1,15 @@
 package watchers
 
 import (
-	com "github.com/Baldomo/webapi-dav/internal/comunicati"
-	"github.com/Baldomo/webapi-dav/internal/config"
-	. "github.com/Baldomo/webapi-dav/internal/log"
-	"github.com/radovskyb/watcher"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
+
+	com "github.com/Baldomo/webapi-dav/internal/comunicati"
+	"github.com/Baldomo/webapi-dav/internal/config"
+	. "github.com/Baldomo/webapi-dav/internal/log"
+	"github.com/radovskyb/watcher"
 )
 
 type WatcherType uint64
@@ -70,10 +71,8 @@ func (fw *FileWatcher) Watch() {
 }
 
 func (fw FileWatcher) notifyComunicato(event watcher.Event) {
-	var (
-		tipo    = ""
-		dirPath = ""
-	)
+	var tipo, dirPath string
+
 	dirPath = strings.Replace(event.Path, event.FileInfo.Name(), "", -1)
 	if strings.Contains(dirPath, "genitori") {
 		tipo = com.TipoGenitori

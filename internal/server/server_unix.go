@@ -3,12 +3,13 @@
 package server
 
 import (
+	"net/http"
+	"time"
+
 	"github.com/Baldomo/webapi-dav/internal/config"
 	"github.com/Baldomo/webapi-dav/internal/log"
 	"github.com/gorilla/mux"
 	"github.com/pseidemann/finish"
-	"net/http"
-	"time"
 )
 
 type serverHandler struct {

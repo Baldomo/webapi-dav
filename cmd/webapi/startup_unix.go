@@ -5,6 +5,9 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
+	"path/filepath"
+
 	com "github.com/Baldomo/webapi-dav/internal/comunicati"
 	"github.com/Baldomo/webapi-dav/internal/config"
 	. "github.com/Baldomo/webapi-dav/internal/log"
@@ -13,8 +16,6 @@ import (
 	"github.com/Baldomo/webapi-dav/internal/utils"
 	"github.com/Baldomo/webapi-dav/internal/watchers"
 	"github.com/nightlyone/lockfile"
-	"os"
-	"path/filepath"
 )
 
 const (

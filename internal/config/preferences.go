@@ -4,19 +4,20 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/BurntSushi/toml"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/BurntSushi/toml"
 )
 
 type config struct {
-	General general   `json:"generali" toml:"generali"`
-	HTTP    connhttp  `json:"http" toml:"http"`
-	DB      db        `json:"db" toml:"db"`
-	Dirs    dirs      `json:"cartelle" toml:"cartelle"`
-	Log     logPrefs  `json:"logging" toml:"logging"`
+	General general  `json:"generali" toml:"generali"`
+	HTTP    connhttp `json:"http" toml:"http"`
+	DB      db       `json:"db" toml:"db"`
+	Dirs    dirs     `json:"cartelle" toml:"cartelle"`
+	Log     logPrefs `json:"logging" toml:"logging"`
 }
 
 type general struct {
@@ -24,7 +25,7 @@ type general struct {
 }
 
 type connhttp struct {
-	Port    string `json:"porta" toml:"porta"`
+	Port string `json:"porta" toml:"porta"`
 }
 
 type dirs struct {
@@ -174,7 +175,10 @@ func formatPrefs() {
 }
 
 func ReloadPrefs() {
-	LoadPrefs(currentFullFilePath)
+	err := LoadPrefs(currentFullFilePath)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func GetConfig() *config {
