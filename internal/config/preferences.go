@@ -21,6 +21,7 @@ type config struct {
 }
 
 type general struct {
+	Notifications  bool `json:"notifiche`
 	RestartOnPanic bool `json:"riavvio_automatico" toml:"riavvio_automatico"`
 }
 
@@ -62,27 +63,28 @@ var (
 
 	defaultPrefs = config{
 		general{
-			false,
+			Notifications:  false,
+			RestartOnPanic: false,
 		},
 		connhttp{
-			":8080",
+			Port: ":8080",
 		},
 		db{
-			"sitoliceo",
-			10,
+			Schema:  "sitoliceo",
+			Timeout: 10,
 		},
 		dirs{
-			"./static",
-			"",
-			"",
-			"",
-			"",
-			"./orario.xml",
+			HTML:     "./static",
+			Genitori: "",
+			Studenti: "",
+			Docenti:  "",
+			Progetti: "",
+			Orario:   "./orario.xml",
 		},
 		logPrefs{
-			true,
-			"./webapi.log",
-			"warning",
+			Enabled:  true,
+			LogFile:  "./webapi.log",
+			LogLevel: "warning",
 		},
 	}
 )

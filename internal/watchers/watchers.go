@@ -50,7 +50,7 @@ func (fw *FileWatcher) Watch() {
 			case event := <-w.Event:
 				Log.Info(event.String())
 				fw.OnEvent()
-				if fw.Notify {
+				if fw.Notify && config.GetConfig().General.Notifications {
 					fw.notifyComunicato(event)
 				}
 			case err := <-w.Error:
