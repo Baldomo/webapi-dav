@@ -11,7 +11,7 @@ import (
 
 const (
 	NUM_FILES_TEST = 2
-	FILE_SIZE = 4 * 1024
+	FILE_SIZE      = 4 * 1024
 )
 
 var NumFilesBenchmark = []int{
@@ -41,7 +41,7 @@ func TestLoadComunicati(t *testing.T) {
 
 		for ind := 0; ind <= NUM_FILES_TEST; ind++ {
 			filename := fmt.Sprintf("%d.txt", ind)
-			file, err := os.OpenFile(d + "/" + filename, os.O_WRONLY|os.O_CREATE, os.ModePerm)
+			file, err := os.OpenFile(d+"/"+filename, os.O_WRONLY|os.O_CREATE, os.ModePerm)
 			if err != nil {
 				t.Fatalf("error writing files: \n %s", err.Error())
 			}

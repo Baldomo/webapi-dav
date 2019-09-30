@@ -2,9 +2,10 @@ package orario
 
 import (
 	"encoding/xml"
-	"github.com/Baldomo/webapi-dav/internal/log"
 	"io/ioutil"
 	"strings"
+
+	"github.com/Baldomo/webapi-dav/internal/log"
 )
 
 type table struct {
@@ -34,11 +35,11 @@ func LoadOrario(path string) {
 	orario = nil
 	raw, err := ioutil.ReadFile(path)
 	if err != nil {
-		log.Log.Error(err.Error())
+		log.Error(err.Error())
 		return
 	}
 	if err := xml.Unmarshal(raw, &orario); err != nil {
-		log.Log.Error(err.Error())
+		log.Error(err.Error())
 		return
 	}
 

@@ -1,4 +1,4 @@
-// +build linux darwin
+//+build linux darwin
 
 package main
 
@@ -10,7 +10,7 @@ import (
 
 	com "github.com/Baldomo/webapi-dav/internal/comunicati"
 	"github.com/Baldomo/webapi-dav/internal/config"
-	. "github.com/Baldomo/webapi-dav/internal/log"
+	"github.com/Baldomo/webapi-dav/internal/log"
 	"github.com/Baldomo/webapi-dav/internal/orario"
 	"github.com/Baldomo/webapi-dav/internal/server"
 	"github.com/Baldomo/webapi-dav/internal/utils"
@@ -60,7 +60,7 @@ func start() {
 
 	lockProcess()
 
-	InitLogger(initServer)
+	log.InitLogger(initServer)
 
 	server.Start()
 }
@@ -106,12 +106,12 @@ func initServer() {
 			},
 		}
 	)
-	Log.Info("---------- DaVinci API ----------")
-	Log.Info("Avvio server...")
-	Log.Info("Caricamento contenuti web...")
+	log.Info("---------- DaVinci API ----------")
+	log.Info("Avvio server...")
+	log.Info("Caricamento contenuti web...")
 	go HTMLWatcher.Watch()
 
-	Log.Info("Caricamento comunicati...")
+	log.Info("Caricamento comunicati...")
 	com.LoadComunicati(com.TipoGenitori)
 	go GenitoriWatcher.Watch()
 	com.LoadComunicati(com.TipoStudenti)
@@ -119,14 +119,14 @@ func initServer() {
 	com.LoadComunicati(com.TipoDocenti)
 	go DocentiWatcher.Watch()
 
-	Log.Info("Caricamento orario...")
+	log.Info("Caricamento orario...")
 	orario.LoadOrario(config.GetConfig().Dirs.Orario)
 	go OrarioWatcher.Watch()
 
-	Log.Info("Caricamento config...")
+	log.Info("Caricamento config...")
 	go PrefWatcher.Watch()
-	Log.Info("Avvio completato.")
-	Log.Info("---------------------------------")
+	log.Info("Avvio completato.")
+	log.Info("---------------------------------")
 }
 
 func lockProcess() {

@@ -1,22 +1,23 @@
-// +build windows
+//+build windows
 
 package main
 
 import (
 	"flag"
 	"fmt"
+	"net/rpc"
+	"os"
+	"path/filepath"
+
 	"github.com/Baldomo/webapi-dav/internal/agenda"
 	com "github.com/Baldomo/webapi-dav/internal/comunicati"
 	"github.com/Baldomo/webapi-dav/internal/config"
-	. "github.com/Baldomo/webapi-dav/internal/log"
+	"github.com/Baldomo/webapi-dav/internal/log"
 	"github.com/Baldomo/webapi-dav/internal/orario"
 	"github.com/Baldomo/webapi-dav/internal/server"
 	"github.com/Baldomo/webapi-dav/internal/utils"
 	"github.com/Baldomo/webapi-dav/internal/watchers"
 	"github.com/nightlyone/lockfile"
-	"net/rpc"
-	"os"
-	"path/filepath"
 )
 
 const (
@@ -56,7 +57,7 @@ func start() {
 
 	lockProcess()
 
-	InitLogger(initServer)
+	log.InitLogger(initServer)
 
 	server.Start()
 }
@@ -82,7 +83,7 @@ func initServer() {
 			OnEvent: func() {
 				com.LoadComunicati(com.TipoDocenti)
 			},
-		Notify: true}
+			Notify: true}
 		OrarioWatcher = watchers.FileWatcher{
 			Path: config.GetConfig().Dirs.Orario,
 			OnEvent: func() {
@@ -102,12 +103,12 @@ func initServer() {
 			},
 		}
 	)
-	Log.Info("---------- DaVinci API ----------")
-	Log.Info("Avvio server...")
-	Log.Info("Caricamento contenuti web...")
+	log.Info("---------- DaVinci API ----------")
+	log.Info("Avvio server...")
+	log.Info("Caricamento contenuti web...")
 	go HTMLWatcher.Watch()
 
-	Log.Info("Caricamento comunicati...")
+	log.Info("Caricamento comunicati...")
 	com.LoadComunicati(com.TipoGenitori)
 	go GenitoriWatcher.Watch()
 	com.LoadComunicati(com.TipoStudenti)
@@ -115,18 +116,18 @@ func initServer() {
 	com.LoadComunicati(com.TipoDocenti)
 	go DocentiWatcher.Watch()
 
-	Log.Info("Caricamento orario...")
+	log.Info("Caricamento orario...")
 	orario.LoadOrario(config.GetConfig().Dirs.Orario)
 	go OrarioWatcher.Watch()
 
-	Log.Info("Caricamento config...")
+	log.Info("Caricamento config...")
 	go PrefWatcher.Watch()
 
-	Log.Info("Collegamento a database...")
+	log.Info("Collegamento a database...")
 	agenda.Fetch()
 
-	Log.Info("Avvio completato.")
-	Log.Info("---------------------------------")
+	log.Info("Avvio completato.")
+	log.Info("---------------------------------")
 }
 
 func lockProcess() {

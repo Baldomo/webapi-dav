@@ -5,7 +5,7 @@ import (
 	"net/url"
 
 	"github.com/Baldomo/webapi-dav/internal/comunicati"
-	. "github.com/Baldomo/webapi-dav/internal/log"
+	"github.com/Baldomo/webapi-dav/internal/log"
 	"github.com/appleboy/go-fcm"
 )
 
@@ -36,10 +36,10 @@ func NotifyComunicato(filename string, tipo string) {
 	}
 	resp, err := client.Send(message)
 	if err != nil {
-		Log.Error(err.Error())
+		log.Error(err.Error())
 	} else {
-		Log.Info("Notifica inviata con successo!")
-		Log.Infof("%#v", message)
-		Log.Infof("%#v", resp)
+		log.Info("Notifica inviata con successo!")
+		log.Infof("%#v", message)
+		log.Infof("%#v", resp)
 	}
 }

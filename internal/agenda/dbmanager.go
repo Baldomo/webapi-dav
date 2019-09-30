@@ -2,6 +2,7 @@ package agenda
 
 import (
 	"fmt"
+
 	"github.com/Baldomo/webapi-dav/internal/config"
 	"github.com/Baldomo/webapi-dav/internal/log"
 	"github.com/Baldomo/webapi-dav/internal/utils"
@@ -44,8 +45,8 @@ func Fetch() {
 	var err error
 	db, err = sqlx.Connect("mysql", dataSource)
 	if err != nil {
-		log.Log.Critical("Errore collegamento a database")
-		log.Log.Critical(err.Error())
+		log.Critical("Errore collegamento a database")
+		log.Critical(err.Error())
 	}
 }
 
@@ -94,7 +95,7 @@ func (es *EventStream) FilterContent(filter []string) *EventStream {
 func (es *EventStream) Close() (*[]Event, error) {
 	rows, err := db.Query(es.buildQuery())
 	if err != nil {
-		log.Log.Error(err.Error())
+		log.Error(err.Error())
 		return &es.events, err
 	}
 	defer rows.Close()
@@ -103,7 +104,7 @@ func (es *EventStream) Close() (*[]Event, error) {
 		e := Event{}
 		err = rows.Scan(&e.Title, &e.Content, &e.Inizio, &e.Fine)
 		if err != nil {
-			log.Log.Error(err.Error())
+			log.Error(err.Error())
 			return &es.events, err
 		}
 		es.events = append(es.events, e)
@@ -130,13 +131,13 @@ func (es EventStream) buildQuery() (string, []interface{}) {
 
 	if len(es.ContentFilter) > 0 {
 		for _, filter := range es.ContentFilter {
-			query = query.Where(contentField + " LIKE ?", fmt.Sprint("%", filter, "%"))
+			query = query.Where(contentField+" LIKE ?", fmt.Sprint("%", filter, "%"))
 		}
 	}
 
 	if len(es.TitleFilter) > 0 {
 		for _, filter := range es.TitleFilter {
-			query = query.Where(titleField + " LIKE ?", fmt.Sprint("%", filter, "%"))
+			query = query.Where(titleField+" LIKE ?", fmt.Sprint("%", filter, "%"))
 		}
 	}
 

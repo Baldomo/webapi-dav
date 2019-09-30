@@ -21,7 +21,7 @@ type config struct {
 }
 
 type general struct {
-	Notifications  bool `json:"notifiche`
+	Notifications  bool `json:"notifiche"`
 	RestartOnPanic bool `json:"riavvio_automatico" toml:"riavvio_automatico"`
 }
 

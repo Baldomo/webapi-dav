@@ -8,7 +8,7 @@ import (
 
 	com "github.com/Baldomo/webapi-dav/internal/comunicati"
 	"github.com/Baldomo/webapi-dav/internal/config"
-	. "github.com/Baldomo/webapi-dav/internal/log"
+	"github.com/Baldomo/webapi-dav/internal/log"
 	"github.com/radovskyb/watcher"
 )
 
@@ -38,7 +38,7 @@ func (fw *FileWatcher) Watch() {
 	if f, err := os.Stat(fw.Path); !f.IsDir() {
 		fw.Path = filepath.Base(fw.Path)
 	} else if err != nil {
-		Log.Critical(err.Error())
+		log.Critical(err.Error())
 		return
 	}
 	w := watcher.New()
@@ -48,13 +48,13 @@ func (fw *FileWatcher) Watch() {
 		for {
 			select {
 			case event := <-w.Event:
-				Log.Info(event.String())
+				log.Info(event.String())
 				fw.OnEvent()
 				if fw.Notify && config.GetConfig().General.Notifications {
 					fw.notifyComunicato(event)
 				}
 			case err := <-w.Error:
-				Log.Error(err.Error())
+				log.Error(err.Error())
 			case <-w.Closed:
 				return
 			}
@@ -62,11 +62,11 @@ func (fw *FileWatcher) Watch() {
 	}()
 
 	if err := w.Add(fw.Path); err != nil {
-		Log.Error(err.Error())
+		log.Error(err.Error())
 	}
 
 	if err := w.Start(time.Millisecond * 100); err != nil {
-		Log.Error(err.Error())
+		log.Error(err.Error())
 	}
 }
 
@@ -88,7 +88,7 @@ func (cw *WebContentWatcher) Watch() {
 	if f, err := os.Stat(cw.Path); !f.IsDir() {
 		cw.Path = filepath.Base(cw.Path)
 	} else if err != nil {
-		Log.Critical(err.Error())
+		log.Critical(err.Error())
 		return
 	}
 	w := watcher.New()
@@ -97,10 +97,10 @@ func (cw *WebContentWatcher) Watch() {
 		for {
 			select {
 			case event := <-w.Event:
-				Log.Info(event.String())
+				log.Info(event.String())
 				cw.OnEvent()
 			case err := <-w.Error:
-				Log.Error(err.Error())
+				log.Error(err.Error())
 			case <-w.Closed:
 				return
 			}
@@ -108,11 +108,11 @@ func (cw *WebContentWatcher) Watch() {
 	}()
 
 	if err := w.Add(cw.Path); err != nil {
-		Log.Error(err.Error())
+		log.Error(err.Error())
 	}
 
 	if err := w.Start(time.Millisecond * 100); err != nil {
-		Log.Error(err.Error())
+		log.Error(err.Error())
 	}
 }
 
@@ -124,11 +124,11 @@ func (cfgw *ConfigWatcher) Watch() {
 			select {
 			case event := <-w.Event:
 				if event.FileInfo.Name() == config.GetConfigFilename() {
-					Log.Info(event.String())
+					log.Info(event.String())
 					cfgw.OnEvent()
 				}
 			case err := <-w.Error:
-				Log.Error(err.Error())
+				log.Error(err.Error())
 			case <-w.Closed:
 				return
 			}
@@ -136,10 +136,10 @@ func (cfgw *ConfigWatcher) Watch() {
 	}()
 
 	if err := w.Add(cfgw.Path); err != nil {
-		Log.Error(err.Error())
+		log.Error(err.Error())
 	}
 
 	if err := w.Start(time.Millisecond * 100); err != nil {
-		Log.Error(err.Error())
+		log.Error(err.Error())
 	}
 }

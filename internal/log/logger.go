@@ -1,9 +1,6 @@
 package log
 
 import (
-	"github.com/Baldomo/webapi-dav/internal/config"
-	"github.com/op/go-logging"
-	"gopkg.in/natefinch/lumberjack.v2"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -12,6 +9,10 @@ import (
 	"strings"
 	"syscall"
 	"time"
+
+	"github.com/Baldomo/webapi-dav/internal/config"
+	"github.com/op/go-logging"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 var (
@@ -19,7 +20,7 @@ var (
 	//formatShort = logging.MustStringFormatter("[%{time:0102 15:04:05.999}] %{message}")
 	fileBackend logging.Backend
 
-	Log = logging.MustGetLogger("webapi-dav")
+	logger = logging.MustGetLogger("webapi-dav")
 
 	lumber = &lumberjack.Logger{
 		Filename: config.GetConfig().Log.LogFile,
@@ -35,7 +36,7 @@ func EventLogger(inner http.Handler, name string) http.Handler {
 
 		inner.ServeHTTP(w, r)
 
-		Log.Info(
+		logger.Info(
 			r.Method + " " +
 				r.RequestURI + " " +
 				name + " " +
@@ -59,7 +60,7 @@ func InitLogger(before func()) {
 			go func() {
 				for {
 					<-sign
-					Log.Warning("Salvataggio log...")
+					logger.Warning("Salvataggio log...")
 					lumber.Close()
 				}
 			}()
@@ -90,6 +91,29 @@ func InitLogger(before func()) {
 }
 
 func CloseLogger() {
-	Log.Warning("Salvataggio log...")
+	logger.Warning("Salvataggio log...")
 	lumber.Close()
 }
+
+func Critical(format string, args ...interface{}) { logger.Critical(format, args) }
+
+func Debug(format string, args ...interface{})  { logger.Debug(format, args) }
+func Debugf(format string, args ...interface{}) { logger.Debugf(format, args) }
+
+func Error(format string, args ...interface{})  { logger.Error(format, args) }
+func Errorf(format string, args ...interface{}) { logger.Errorf(format, args) }
+
+func Fatal(args ...interface{})                 { logger.Fatal(args...) }
+func Fatalf(format string, args ...interface{}) { logger.Fatalf(format, args) }
+
+func Info(format string, args ...interface{})  { logger.Info(format, args) }
+func Infof(format string, args ...interface{}) { logger.Infof(format, args) }
+
+func Notice(format string, args ...interface{})  { logger.Notice(format, args) }
+func Noticef(format string, args ...interface{}) { logger.Noticef(format, args) }
+
+func Panic(args ...interface{})                 { logger.Panic(args...) }
+func Panicf(format string, args ...interface{}) { logger.Panicf(format, args...) }
+
+func Warning(format string, args ...interface{})  { logger.Warning(format, args) }
+func Warningf(format string, args ...interface{}) { logger.Warningf(format, args) }

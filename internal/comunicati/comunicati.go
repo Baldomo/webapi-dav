@@ -1,8 +1,6 @@
 package comunicati
 
 import (
-	"github.com/Baldomo/webapi-dav/internal/config"
-	"github.com/Baldomo/webapi-dav/internal/log"
 	"io/ioutil"
 	"net/url"
 	"os"
@@ -12,6 +10,9 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/Baldomo/webapi-dav/internal/config"
+	"github.com/Baldomo/webapi-dav/internal/log"
 )
 
 type Comunicato struct {
@@ -38,7 +39,7 @@ const (
 )
 
 func (c *Comunicato) Equals(other *Comunicato) bool {
-	if c.Nome == other.Nome && c.Data.Round(time.Second).Equal(other.Data.Round(time.Second)) && c.Tipo == other.Tipo && c.URL ==other.URL {
+	if c.Nome == other.Nome && c.Data.Round(time.Second).Equal(other.Data.Round(time.Second)) && c.Tipo == other.Tipo && c.URL == other.URL {
 		return true
 	}
 	return false
@@ -63,7 +64,7 @@ func scrape(dir string, tipo string) Comunicati {
 	absPath, _ := filepath.Abs(dir)
 	files, err := ioutil.ReadDir(absPath)
 	if err != nil {
-		log.Log.Fatal(err)
+		log.Fatal(err)
 	}
 
 	buf := make(Comunicati, len(files))
@@ -83,7 +84,7 @@ func scrape(dir string, tipo string) Comunicati {
 	sort.Slice(buf, func(i, j int) bool {
 		return buf[i].Data.After(buf[j].Data)
 	})
-	log.Log.Infof("Caricamento comunicati %s completato", tipo)
+	log.Infof("Caricamento comunicati %s completato", tipo)
 	return buf
 }
 

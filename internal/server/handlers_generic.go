@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 
 	"github.com/Baldomo/webapi-dav/internal/config"
-	. "github.com/Baldomo/webapi-dav/internal/log"
+	"github.com/Baldomo/webapi-dav/internal/log"
 	"github.com/Baldomo/webapi-dav/internal/utils"
 )
 
@@ -49,7 +49,7 @@ func AboutHandler(w http.ResponseWriter, r *http.Request) {
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		if err := json.NewEncoder(w).Encode(aboutMessage); err != nil {
-			Log.Error("AboutHandler: errore encoding json")
+			log.Error("AboutHandler: errore encoding json")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
 			w.WriteHeader(http.StatusOK)
@@ -58,7 +58,7 @@ func AboutHandler(w http.ResponseWriter, r *http.Request) {
 
 	case "text/html":
 		if err := utils.ShowGenericTemplate(w, aboutMessage); err != nil {
-			Log.Error("AboutHandler: errore template html")
+			log.Error("AboutHandler: errore template html")
 		} else {
 			w.WriteHeader(http.StatusOK)
 		}
@@ -75,7 +75,7 @@ func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
 	case "text/html":
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		if err := utils.ShowGenericTemplate(w, message); err != nil {
-			Log.Error(err.Error())
+			log.Error(err.Error())
 		}
 		break
 
@@ -103,7 +103,7 @@ func TeapotHandler(w http.ResponseWriter, r *http.Request) {
 
 	case "text/html":
 		if err := utils.ShowGenericTemplate(w, message); err != nil {
-			Log.Error("TeapotHandler: errore template html")
+			log.Error("TeapotHandler: errore template html")
 		} else {
 			w.WriteHeader(http.StatusTeapot)
 		}
@@ -119,7 +119,7 @@ func VersionHandler(w http.ResponseWriter, r *http.Request) {
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		if err := json.NewEncoder(w).Encode(versionMessage); err != nil {
-			Log.Error("VersionHandler: errore encoding json")
+			log.Error("VersionHandler: errore encoding json")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
 			w.WriteHeader(http.StatusOK)
@@ -128,7 +128,7 @@ func VersionHandler(w http.ResponseWriter, r *http.Request) {
 
 	case "text/html":
 		if err := utils.ShowGenericTemplate(w, versionMessage); err != nil {
-			Log.Error("VersionHandler: errore template html")
+			log.Error("VersionHandler: errore template html")
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
 			w.WriteHeader(http.StatusOK)
@@ -138,7 +138,7 @@ func VersionHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func RefreshHTML() {
-	Log.Info("Ricaricamento pagine web...")
+	log.Info("Ricaricamento pagine web...")
 	indexHtml = ""
 	absPath, _ := filepath.Abs(filepath.Join(config.GetConfig().Dirs.HTML, "index.html"))
 	raw, _ := ioutil.ReadFile(absPath)
