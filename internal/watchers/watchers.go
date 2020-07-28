@@ -73,6 +73,12 @@ func (fw *FileWatcher) Watch() {
 func (fw FileWatcher) notifyComunicato(event watcher.Event) {
 	var tipo, dirPath string
 
+	if event.Op == watcher.Remove {
+		// Do not notify for deleted comunicati
+		// TODO: test etc
+		return
+	}
+
 	dirPath = strings.Replace(event.Path, event.FileInfo.Name(), "", -1)
 	if strings.Contains(dirPath, "genitori") {
 		tipo = com.TipoGenitori

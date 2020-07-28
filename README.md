@@ -1,7 +1,9 @@
-# webapi-dav
-Questa è la documentazione ufficiale di Da Vinci API, contenente utilizzo e configurazione del webserver.
-Ultima versione: v0.6.2
-[Copia del README su Github](https://gist.github.com/Baldomo/5dc1db7a46e00f94ef714b7063f7fa3d)
+<p align="center">
+  <img src="docs/logo.png" width="100" />
+</p>
+<h1 align="center">webapi-dav</h1>
+
+Questa è la documentazione ufficiale di Da Vinci API (`webapi-dav`), contenente utilizzo e configurazione del webserver.
 
 ## Indice
 * [Esecuzione](#markdown-header-esecuzione)
