@@ -19,6 +19,35 @@ Questa è la documentazione ufficiale di Da Vinci API (`webapi-dav`), contenente
 * [Comunicati](#comunicati)
 * ~~[Progetti](#progetti)~~
 
+## Compilazione
+Tutte le funzionalità utili a compilare/testare il progetto sono incluse nel file `build.go`. Per ottenere una vista generale delle opzioni disponibili, si veda `go run build.go --help` o il contenuto del file. Di seguito sono riportati i comandi di livello superiore:
+
+#### Esempio di workflow (debug)
+Compilazione del progetto (senza creazioni di archivi compressi, si suppone ambiente Linux):
+```
+go run build.go build -os linux -fast
+```
+
+Creazione dell'ambiente di test runtime ed esecuzione del server (vengono copiati i file di configurazione e creati una serie di finti file PDF per simulare i comunicati):
+```
+go run build.go deploy -run
+```
+
+Rimozione dell'ambiente creato:
+```
+go run build.go clean
+```
+
+#### Esempio di workflow (release)
+Esecuzione dei test integrati:
+```
+go run build.go test
+```
+
+Compilazione del progetto (si suppone ambiente Linux):
+```
+go run build.go build -os windows
+```
 
 ## Esecuzione
 L'eseguibile accetta un solo parametro all'esecuzione: `-config file.{json/toml}`,
