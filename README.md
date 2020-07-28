@@ -6,18 +6,18 @@
 Questa è la documentazione ufficiale di Da Vinci API (`webapi-dav`), contenente utilizzo e configurazione del webserver.
 
 ## Indice
-* [Esecuzione](#markdown-header-esecuzione)
-* [Configurazione](#markdown-header-configurazione)
-    * [Apache](#markdown-header-apache)
-    * [Generali](#markdown-header-generali)
-    * [Connessione](#markdown-header-connessione)
-    * [Cartelle](#markdown-header-cartelle)
-    * [Logging](#markdown-header-logging)
-    * [Esempi](#markdown-header-esempi-configurazione)
-        * [TOML](#markdown-header-toml)
-        * [JSON](#markdown-header-json)
-* [Comunicati](#markdown-header-comunicati)
-* ~~[Progetti](#markdown-header-progetti)~~
+* [Esecuzione](#esecuzione)
+* [Configurazione](#configurazione)
+    * [Apache](#apache)
+    * [Generali](#generali)
+    * [Connessione](#connessione)
+    * [Cartelle](#cartelle)
+    * [Logging](#logging)
+    * [Esempi](#esempi-configurazione)
+        * [TOML](#toml)
+        * [JSON](#json)
+* [Comunicati](#comunicati)
+* ~~[Progetti](#progetti)~~
 
 
 ## Esecuzione
