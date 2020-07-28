@@ -6,6 +6,7 @@
 Questa è la documentazione ufficiale di Da Vinci API (`webapi-dav`), contenente utilizzo e configurazione del webserver.
 
 ## Indice
+* [Compilazione](#compilazione)
 * [Esecuzione](#esecuzione)
 * [Configurazione](#configurazione)
     * [Apache](#apache)
@@ -20,7 +21,7 @@ Questa è la documentazione ufficiale di Da Vinci API (`webapi-dav`), contenente
 * ~~[Progetti](#progetti)~~
 
 ## Compilazione
-Tutte le funzionalità utili a compilare/testare il progetto sono incluse nel file `build.go`. Per ottenere una vista generale delle opzioni disponibili, si veda `go run build.go --help` o il contenuto del file. Di seguito sono riportati i comandi di livello superiore:
+Tutte le funzionalità utili a compilare/testare il progetto sono incluse nel file `build.go`. Per ottenere una vista generale delle opzioni disponibili, si veda `go run build.go --help` o il contenuto del file. Di seguito sono riportati alcuni esempi di comandi per compilare/testare `webapi-dav`.
 
 #### Esempio di workflow (debug)
 Compilazione del progetto (senza creazioni di archivi compressi, si suppone ambiente Linux):
