@@ -2,20 +2,21 @@ package server
 
 import (
 	"context"
-	"github.com/Baldomo/webapi-dav/internal/config"
-	"github.com/Baldomo/webapi-dav/internal/log"
-	"github.com/gorilla/mux"
 	"net"
 	"net/http"
 	"net/rpc"
 	"time"
+
+	"github.com/Baldomo/webapi-dav/internal/config"
+	"github.com/Baldomo/webapi-dav/internal/log"
+	"github.com/gorilla/mux"
 )
 
 type serverHandler struct {
 	Stopped chan struct{}
 
-	http  *http.Server
-	ipc   *rpc.Server
+	http *http.Server
+	ipc  *rpc.Server
 }
 
 var (
@@ -87,7 +88,7 @@ func (sh *serverHandler) Start() {
 	sh.ipc.RegisterName("serverHandler", sh)
 	l, err := net.Listen("tcp", ":2202")
 	if err != nil {
-		log.Log.Critical("Impossibile avviare servizio IPC")
+		log.Critical("Impossibile avviare servizio IPC")
 	}
 
 	// Blocking: aspetta segnali da attraverso IPC
@@ -107,7 +108,7 @@ func Shutdown() { handler.Shutdown(&struct{}{}, &struct{}{}) }
 func (sh *serverHandler) Shutdown(_, _ *struct{}) error {
 	err := shutdown(sh.http, sh.Stopped)
 	if err != nil {
-		log.Log.Error(err.Error())
+		log.Error(err.Error())
 	}
 
 	select {
@@ -129,13 +130,13 @@ func shutdown(s *http.Server, cchan chan struct{}) error {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
-	log.Log.Warningf("Conclusione richieste con timeout %s", timeout)
+	log.Warningf("Conclusione richieste con timeout %s", timeout)
 
 	if err := s.Shutdown(ctx); err != nil {
-		log.Log.Error(err.Error())
+		log.Error(err.Error())
 	} else {
 		if s != nil {
-			log.Log.Info("Concluse richieste in arrivo")
+			log.Info("Concluse richieste in arrivo")
 
 			select {
 			case <-ctx.Done():
@@ -145,7 +146,7 @@ func shutdown(s *http.Server, cchan chan struct{}) error {
 			default:
 				if deadline, ok := ctx.Deadline(); ok {
 					secs := (time.Until(deadline) + time.Second/2) / time.Second
-					log.Log.Warningf("Spegnimento server con timeout %vs", secs)
+					log.Warningf("Spegnimento server con timeout %vs", secs)
 				}
 
 				done := make(chan error)
@@ -164,7 +165,7 @@ func shutdown(s *http.Server, cchan chan struct{}) error {
 	if deadline, ok := ctx.Deadline(); ok {
 		cchan <- struct{}{}
 		secs := (time.Until(deadline) + time.Second/2) / time.Second
-		log.Log.Warningf("Completato spegnimento in %vs", secs)
+		log.Warningf("Completato spegnimento in %vs", secs)
 	}
 
 	log.CloseLogger()

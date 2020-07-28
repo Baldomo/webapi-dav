@@ -98,10 +98,8 @@ func build() {
 	for _, osValue := range osList {
 		if v, ok := vars[osValue]; ok {
 			buildArtifact(v)
-
 			if !fast {
 				packageArtifact(v)
-
 				writeChecksum(v)
 			}
 		} else {
@@ -113,6 +111,7 @@ func build() {
 func buildArtifact(system string) {
 	os.Setenv("GOOS", system)
 	os.Setenv("GOARCH", "amd64")
+	os.Setenv("CGO_ENABLED", "0")
 
 	fileExt := ""
 	ldflags := "-s -w"
@@ -127,12 +126,14 @@ func buildArtifact(system string) {
 	args := []string{
 		"build",
 		"-o", outFile,
-		"-ldflags", ldflags,
+		fmt.Sprint("-ldflags=", ldflags),
 		"./cmd/webapi",
 	}
 
 	buildCmd := exec.Command("go", args...)
 	log.Printf("Building package for %s %v\n", system, buildCmd.Args)
+	buildCmd.Stderr = os.Stderr
+	buildCmd.Stdout = os.Stdout
 	err := buildCmd.Run()
 	must(err)
 }
