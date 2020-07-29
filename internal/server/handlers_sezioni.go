@@ -36,7 +36,6 @@ func ComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusOK)
 		}
-		break
 
 	case "text/html":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -46,9 +45,7 @@ func ComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusOK)
 		}
-		break
 	}
-	return
 }
 
 func GenitoriComunicatiHandler(w http.ResponseWriter, r *http.Request) {
@@ -74,7 +71,6 @@ func GenitoriComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusOK)
 		}
-		break
 
 	case "text/html":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -84,7 +80,6 @@ func GenitoriComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusOK)
 		}
-		break
 	}
 }
 
@@ -111,7 +106,6 @@ func StudentiComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusOK)
 		}
-		break
 
 	case "text/html":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -121,7 +115,6 @@ func StudentiComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusOK)
 		}
-		break
 	}
 }
 
@@ -148,7 +141,6 @@ func DocentiComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusOK)
 		}
-		break
 
 	case "text/html":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -158,7 +150,6 @@ func DocentiComunicatiHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusOK)
 		}
-		break
 	}
 }
 
@@ -175,7 +166,6 @@ func DocentiHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusOK)
 		}
-		break
 
 	case "text/html":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -185,7 +175,6 @@ func DocentiHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusOK)
 		}
-		break
 	}
 }
 
@@ -200,7 +189,6 @@ func ClassiHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusOK)
 		}
-		break
 
 	case "text/html":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -210,7 +198,6 @@ func ClassiHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusOK)
 		}
-		break
 	}
 }
 
@@ -227,7 +214,6 @@ func OrarioHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusOK)
 		}
-		break
 
 	case "text/html":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -237,13 +223,12 @@ func OrarioHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusOK)
 		}
-		break
 	}
 }
 
 func OrarioClasseHandler(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	classe, _ := mux.Vars(r)["classe"]
+	classe := mux.Vars(r)["classe"]
 	switch utils.RequestMime(r.Header) {
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -253,7 +238,6 @@ func OrarioClasseHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusOK)
 		}
-		break
 
 	case "text/html":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -263,7 +247,6 @@ func OrarioClasseHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusOK)
 		}
-		break
 	}
 
 }
@@ -286,7 +269,6 @@ func OrarioDocenteHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusOK)
 		}
-		break
 
 	case "text/html":
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -296,7 +278,6 @@ func OrarioDocenteHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusOK)
 		}
-		break
 	}
 }
 

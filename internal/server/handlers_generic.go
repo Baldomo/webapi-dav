@@ -54,7 +54,6 @@ func AboutHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusOK)
 		}
-		break
 
 	case "text/html":
 		if err := utils.ShowGenericTemplate(w, aboutMessage); err != nil {
@@ -62,7 +61,6 @@ func AboutHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusOK)
 		}
-		break
 	}
 }
 
@@ -77,13 +75,11 @@ func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
 		if err := utils.ShowGenericTemplate(w, message); err != nil {
 			log.Error(err.Error())
 		}
-		break
 
 	case "application/json":
 		if err := json.NewEncoder(w).Encode(message); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 		}
-		break
 	}
 }
 
@@ -99,7 +95,6 @@ func TeapotHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusTeapot)
 		}
-		break
 
 	case "text/html":
 		if err := utils.ShowGenericTemplate(w, message); err != nil {
@@ -107,7 +102,6 @@ func TeapotHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusTeapot)
 		}
-		break
 	}
 }
 
@@ -124,7 +118,6 @@ func VersionHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusOK)
 		}
-		break
 
 	case "text/html":
 		if err := utils.ShowGenericTemplate(w, versionMessage); err != nil {
@@ -133,7 +126,6 @@ func VersionHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.WriteHeader(http.StatusOK)
 		}
-		break
 	}
 }
 

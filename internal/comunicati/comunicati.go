@@ -50,7 +50,7 @@ func NewComunicato(nome string, data time.Time, tipo string) *Comunicato {
 	com.Nome = nome
 	com.Data = data
 	if strings.ContainsAny(tipo, "/") {
-		strings.Replace(tipo, "/", "", -1)
+		tipo = strings.Replace(tipo, "/", "", -1)
 	}
 	com.Tipo = tipo
 	com.URL = UrlPrefix + "comunicati-" + tipo + "/" + url.PathEscape(nome)
