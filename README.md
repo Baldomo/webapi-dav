@@ -58,6 +58,15 @@ per specificare manualmente il percorso del file di configurazione. Anche se il 
 l'estensione corretta, il programma cercherà di interpretarlo e, se valido,
 lo utilizzerà.
 
+#### Variabili d'ambiente
+`webapi-dav` utilizza varie variabili d'ambiente per accedere a credenziali sensibili senza doverle memorizzare in un file.
+
+- `WEBAPI_DB_USER`: username per l'accesso al database degli eventi MySQL
+- `WEBAPI_DB_PWD`: password per l'accesso al database degli eventi MySQL
+- `WEBAPI_FCM_KEY`: chiave API per il servizio di Firebase Cloud Messaging (notifiche comunicati)
+
+In caso le variabili `WEBAPI_DB_*` non siano inizializzate, la connessione al database non viene eseguita e qualunque query viene semplicemente terminata, per cui ogni richiesta REST riceve come risultato un array JSON vuoto. Per quanto riguarda `WEBAPI_FCM_KEY`, se nulla le notifiche non vengono inviate.
+
 #### Apache
 L'unico modo (al momento) di poter eseguire il webserver è tramite mod_proxy; moduli richiesti:
 ```apache

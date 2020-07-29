@@ -23,8 +23,8 @@ COPY config.toml /go/bin
 COPY ./docs /go/bin/docs
 COPY --from=builder /go/bin/webapi /go/bin/webapi
 
-ENV WEBAPI_USER root
-ENV WEBAPI_PWD root
+ENV WEBAPI_DB_USER root
+ENV WEBAPI_DB_PWD root
 ENV MYSQL_ROOT_PASSWORD root
 
 EXPOSE 8080:8080
