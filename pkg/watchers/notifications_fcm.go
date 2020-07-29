@@ -11,11 +11,11 @@ import (
 )
 
 const (
-	apikey   = os.Getenv("WEBAPI_FCM_KEY")
 	duration = 86400
 )
 
 var (
+	apikey             = os.Getenv("WEBAPI_FCM_KEY")
 	client *fcm.Client = nil
 )
 
