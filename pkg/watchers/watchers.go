@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	com "github.com/Baldomo/webapi-dav/internal/comunicati"
-	"github.com/Baldomo/webapi-dav/internal/config"
-	"github.com/Baldomo/webapi-dav/internal/log"
+	com "github.com/Baldomo/webapi-dav/pkg/comunicati"
+	"github.com/Baldomo/webapi-dav/pkg/config"
+	"github.com/Baldomo/webapi-dav/pkg/log"
 	"github.com/radovskyb/watcher"
 )
 

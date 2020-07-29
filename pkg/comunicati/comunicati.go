@@ -11,25 +11,36 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Baldomo/webapi-dav/internal/config"
-	"github.com/Baldomo/webapi-dav/internal/log"
+	"github.com/Baldomo/webapi-dav/pkg/config"
+	"github.com/Baldomo/webapi-dav/pkg/log"
 )
 
+// Rappresentazione di un comunicato come restituito dalle richieste REST
 type Comunicato struct {
-	Nome string    `json:"nome"`
+	// Nome/titolo del comunicato (praticamente il nome del file)
+	Nome string `json:"nome"`
+
+	// Data di emissione del comunicato
 	Data time.Time `json:"data"`
-	Tipo string    `json:"tipo"`
-	URL  string    `json:"url"`
+
+	// Tipo del comunicato (docenti/genitori/studenti)
+	Tipo string `json:"tipo"`
+
+	// URL statico del comunicato sul server
+	URL string `json:"url"`
 }
 
 type Comunicati []*Comunicato
 
+// Variabili interne di default per tenere in memoria i comunicati dei vari tipi
 var (
 	Genitori Comunicati
 	Studenti Comunicati
 	Docenti  Comunicati
 )
 
+// Costanti di default per i tipi dei comunicati e l'URL di base della cartella
+// contenente i file PDF
 const (
 	TipoGenitori = "genitori"
 	TipoStudenti = "studenti"
@@ -38,13 +49,18 @@ const (
 	UrlPrefix = "http://www.liceodavinci.tv/sitoLiceo/images/comunicati/"
 )
 
+// Compara due comunicati con arrotondamento della data etc
 func (c *Comunicato) Equals(other *Comunicato) bool {
-	if c.Nome == other.Nome && c.Data.Round(time.Second).Equal(other.Data.Round(time.Second)) && c.Tipo == other.Tipo && c.URL == other.URL {
+	if c.Nome == other.Nome &&
+		c.Data.Round(time.Second).Equal(other.Data.Round(time.Second)) &&
+		c.Tipo == other.Tipo &&
+		c.URL == other.URL {
 		return true
 	}
 	return false
 }
 
+// Costruttore per Comunicato
 func NewComunicato(nome string, data time.Time, tipo string) *Comunicato {
 	com := new(Comunicato)
 	com.Nome = nome
@@ -58,6 +74,8 @@ func NewComunicato(nome string, data time.Time, tipo string) *Comunicato {
 	return com
 }
 
+// Cammina le cartelle dei comunicati e memeorizza le informazioni di modello Comunicato
+// per ogni file
 func scrape(dir string, tipo string) Comunicati {
 	var wg sync.WaitGroup
 
@@ -88,9 +106,9 @@ func scrape(dir string, tipo string) Comunicati {
 	return buf
 }
 
+// Carica in memoria i vari tipi di comunicati
 func LoadComunicati(tipo string) {
 	switch tipo {
-
 	case TipoGenitori:
 		Genitori = scrape(config.GetConfig().Dirs.Genitori, TipoGenitori)
 
@@ -102,10 +120,11 @@ func LoadComunicati(tipo string) {
 
 	default:
 		return
-
 	}
 }
 
+// Dato un tipo di comunicato (docenti/genitori/studenti), restituisce la slice
+// di Comunicato memorizzata
 func GetByName(tipo string) Comunicati {
 	switch tipo {
 
@@ -123,6 +142,7 @@ func GetByName(tipo string) Comunicati {
 	}
 }
 
+// Dato un tipo di comunicato, restituisce il numero di comunicati presenti di quel tipo
 func GetLenByName(tipo string) int {
 	switch tipo {
 

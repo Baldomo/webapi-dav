@@ -5,29 +5,50 @@ import (
 	"net/http"
 )
 
+// Modello di informazione di un endpoint
 type Operation struct {
+	// Metodo accettato (ad es. "POST")
 	Method string
-	URI    string
-	Desc   string
-	Title  string
+
+	// URL dell'endpoint (ad es. "/api/orario")
+	URI string
+
+	// Descrizione testuale della funzionalità
+	// dell'endpoint
+	Desc string
+
+	// Nome simbolico dell'endpoint
+	Title string
 }
 
+// Modello di un messaggio generico di ritorno per una richiesta agli
+// endpoint di utility (ad es. /api/version)
 type APIMessage struct {
-	Code uint   `json:"codice"`
+	// Codice HTTP (ad es. 200 o 404)
+	Code uint `json:"codice"`
+
+	// Stringa con informazioni aggiuntive
 	Info string `json:"info"`
 }
 
+// Rappresentazione interna dei dati passati alla template di index.html
+// visualizzata nel browser per le richieste all'URL di base (/api)
 type templateData struct {
 	Version string
 	Ops     map[string]*Operation
 }
 
 const (
+	// Versione corrente di webapi-dav
 	VersionNumber = "0.7.1"
-	VersionDate   = "08/09/2019"
+
+	// Data di release della versione corrente
+	VersionDate = "08/09/2019"
 )
 
 var (
+	// Template generica mostrata per le richieste da browser a endpoint di utility
+	// (ad es. /api/version)
 	genericHTML = `
 	<!DOCTYPE html>
 	<html>
@@ -68,6 +89,7 @@ var (
 	}
 )
 
+// Costruttore per templateData
 func TemplateData() templateData {
 	return templateData{
 		Ops:     ops,
@@ -75,6 +97,7 @@ func TemplateData() templateData {
 	}
 }
 
+// Restituisce una Operation memorizzata dato il nome associato
 func GetOp(nome string) *Operation {
 	if val, ok := ops[nome]; ok {
 		return val
@@ -83,11 +106,14 @@ func GetOp(nome string) *Operation {
 	}
 }
 
+// Restituisce la map interna contenente tutti i dati per index.html
 func GetMapOps() *map[string]*Operation {
 	return &ops
 }
 
-func ShowGenericTemplate(w http.ResponseWriter, args interface{}) error {
+// Dato un http.ReponseWriter, scrive in uscita la template generica
+// con gli argomenti dati (di tipo APIMessage)
+func ShowGenericTemplate(w http.ResponseWriter, args APIMessage) error {
 	temp, err := template.New("generic").Parse(genericHTML)
 	if err != nil {
 		return err

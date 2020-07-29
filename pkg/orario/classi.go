@@ -13,6 +13,8 @@ var (
 
 type classe string
 
+// Memorizza tutte le classi a partire dalle stringhe valide contenute nella
+// tabella decodificata dall'XML
 func loadClassi() {
 	classi = nil
 	var classitemp []classe
@@ -34,6 +36,8 @@ func loadClassi() {
 	}
 }
 
+// Implementazione di un decodificatore di XML personalizzato per un oggetto
+// classe da un token XML, usato nella decodifica dell'orario esportato
 func (c *classe) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) error {
 	var content string
 	if err := decoder.DecodeElement(&content, &start); err != nil {
@@ -44,10 +48,13 @@ func (c *classe) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) erro
 	return nil
 }
 
+// Restituisce la stringa di una classe (ad es. "5B")
 func (c classe) String() string {
 	return string(c)
 }
 
+// Restituisce un puntatore alla slice interna di tutte le classi
+// esistenti
 func GetAllClassi() *[]classe {
 	return &classi
 }

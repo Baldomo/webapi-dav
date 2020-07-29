@@ -2,9 +2,10 @@ package agenda
 
 import (
 	"fmt"
-	"github.com/Baldomo/webapi-dav/internal/utils"
 	"testing"
 	"time"
+
+	"github.com/Baldomo/webapi-dav/pkg/utils"
 )
 
 var (

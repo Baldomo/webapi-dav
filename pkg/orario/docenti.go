@@ -15,6 +15,8 @@ var (
 	doc docenti
 )
 
+// Memorizza tutti i docenti a partire dalle stringhe valide contenute nella
+// tabella decodificata dall'XML
 func loadDocenti() {
 	doc = nil
 	var doctemp docenti
@@ -36,10 +38,12 @@ func loadDocenti() {
 	}
 }
 
+// Restituisce un puntatore alla slice di docenti estratti dall'orario
 func GetAllDocenti() *docenti {
 	return &doc
 }
 
+// Convalida a livello JSON le richieste REST ricevute
 func (doc *Docente) Validate() error {
 	if doc.Nome == "" {
 		return fmt.Errorf("JSON incompleto - nome mancante")

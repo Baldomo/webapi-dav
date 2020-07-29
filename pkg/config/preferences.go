@@ -54,11 +54,13 @@ var (
 	currentFullFilePath = ""
 	currentFiletype     = "none"
 
+	// Tipi di file di configurazione validi
 	filetypes = []string{
 		".json",
 		".toml",
 	}
 
+	// Inizializza la configurazione con una di default
 	preferences = defaultPrefs
 
 	defaultPrefs = config{
@@ -89,6 +91,8 @@ var (
 	}
 )
 
+// Dato il percorso di un file di configurazione, controlla il tipo del file e,
+// se valido, lo converte nella rappresentazione interna e lo memorizza
 func LoadPrefs(path string) error {
 	preferences = defaultPrefs
 	absPath, err := filepath.Abs(path)
@@ -120,7 +124,6 @@ func LoadPrefs(path string) error {
 	}
 
 	switch currentFiletype {
-
 	case ".json":
 		raw, errIO := ioutil.ReadFile(absPath)
 		if errIO != nil {
@@ -143,6 +146,7 @@ func LoadPrefs(path string) error {
 	return nil
 }
 
+// Controlla vari campi della configurazione e aggiusa il formato di quelli non validi
 func formatPrefs() {
 	//HTTP
 	if !strings.HasPrefix(preferences.HTTP.Port, ":") {
@@ -176,6 +180,7 @@ func formatPrefs() {
 	}
 }
 
+// WIP: ricarica file di configurazione da disco
 func ReloadPrefs() {
 	err := LoadPrefs(currentFullFilePath)
 	if err != nil {
@@ -183,14 +188,17 @@ func ReloadPrefs() {
 	}
 }
 
+// Restituisce un puntatore alla configurazione corrente interna
 func GetConfig() *config {
 	return &preferences
 }
 
+// Restituisce il percorso del file di configurazione in uso
 func GetConfigPath() string {
 	return currentFilePath
 }
 
+// Restituisce il nome del file di configurazione in uso
 func GetConfigFilename() string {
 	return filepath.Base(currentFullFilePath)
 }

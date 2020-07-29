@@ -8,13 +8,13 @@ import (
 	"os"
 	"path/filepath"
 
-	com "github.com/Baldomo/webapi-dav/internal/comunicati"
-	"github.com/Baldomo/webapi-dav/internal/config"
-	"github.com/Baldomo/webapi-dav/internal/log"
-	"github.com/Baldomo/webapi-dav/internal/orario"
-	"github.com/Baldomo/webapi-dav/internal/server"
-	"github.com/Baldomo/webapi-dav/internal/utils"
-	"github.com/Baldomo/webapi-dav/internal/watchers"
+	com "github.com/Baldomo/webapi-dav/pkg/comunicati"
+	"github.com/Baldomo/webapi-dav/pkg/config"
+	"github.com/Baldomo/webapi-dav/pkg/log"
+	"github.com/Baldomo/webapi-dav/pkg/orario"
+	"github.com/Baldomo/webapi-dav/pkg/server"
+	"github.com/Baldomo/webapi-dav/pkg/utils"
+	"github.com/Baldomo/webapi-dav/pkg/watchers"
 	"github.com/nightlyone/lockfile"
 )
 
@@ -60,7 +60,8 @@ func start() {
 
 	lockProcess()
 
-	log.InitLogger(initServer)
+	log.InitLogger()
+	initServer()
 
 	server.Start()
 }

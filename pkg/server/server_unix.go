@@ -6,12 +6,13 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Baldomo/webapi-dav/internal/config"
-	"github.com/Baldomo/webapi-dav/internal/log"
+	"github.com/Baldomo/webapi-dav/pkg/config"
+	"github.com/Baldomo/webapi-dav/pkg/log"
 	"github.com/gorilla/mux"
 	"github.com/pseidemann/finish"
 )
 
+// Controller interno di un http.Server
 type serverHandler struct {
 	http *http.Server
 }
@@ -22,6 +23,8 @@ var (
 	handler = new(serverHandler)
 )
 
+// Inizializza un nuovo router gorilla/mux con sane impostazioni predefinite,
+// insieme ai vari middleware
 func NewRouter() *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 	router.NotFoundHandler = http.HandlerFunc(NotFoundHandler)
@@ -40,6 +43,7 @@ func NewRouter() *mux.Router {
 	return router
 }
 
+// Inizializza un http.Server con sani valori di default
 func newServer() *http.Server {
 	return &http.Server{
 		Handler:           NewRouter(),
@@ -74,6 +78,7 @@ func newServer() *http.Server {
 //	}
 //}
 
+// Avvia il loop ListenAndServe dell'oggetto server interno (http.Server.ListenAndServe)
 func Start() { handler.Start() }
 func (sh *serverHandler) Start() {
 	sh.http = newServer()

@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"github.com/Baldomo/webapi-dav/internal/config"
-	"github.com/Baldomo/webapi-dav/internal/log"
-	"github.com/Baldomo/webapi-dav/internal/utils"
+	"github.com/Baldomo/webapi-dav/pkg/config"
+	"github.com/Baldomo/webapi-dav/pkg/log"
+	"github.com/Baldomo/webapi-dav/pkg/utils"
 )
 
 var (
@@ -129,6 +129,8 @@ func VersionHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Ricarica in memoria le pagine HTML statiche (che verranno servite aggiornate
+// alle richieste successive)
 func RefreshHTML() {
 	log.Info("Ricaricamento pagine web...")
 	indexHtml = ""

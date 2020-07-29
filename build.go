@@ -240,9 +240,7 @@ func deploy() {
 	)
 
 	smartCopy("docs/", "playground/docs/")
-
 	smartCopy("config.toml", "playground/config.toml")
-
 	smartCopy("orario.xml", "playground/orario.xml")
 
 	fileExt := ""
@@ -256,7 +254,8 @@ func deploy() {
 	if run {
 		apiCmd := exec.Command("./webapi" + fileExt)
 		apiCmd.Dir = "playground"
-		log.Printf("Starting webapi\nUse Ctrl+C (SIGINT) to exit...")
+		log.Println("Starting webapi")
+		log.Println("Use Ctrl+C (SIGINT) to exit...")
 		err := apiCmd.Run()
 		must(err)
 	}

@@ -7,11 +7,13 @@ import (
 	"net/rpc"
 	"time"
 
-	"github.com/Baldomo/webapi-dav/internal/config"
-	"github.com/Baldomo/webapi-dav/internal/log"
+	"github.com/Baldomo/webapi-dav/pkg/config"
+	"github.com/Baldomo/webapi-dav/pkg/log"
 	"github.com/gorilla/mux"
 )
 
+// Controller virtuale per un oggetto server con IPC
+// e controllo di spegnimento tramite un canale
 type serverHandler struct {
 	Stopped chan struct{}
 
@@ -25,6 +27,8 @@ var (
 	handler = new(serverHandler)
 )
 
+// Inizializza un nuovo router gorilla/mux con sane impostazioni predefinite,
+// insieme ai vari middleware
 func NewRouter() *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 	router.NotFoundHandler = http.HandlerFunc(NotFoundHandler)
@@ -43,6 +47,7 @@ func NewRouter() *mux.Router {
 	return router
 }
 
+// Inizializza un http.Server con sani valori di default
 func newServer() *http.Server {
 	return &http.Server{
 		Handler:           NewRouter(),
@@ -77,6 +82,7 @@ func newServer() *http.Server {
 //	}
 //}
 
+// Avvia il loop ListenAndServe dell'oggetto server interno (http.Server.ListenAndServe)
 func Start() { handler.Start() }
 func (sh *serverHandler) Start() {
 	sh.http = newServer()
@@ -95,6 +101,7 @@ func (sh *serverHandler) Start() {
 	sh.ipc.Accept(l)
 }
 
+// Riavvia il server interno
 func (sh *serverHandler) restart(_, _ *struct{}) error {
 	err := sh.Shutdown(&struct{}{}, &struct{}{})
 	if err != nil {
@@ -104,6 +111,8 @@ func (sh *serverHandler) restart(_, _ *struct{}) error {
 	return nil
 }
 
+// Esegue graceful shutdown del server interno (termina tutte le richieste in
+// corso, rifiuta quelle in arrivo)
 func Shutdown() { handler.Shutdown(&struct{}{}, &struct{}{}) }
 func (sh *serverHandler) Shutdown(_, _ *struct{}) error {
 	err := shutdown(sh.http, sh.Stopped)
@@ -122,6 +131,7 @@ func (sh *serverHandler) Shutdown(_, _ *struct{}) error {
 	return nil
 }
 
+// Metodo interno di controllo dello spegnimento
 func shutdown(s *http.Server, cchan chan struct{}) error {
 	if s == nil {
 		return nil

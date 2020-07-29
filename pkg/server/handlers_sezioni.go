@@ -5,11 +5,11 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Baldomo/webapi-dav/internal/agenda"
-	com "github.com/Baldomo/webapi-dav/internal/comunicati"
-	"github.com/Baldomo/webapi-dav/internal/log"
-	"github.com/Baldomo/webapi-dav/internal/orario"
-	"github.com/Baldomo/webapi-dav/internal/utils"
+	"github.com/Baldomo/webapi-dav/pkg/agenda"
+	com "github.com/Baldomo/webapi-dav/pkg/comunicati"
+	"github.com/Baldomo/webapi-dav/pkg/log"
+	"github.com/Baldomo/webapi-dav/pkg/orario"
+	"github.com/Baldomo/webapi-dav/pkg/utils"
 	"github.com/gorilla/mux"
 )
 

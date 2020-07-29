@@ -1,12 +1,12 @@
 package utils
 
 import (
-	"fmt"
 	"net"
 	"net/http"
 	"strings"
 )
 
+// Estrae il tipo MIME da una richiesta http (valore di "Accept:")
 func RequestMime(header http.Header) string {
 	/*if strings.Split(header.Get("Accept"), ",")[0] == "text/html" {
 		return "application/json"
@@ -14,6 +14,7 @@ func RequestMime(header http.Header) string {
 	return strings.Split(header.Get("Accept"), ",")[0]
 }
 
+// Estrae l'indirizzo IP di origine di una http.Request
 func RequestIP(r *http.Request) net.IP {
 	ip, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
@@ -22,16 +23,13 @@ func RequestIP(r *http.Request) net.IP {
 	return net.ParseIP(ip)
 }
 
-func Error(origin string, format string, args ...interface{}) error {
-	return fmt.Errorf(origin+format, args...)
-}
-
+// Trasforma un int64 in stringa
 func I64toa(n int64) string {
 	buf := [11]byte{}
 	pos := len(buf)
 	signed := n < 0
 	if signed {
-		n= -n
+		n = -n
 	}
 	for {
 		pos--

@@ -3,7 +3,7 @@ openapi: 3.0.2
 info:
   title: webapi-dav
   description: La API RESTful è un servizio utile per ottenere dati dal [sito principale](http://www.liceodavinci.tv/sitoLiceo)
-  version: 0.6.2
+  version: 0.7.1
 
 servers:
 - url: http://liceodavinci.tv/api
