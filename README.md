@@ -71,7 +71,7 @@ lo utilizzerà.
 In caso le variabili `WEBAPI_DB_*` non siano inizializzate, la connessione al database non viene eseguita e qualunque query viene semplicemente terminata, per cui ogni richiesta REST riceve come risultato un array JSON vuoto. Per quanto riguarda `WEBAPI_FCM_KEY`, se nulla le notifiche non vengono inviate.
 
 #### Apache
-L'unico modo (al momento) di poter eseguire il webserver è tramite mod_proxy; moduli richiesti:
+Per utilizzare `webapi-dav` con Apache è necessario usare `mod_proxy`; moduli richiesti:
 ```apache
 LoadModule headers_module modules/mod_headers.so
 LoadModule proxy_module modules/mod_proxy.so
@@ -210,11 +210,12 @@ Esempio di `config.json` (in quella di default le cartelle non sono specificate)
 Qualunque cartella contenente file può essere esposta nella configurazione: la API
 terrà in memoria una lista dei comunicati secondo la struttura:
 ```go
-Comunicato
-    Nome  string    (nome del file)
-    Data  time.Time (data di ultima modifica)
-    Tipo  string    ("genitori", "studenti" o "docenti")
-    URL   string    (link diretto al PDF)
+type Comunicato struct {
+    Nome  string    // nome del file
+    Data  time.Time // data di ultima modifica
+    Tipo  string    // "genitori", "studenti" o "docenti"
+    URL   string    // link diretto al PDF
+}
 ```
 Esempio di risposta di singolo comunicato in JSON:
 ```json
