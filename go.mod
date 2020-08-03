@@ -6,6 +6,7 @@ require (
 	github.com/BurntSushi/toml v0.3.0
 	github.com/Masterminds/squirrel v1.1.0
 	github.com/appleboy/go-fcm v0.0.0-20171025023350-3bc382cee418
+	github.com/gbrlsnchs/jwt/v3 v3.0.0-rc.2
 	github.com/go-sql-driver/mysql v1.3.0
 	github.com/gorilla/context v0.0.0-20160226214623-1ea25387ff6f // indirect
 	github.com/gorilla/mux v1.6.1
