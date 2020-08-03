@@ -2,6 +2,10 @@
   "generali": {
     "riavvio_automatico": true
   },
+  "autenticazione": {
+    "fqdn_sito": "liceodavinci.tv",
+    "chiave_firma": "secret"
+  },
   "http": {
     "porta": ":8080"
   },
