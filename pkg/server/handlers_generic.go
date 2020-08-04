@@ -33,7 +33,6 @@ func AuthorizationMiddleware(next http.Handler) http.Handler {
 
 		} else {
 			// Ottiene il token
-			log.Error(authHeader[1])
 			jwtToken := []byte(authHeader[1])
 
 			// Verifica il token e passa la richiesta all'handler se valido
