@@ -35,6 +35,12 @@ func NewRouter() *mux.Router {
 	for _, route := range routes {
 		var handler http.Handler
 		handler = route.HandlerFunc
+
+		// Aggiunge il middleware di autorizzazione se richiesto
+		if route.RequiresAuthorization {
+			handler = AuthorizationMiddleware(handler).(http.Handler)
+		}
+
 		handler = log.EventLogger(handler, route.Name)
 
 		router.
