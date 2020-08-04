@@ -1,7 +1,7 @@
 /*
  * auth.go
  * 
- * Funzioni per la verifica dei token JWT di autenticazione.
+ * Funzioni per la verifica dei token JWT di autorizzazione.
  *
  * Copyright (c) 2020 Antonio Napolitano <nap@antonionapolitano.eu>
  *
@@ -21,7 +21,6 @@
  * along with webapi-dav. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Funzioni per la verifica di token JWT di autenticazione
 package auth
 
 import (
@@ -64,7 +63,7 @@ func InitializeSigning() error {
 
 	// Ritorna un errore se manca la chiave per la firma
 	if secret == "" {
-		return errors.New("Chiave per l'autenticazione non specificata!")
+		return errors.New("Chiave per la firma non specificata!")
 	}
 
 	// Inizializza l'algoritmo
