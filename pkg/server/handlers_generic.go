@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"strings"
 	"html/template"
 	"io/ioutil"
 	"net/http"
@@ -10,11 +11,41 @@ import (
 	"github.com/Baldomo/webapi-dav/pkg/config"
 	"github.com/Baldomo/webapi-dav/pkg/log"
 	"github.com/Baldomo/webapi-dav/pkg/utils"
+	"github.com/Baldomo/webapi-dav/pkg/auth"
 )
 
 var (
 	indexHtml = ""
 )
+
+// Middleware per la verifica del token JWT di autorizzazione
+func AuthorizationMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		// Divide l'header
+		authHeader := strings.Split(r.Header.Get("Authorization"), "Bearer ")
+
+		// Verifica l'header
+		if len(authHeader) != 2 {
+			log.Error("AuthorizationMiddleware: header is not valid")
+			w.WriteHeader(http.StatusUnauthorized)
+			w.Write([]byte("Malformed or missing bearer token"))
+
+		} else {
+			// Ottiene il token
+			jwtToken := []byte(authHeader[1])
+
+			// Verifica il token e passa la richiesta all'handler se valido
+			if _, err := auth.ParseToken(jwtToken); err != nil {
+				log.Error(err.Error())
+				w.WriteHeader(http.StatusUnauthorized)
+				w.Write([]byte("Unauthorized"))
+			} else {
+				next.ServeHTTP(w, r)
+			}
+		}
+	})
+}
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()

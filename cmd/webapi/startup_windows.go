@@ -12,6 +12,7 @@ import (
 	"github.com/Baldomo/webapi-dav/pkg/agenda"
 	com "github.com/Baldomo/webapi-dav/pkg/comunicati"
 	"github.com/Baldomo/webapi-dav/pkg/config"
+	"github.com/Baldomo/webapi-dav/pkg/auth"
 	"github.com/Baldomo/webapi-dav/pkg/log"
 	"github.com/Baldomo/webapi-dav/pkg/orario"
 	"github.com/Baldomo/webapi-dav/pkg/server"
@@ -56,6 +57,11 @@ func start() {
 	}
 
 	lockProcess()
+
+	err = auth.InitializeSigning()
+	if err != nil {
+		panic(err)
+	}
 
 	log.InitLogger()
 	initServer()

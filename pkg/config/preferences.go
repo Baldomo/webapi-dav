@@ -14,6 +14,7 @@ import (
 
 type config struct {
 	General general  `json:"generali" toml:"generali"`
+	Auth	auth	 `json:"autenticazione" toml:"autenticazione"`
 	HTTP    connhttp `json:"http" toml:"http"`
 	DB      db       `json:"db" toml:"db"`
 	Dirs    dirs     `json:"cartelle" toml:"cartelle"`
@@ -23,6 +24,11 @@ type config struct {
 type general struct {
 	Notifications  bool `json:"notifiche"`
 	RestartOnPanic bool `json:"riavvio_automatico" toml:"riavvio_automatico"`
+}
+
+type auth struct {
+	FQDN		string `json:"fqdn_sito" toml:"fqdn_sito"`
+	JWTSecret	string `json:"chiave_firma" toml:"chiave_firma"`
 }
 
 type connhttp struct {
@@ -67,6 +73,10 @@ var (
 		general{
 			Notifications:  false,
 			RestartOnPanic: false,
+		},
+		auth{
+			FQDN: "",
+			JWTSecret: "",
 		},
 		connhttp{
 			Port: ":8080",
@@ -146,8 +156,13 @@ func LoadPrefs(path string) error {
 	return nil
 }
 
-// Controlla vari campi della configurazione e aggiusa il formato di quelli non validi
+// Controlla vari campi della configurazione e aggiusta il formato di quelli non validi
 func formatPrefs() {
+	//Auth
+	if preferences.Auth.FQDN == "" {
+		fmt.Println("FQDN non specificato!")
+	}
+
 	//HTTP
 	if !strings.HasPrefix(preferences.HTTP.Port, ":") {
 		preferences.HTTP.Port = ":" + preferences.HTTP.Port
