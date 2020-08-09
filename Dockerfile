@@ -2,33 +2,26 @@ FROM golang:alpine as builder
 
 RUN apk add --no-cache git
 
-RUN mkdir -p /go/webapi
-WORKDIR /go/webapi
+WORKDIR /src/
 
 COPY build.go .
 COPY ./pkg ./pkg
 COPY ./cmd ./cmd
-COPY go.mod .
-COPY go.sum .
-RUN go mod download
-
-RUN apk del git
+COPY go.mod go.sum .
+RUN go get ./...
 
 RUN GOOS=linux CGO_ENABLED=0 go run build.go -fast -os linux build
+RUN apk del git
 
-# FROM scratch
-RUN mkdir -p /go/bin
-WORKDIR /go/bin
-COPY orario.xml .
-COPY config.toml .
-COPY ./docs ./docs
-# COPY --from=builder /go/bin/build/linux/webapi /go/bin/webapi
-RUN cp /go/webapi/build/linux/webapi .
+FROM scratch
+COPY orario.xml /
+COPY config.toml /
+COPY ./docs /docs
+COPY --from=builder /src/build/linux/webapi /
 
-# ENV WEBAPI_DB_USER root
-# ENV WEBAPI_DB_PWD root
-ENV MYSQL_ROOT_PASSWORD root
+ENV WEBAPI_DB_USER root
+ENV WEBAPI_DB_PWD root
 
 EXPOSE 8080:8080
 
-CMD ["/go/bin/webapi"]
+CMD ["/webapi"]

@@ -37,6 +37,7 @@ var commands = map[string]cmd{
 	"build":  build,
 	"clean":  clean,
 	"deploy": deploy,
+	"docker": docker,
 	"test":   test,
 }
 
@@ -44,6 +45,7 @@ var descriptions = map[string]string{
 	"build":  "build and package artifacts",
 	"clean":  "cleanup build output and playground/",
 	"deploy": "create a standard working environment to test the program locally",
+	"docker": "run webapi-dav in a Docker container",
 	"test":   "run tests for all packages",
 }
 
@@ -334,6 +336,75 @@ func dirCopy(srcdir, destdir string, info os.FileInfo) {
 	}
 }
 
+// Deploys a Docker container with webapi-dav
+func docker() {
+	argsImages := []string{
+		"images", "-q",
+		"-f", "reference=webapi-dav",
+	}
+	imagesRaw, err := exec.Command("docker", argsImages...).Output()
+	must(err)
+	if len(imagesRaw) == 0 {
+		log.Println("Docker image not found! Building image webapi-dav")
+		argsBuild := []string{
+			"image", "build",
+			"-t", "webapi-dav",
+			".",
+		}
+
+		buildCmd := exec.Command("docker", argsBuild...)
+		buildCmd.Stdout = os.Stdout
+		must(buildCmd.Run())
+	}
+
+	argsPs := []string{
+		"ps", "-q", "-a",
+		"-f", "ancestor=webapi-dav",
+	}
+	containersRaw, err := exec.Command("docker", argsPs...).Output()
+	must(err)
+	if len(containersRaw) != 0 {
+		// There are running webapi-dav instances
+		log.Println("Stopping running instances")
+		latest := strings.Split(string(containersRaw), "\n")[0]
+
+		argsStop := []string{
+			"stop",
+			latest,
+		}
+		must(exec.Command("docker", argsStop...).Run())
+
+		log.Println("Removing existing containers")
+		argsRm := []string{
+			"container", "rm", "webapi-dav",
+		}
+		must(exec.Command("docker", argsRm...).Run())
+	}
+
+	comDoc, _ := filepath.Abs("./playground/comunicati-docenti")
+	comGen, _ := filepath.Abs("./playground/comunicati-genitori")
+	comStud, _ := filepath.Abs("./playground/comunicati-studenti")
+
+	_ = os.MkdirAll(comDoc, os.ModeDir|os.ModePerm)
+	_ = os.MkdirAll(comGen, os.ModeDir|os.ModePerm)
+	_ = os.MkdirAll(comStud, os.ModeDir|os.ModePerm)
+
+	log.Println("Starting container")
+	argsRun := []string{
+		"run",
+		"-it", "-d",
+		"--name", "webapi-dav",
+		"-p", "8080:8080",
+		"-v", comDoc + ":/comunicati-docenti",
+		"-v", comGen + ":/comunicati-genitori",
+		"-v", comStud + ":/comunicati-studenti",
+		"webapi-dav",
+	}
+	runCmd := exec.Command("docker", argsRun...)
+	runCmd.Stdout = os.Stdout
+	must(runCmd.Run())
+}
+
 // Runs tests
 func test() {
 	args := []string{
@@ -345,6 +416,5 @@ func test() {
 
 	testCmd := exec.Command("go", args...)
 	testCmd.Stdout = os.Stdout
-	err := testCmd.Run()
-	must(err)
+	must(testCmd.Run())
 }
