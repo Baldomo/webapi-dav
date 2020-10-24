@@ -124,6 +124,27 @@ var routes = []Route{
 		true,
 		ClassiHandler,
 	},
+	{
+		"Pdf",
+		"GET",
+		"/sitoLiceo/images/comunicati/comunicati-docenti/{filename}",
+		true,
+		PdfHandler,
+	},
+	{
+		"Pdf",
+		"GET",
+		"/sitoLiceo/images/comunicati/comunicati-genitori/{filename}",
+		true,
+		PdfHandler,
+	},
+	{
+		"Pdf",
+		"GET",
+		"/sitoLiceo/images/comunicati/comunicati-studenti/{filename}",
+		true,
+		PdfHandler,
+	},
 
 	// Orario
 	{
