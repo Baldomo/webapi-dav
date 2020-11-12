@@ -7,7 +7,7 @@ WORKDIR /src/
 COPY build.go .
 COPY ./pkg ./pkg
 COPY ./cmd ./cmd
-COPY go.mod go.sum .
+COPY go.mod go.sum ./
 RUN go get ./...
 
 RUN GOOS=linux CGO_ENABLED=0 go run build.go -fast -os linux build
