@@ -80,7 +80,7 @@ func ParseToken(token []byte) (UserInfo, error) {
 		now = time.Now()
 
 		// Carico l'FQDN dalla configurazione e definisco l'audience
-		fqdn = config.GetConfig().Auth.FQDN
+		fqdn = config.GetConfig().General.FQDN
 		aud  = jwt.Audience{"http://" + fqdn, "https://" + fqdn}
 
 		// Inizializzo i "validatori"

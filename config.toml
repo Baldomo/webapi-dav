@@ -1,8 +1,8 @@
 [generali]
+fqdn_sito = "liceodavinci.tv"
 riavvio_automatico = true  # TODO: da implementare
 
 [autenticazione]
-fqdn_sito = "liceodavinci.tv"
 chiave_firma = "secret"
 
 [http]

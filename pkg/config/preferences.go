@@ -22,13 +22,13 @@ type config struct {
 }
 
 type general struct {
-	Notifications  bool `json:"notifiche"`
-	RestartOnPanic bool `json:"riavvio_automatico" toml:"riavvio_automatico"`
+	FQDN           string `json:"fqdn_sito" toml:"fqdn_sito"`
+	Notifications  bool   `json:"notifiche"`
+	RestartOnPanic bool   `json:"riavvio_automatico" toml:"riavvio_automatico"`
 }
 
 type auth struct {
-	FQDN		string `json:"fqdn_sito" toml:"fqdn_sito"`
-	JWTSecret	string `json:"chiave_firma" toml:"chiave_firma"`
+	JWTSecret string `json:"chiave_firma" toml:"chiave_firma"`
 }
 
 type connhttp struct {
@@ -71,11 +71,11 @@ var (
 
 	defaultPrefs = config{
 		general{
+			FQDN: "",
 			Notifications:  false,
 			RestartOnPanic: false,
 		},
 		auth{
-			FQDN: "",
 			JWTSecret: "",
 		},
 		connhttp{
@@ -159,7 +159,7 @@ func LoadPrefs(path string) error {
 // Controlla vari campi della configurazione e aggiusta il formato di quelli non validi
 func formatPrefs() {
 	//Auth
-	if preferences.Auth.FQDN == "" {
+	if preferences.General.FQDN == "" {
 		fmt.Println("FQDN non specificato!")
 	}
 

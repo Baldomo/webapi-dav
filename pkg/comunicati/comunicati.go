@@ -46,7 +46,7 @@ const (
 	TipoStudenti = "studenti"
 	TipoDocenti  = "docenti"
 
-	UrlPrefix = "http://www.liceodavinci.tv/sitoLiceo/images/comunicati/"
+	PathPrefix = "/sitoLiceo/images/comunicati/"
 )
 
 // Compara due comunicati con arrotondamento della data etc
@@ -69,7 +69,7 @@ func NewComunicato(nome string, data time.Time, tipo string) *Comunicato {
 		tipo = strings.Replace(tipo, "/", "", -1)
 	}
 	com.Tipo = tipo
-	com.URL = UrlPrefix + "comunicati-" + tipo + "/" + url.PathEscape(nome)
+    com.URL = "https://" + config.GetConfig().General.FQDN + PathPrefix + "comunicati-" + tipo + "/" + url.PathEscape(nome)
 
 	return com
 }
