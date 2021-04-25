@@ -56,6 +56,8 @@ func start() {
 		panic(err)
 	}
 
+    server.Init()
+
 	lockProcess()
 
 	err = auth.InitializeSigning()

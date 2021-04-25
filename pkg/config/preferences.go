@@ -23,6 +23,7 @@ type config struct {
 
 type general struct {
 	FQDN           string `json:"fqdn_sito" toml:"fqdn_sito"`
+	ComunicatiPath string `json:"path_comunicati" toml:"path_comunicati"`
 	Notifications  bool   `json:"notifiche"`
 	RestartOnPanic bool   `json:"riavvio_automatico" toml:"riavvio_automatico"`
 }

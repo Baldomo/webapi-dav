@@ -2,7 +2,6 @@ package server
 
 import (
 	"encoding/json"
-	"fmt"
 	"html/template"
 	"io/ioutil"
 	"net/http"
@@ -99,10 +98,10 @@ func PdfHandler(w http.ResponseWriter, r *http.Request) {
 	case "comunicati-studenti":
 		comSubPath = config.GetConfig().Dirs.Studenti
 	}
-
 	comSubPath, _ = filepath.Abs(comSubPath)
-	// TODO: trovare un modo migliore di fare questa cosa (muovere URL di base in config?)
-	strip := fmt.Sprintf("/sitoLiceo/images/comunicati/%s/", comBaseDir)
+
+    comBasePath := config.GetConfig().General.ComunicatiPath
+    strip := filepath.Join(comBasePath, comBaseDir) + "/"
 	http.
 		StripPrefix(strip, http.FileServer(http.Dir(comSubPath))).
 		ServeHTTP(w, r)

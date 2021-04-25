@@ -1,5 +1,6 @@
 [generali]
 fqdn_sito = "liceodavinci.tv"
+path_comunicati = "/sitoLiceo/images/comunicati/"
 riavvio_automatico = true  # TODO: da implementare
 
 [autenticazione]
