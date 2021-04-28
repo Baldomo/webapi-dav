@@ -32,7 +32,7 @@ func AuthorizationMiddleware(next http.Handler) http.Handler {
 			log.Error("AuthorizationMiddleware: header is not valid")
 			w.WriteHeader(http.StatusUnauthorized)
 			w.Write([]byte("Malformed or missing bearer token"))
-
+			r.Body.Close()
 		} else {
 			// Ottiene il token
 			jwtToken := []byte(authHeader[1])
@@ -42,6 +42,7 @@ func AuthorizationMiddleware(next http.Handler) http.Handler {
 				log.Error(err.Error())
 				w.WriteHeader(http.StatusUnauthorized)
 				w.Write([]byte("Unauthorized"))
+				r.Body.Close()
 			} else {
 				next.ServeHTTP(w, r)
 			}
@@ -100,8 +101,8 @@ func PdfHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	comSubPath, _ = filepath.Abs(comSubPath)
 
-    comBasePath := config.GetConfig().General.ComunicatiPath
-    strip := filepath.Join(comBasePath, comBaseDir) + "/"
+	comBasePath := config.GetConfig().General.ComunicatiPath
+	strip := filepath.Join(comBasePath, comBaseDir) + "/"
 	http.
 		StripPrefix(strip, http.FileServer(http.Dir(comSubPath))).
 		ServeHTTP(w, r)

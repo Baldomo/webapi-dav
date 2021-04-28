@@ -14,7 +14,7 @@ import (
 
 type config struct {
 	General general  `json:"generali" toml:"generali"`
-	Auth	auth	 `json:"autenticazione" toml:"autenticazione"`
+	Auth    auth     `json:"autenticazione" toml:"autenticazione"`
 	HTTP    connhttp `json:"http" toml:"http"`
 	DB      db       `json:"db" toml:"db"`
 	Dirs    dirs     `json:"cartelle" toml:"cartelle"`
@@ -72,7 +72,7 @@ var (
 
 	defaultPrefs = config{
 		general{
-			FQDN: "",
+			FQDN:           "",
 			Notifications:  false,
 			RestartOnPanic: false,
 		},

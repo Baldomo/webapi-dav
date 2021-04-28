@@ -32,7 +32,7 @@ func NotifyComunicato(filename string, tipo string) {
 			Body:  fmt.Sprintf("Nuovo comunicato: %s", filename),
 		},
 		Data: map[string]interface{}{
-            "": fmt.Sprint("https://" + config.GetConfig().General.FQDN + comunicati.PathPrefix, "comunicati-", tipo, "/", url.PathEscape(filename)),
+			"": fmt.Sprint("https://"+config.GetConfig().General.FQDN+comunicati.PathPrefix, "comunicati-", tipo, "/", url.PathEscape(filename)),
 		},
 		TimeToLive: func(i uint) *uint { return &i }(duration),
 	}

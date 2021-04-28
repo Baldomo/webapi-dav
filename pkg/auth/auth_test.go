@@ -24,9 +24,9 @@
 package auth
 
 import (
-	"testing"
-	"fmt"
 	"flag"
+	"fmt"
+	"testing"
 
 	"github.com/Baldomo/webapi-dav/pkg/config"
 )
