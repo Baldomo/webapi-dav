@@ -1,6 +1,5 @@
 [generali]
 fqdn_sito = "liceodavinci.tv"
-path_comunicati = "/sitoLiceo/images/comunicati/"
 riavvio_automatico = true  # TODO: da implementare
 
 [autenticazione]
@@ -14,6 +13,7 @@ database = "sitoliceo"
 
 [cartelle]
 html = "docs"
+path_comunicati = "/sitoLiceo/images/comunicati/"
 comunicati_genitori = "comunicati-genitori"
 comunicati_studenti = "comunicati-studenti"
 comunicati_docenti = "comunicati-docenti"

@@ -6,22 +6,26 @@
 Questa è la documentazione ufficiale di Da Vinci API (`webapi-dav`), contenente utilizzo e configurazione del webserver.
 
 ## Indice
-* [Compilazione](#compilazione)
-    * [Esempio di workflow (debug)](#esempio-di-workflow-debug)
-    * [Esempio di workflow (release)](#esempio-di-workflow-release)
-* [Esecuzione](#esecuzione)
-    * [Variabili d'ambiente](#variabili-dambiente)
-* [Configurazione](#configurazione)
-    * [Apache](#apache)
-    * [Generali](#generali)
-    * [Connessione](#connessione)
-    * [Cartelle](#cartelle)
-    * [Logging](#logging)
-    * [Esempi](#esempi-configurazione)
-        * [TOML](#toml)
-        * [JSON](#json)
-* [Comunicati](#comunicati)
-* ~~[Progetti](#progetti)~~
+- [Indice](#indice)
+- [Compilazione](#compilazione)
+    - [Esempio di workflow (debug)](#esempio-di-workflow-debug)
+    - [Esempio di workflow (release)](#esempio-di-workflow-release)
+- [Esecuzione](#esecuzione)
+    - [Variabili d'ambiente](#variabili-dambiente)
+    - [Apache](#apache)
+- [Configurazione](#configurazione)
+    - [Generali](#generali)
+    - [Connessione](#connessione)
+      - [HTTP](#http)
+    - [Cartelle](#cartelle)
+    - [Database](#database)
+    - [Logging](#logging)
+      - [Note:](#note)
+- [Esempi configurazione](#esempi-configurazione)
+    - [TOML](#toml)
+    - [JSON](#json)
+- [Comunicati](#comunicati)
+- [Altro](#altro)
 
 ## Compilazione
 Tutte le funzionalità utili a compilare/testare il progetto sono incluse nel file `build.go`. Per ottenere una vista generale delle opzioni disponibili, si veda `go run build.go --help` o il contenuto del file. Di seguito sono riportati alcuni esempi di comandi per compilare/testare `webapi-dav`.
@@ -118,7 +122,9 @@ Chiavi e parametri:
 #### Generali
 | Nome                 | Tipo    | Valori             | Descrizione |
 |----------------------|---------|--------------------|-------------|
-| `riavvio_automatico` | boolean | `true, false`      | Ancora da implementare, non funzionante. |
+| `fqdn_sito`          | string  | URL                | Dominio base del server (es. `liceodavinci.tv`) |
+| `notifiche`          | boolean | `true, false`      | Attiva il servizio di notifiche tramite Firebase |
+| `riavvio_automatico` | boolean | `true, false`      | Ancora da implementare, non funzionante |
 
 ---
 
@@ -127,7 +133,7 @@ Chiavi e parametri:
 ##### HTTP
 | Nome                 | Tipo     | Valori         | Descrizione |
 |----------------------|----------|----------------|-------------|
-| `porta`              | string   | "numero porta" | Indica la porta che il server userà per le connessioni HTTP in entrata. |
+| `porta`              | string   | "numero porta" | Indica la porta che il server userà per le connessioni HTTP in entrata |
 
 ---
 
@@ -135,11 +141,20 @@ Chiavi e parametri:
 | Nome                  | Tipo    | Valori             | Descrizione |
 |-----------------------|---------|--------------------|-------------|
 | `html`                | string  | "/percorso/"       | Percorso della cartella che contiene i file HTML per le pagine web |
-| `comunicati_genitori` | string  | "/percorso/"       | Percorso della cartella comunicati genitori |
-| `comunicati_studenti` | string  | "/percorso/"       | Percorso della cartella comunicati studenti |
-| `comunicati_docenti`  | string  | "/percorso/"       | Percorso della cartella comunicati docenti |
+| `path_comunicati`     | string  | "/percorso/"       | Percorso della cartella comunicati |
+| `comunicati_genitori` | string  | "/percorso/"       | Percorso della sottocartella comunicati genitori |
+| `comunicati_studenti` | string  | "/percorso/"       | Percorso della sottocartella comunicati studenti |
+| `comunicati_docenti`  | string  | "/percorso/"       | Percorso della sottocartella comunicati docenti |
 | `progetti`            | string  | "/percorso/"       | Percorso della cartella progetti (**non ancora implementato**) |
 | `orario`              | string  | "/percorso/"       | Percorso del file esportato dal gestionale dell'orario, contenente la tabella Attività in XML |
+
+---
+
+#### Database
+| Nome       | Tipo    | Valori             | Descrizione |
+|------------|---------|--------------------|-------------|
+| `database` | string  | `true, false`      | Nome del database Joomla contenente l'agenda |
+| `timeout`  | integer | numero intero      | Timeout per connessione al database |
 
 ---
 
@@ -162,6 +177,13 @@ Chiavi e parametri:
 Esempio di `config.toml` (in quella di default le cartelle non sono specificate):
 
 ```toml
+[generali]
+fqdn_sito = "liceodavinci.tv"
+notifiche = false
+
+[autenticazione]
+chiave_firma = "secret"
+
 [http]
 porta = ":8080"
 
@@ -169,7 +191,8 @@ porta = ":8080"
 database = "sitoliceo"
 
 [cartelle]
-html = "static/"
+html = "docs"
+path_comunicati = "/sitoLiceo/images/comunicati/"
 comunicati_genitori = "comunicati-genitori"
 comunicati_studenti = "comunicati-studenti"
 comunicati_docenti = "comunicati-docenti"
@@ -177,7 +200,7 @@ orario = "orario.xml"
 
 [logging]
 abilitato = true
-file_log = "webapi.log"
+file_log = "./run.log"
 livello_log = "verbose"
 ```
 
@@ -185,14 +208,22 @@ livello_log = "verbose"
 Esempio di `config.json` (in quella di default le cartelle non sono specificate):
 ```json
 {
+  "generali": {
+    "fqdn_sito": "liceodavinci.tv",
+    "notifiche": false
+  },
+  "autenticazione": {
+    "chiave_firma": "secret"
+  },
   "http": {
     "porta": ":8080"
   },
   "db": {
-    "database": "sitoliceo",
+    "database": "sitoliceo"
   },
   "cartelle": {
-    "html": "static/",
+    "html": "docs",
+    "path_comunicati": "/sitoLiceo/images/comunicati/",
     "comunicati_genitori": "comunicati-genitori",
     "comunicati_studenti": "comunicati-studenti",
     "comunicati_docenti": "comunicati-docenti",
@@ -200,7 +231,7 @@ Esempio di `config.json` (in quella di default le cartelle non sono specificate)
   },
   "logging": {
     "abilitato": true,
-    "file_log": "webapi.log",
+    "file_log": "./run.log",
     "livello_log": "verbose"
   }
 }
@@ -220,10 +251,10 @@ type Comunicato struct {
 Esempio di risposta di singolo comunicato in JSON:
 ```json
 {
-    "nome":"177_corsa campestre istituto.pdf",
-    "data":"2017-11-26T10:30:49.272711528+01:00",
-    "tipo":"studenti",
-    "url":"http://liceodavinci.tv/sitoLiceo/comunicati/comunicati-studenti/..."
+  "nome":"177_corsa campestre istituto.pdf",
+  "data":"2017-11-26T10:30:49.272711528+01:00",
+  "tipo":"studenti",
+  "url":"http://liceodavinci.tv/sitoLiceo/comunicati/comunicati-studenti/..."
 }
 ```
 

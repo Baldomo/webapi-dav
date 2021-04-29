@@ -101,7 +101,7 @@ func PdfHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	comSubPath, _ = filepath.Abs(comSubPath)
 
-	comBasePath := config.GetConfig().General.ComunicatiPath
+	comBasePath := config.GetConfig().Dirs.ComunicatiPath
 	strip := filepath.Join(comBasePath, comBaseDir) + "/"
 	http.
 		StripPrefix(strip, http.FileServer(http.Dir(comSubPath))).

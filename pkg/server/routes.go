@@ -28,7 +28,7 @@ type Route struct {
 var routes []Route
 
 func Init() {
-	comBasePath := config.GetConfig().General.ComunicatiPath
+	comBasePath := config.GetConfig().Dirs.ComunicatiPath
 	routes = []Route{
 		// Generiche
 		{

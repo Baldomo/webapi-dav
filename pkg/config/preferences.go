@@ -23,7 +23,6 @@ type config struct {
 
 type general struct {
 	FQDN           string `json:"fqdn_sito" toml:"fqdn_sito"`
-	ComunicatiPath string `json:"path_comunicati" toml:"path_comunicati"`
 	Notifications  bool   `json:"notifiche"`
 	RestartOnPanic bool   `json:"riavvio_automatico" toml:"riavvio_automatico"`
 }
@@ -37,12 +36,13 @@ type connhttp struct {
 }
 
 type dirs struct {
-	HTML     string `json:"html" toml:"html"`
-	Genitori string `json:"comunicati_genitori" toml:"comunicati_genitori"`
-	Studenti string `json:"comunicati_studenti" toml:"comunicati_studenti"`
-	Docenti  string `json:"comunicati_docenti" toml:"comunicati_docenti"`
-	Progetti string `json:"progetti" toml:"progetti"`
-	Orario   string `json:"orario" toml:"orario"`
+	HTML           string `json:"html" toml:"html"`
+	ComunicatiPath string `json:"path_comunicati" toml:"path_comunicati"`
+	Genitori       string `json:"comunicati_genitori" toml:"comunicati_genitori"`
+	Studenti       string `json:"comunicati_studenti" toml:"comunicati_studenti"`
+	Docenti        string `json:"comunicati_docenti" toml:"comunicati_docenti"`
+	Progetti       string `json:"progetti" toml:"progetti"`
+	Orario         string `json:"orario" toml:"orario"`
 }
 
 type db struct {
@@ -87,12 +87,13 @@ var (
 			Timeout: 10,
 		},
 		dirs{
-			HTML:     "./static",
-			Genitori: "",
-			Studenti: "",
-			Docenti:  "",
-			Progetti: "",
-			Orario:   "./orario.xml",
+			HTML:           "./static",
+			ComunicatiPath: "",
+			Genitori:       "",
+			Studenti:       "",
+			Docenti:        "",
+			Progetti:       "",
+			Orario:         "./orario.xml",
 		},
 		logPrefs{
 			Enabled:  true,
@@ -167,6 +168,11 @@ func formatPrefs() {
 	//HTTP
 	if !strings.HasPrefix(preferences.HTTP.Port, ":") {
 		preferences.HTTP.Port = ":" + preferences.HTTP.Port
+	}
+
+	// DB
+	if preferences.DB.Timeout < 0 {
+		preferences.DB.Timeout = 10
 	}
 
 	// Dirs

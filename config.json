@@ -1,9 +1,9 @@
 {
   "generali": {
+    "fqdn_sito": "liceodavinci.tv",
     "riavvio_automatico": true
   },
   "autenticazione": {
-    "fqdn_sito": "liceodavinci.tv",
     "chiave_firma": "secret"
   },
   "http": {
@@ -14,6 +14,7 @@
   },
   "cartelle": {
     "html": "docs",
+    "path_comunicati": "/sitoLiceo/images/comunicati/",
     "comunicati_genitori": "comunicati-genitori",
     "comunicati_studenti": "comunicati-studenti",
     "comunicati_docenti": "comunicati-docenti",
@@ -22,7 +23,7 @@
   },
   "logging": {
     "abilitato": true,
-    "file_log": "run.log",
+    "file_log": "./run.log",
     "livello_log": "verbose"
   }
 }
