@@ -105,7 +105,7 @@ func scrape(dir string, tipo string) Comunicati {
 
 		if bufi.Data.Equal(bufj.Data) {
 			// Ordine alfabetico crescente per comunicati con data uguale al secondo
-			return bufi.Nome < bufj.Nome
+			return bufi.Nome > bufj.Nome
 		}
 
 		return bufi.Data.After(bufj.Data)
