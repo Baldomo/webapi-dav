@@ -1,6 +1,11 @@
 package server
 
-import "net/http"
+import (
+	"net/http"
+	"path"
+
+	"github.com/Baldomo/webapi-dav/pkg/config"
+)
 
 // Rappresentazione schematica di un endpoint REST
 type Route struct {
@@ -20,140 +25,166 @@ type Route struct {
 	HandlerFunc http.HandlerFunc
 }
 
-var routes = []Route{
-	// Generiche
-	{
-		"Index",
-		"GET",
-		"/api",
-		false,
-		IndexHandler,
-	},
-	{
-		"VersionNumber",
-		"GET",
-		"/api/version",
-		false,
-		VersionHandler,
-	},
-	{
-		"Informazioni",
-		"GET",
-		"/api/about",
-		false,
-		AboutHandler,
-	},
-	{
-		"Teapot",
-		"GET",
-		"/api/teapot",
-		false,
-		TeapotHandler,
-	},
-	{
-		"Swagger",
-		"GET",
-		"/api/openapi.yaml",
-		false,
-		OpenapiHandler,
-	},
+var routes []Route
 
-	// Comunicati
-	{
-		"Comunicati_List",
-		"GET",
-		"/api/comunicati",
-		true,
-		ComunicatiHandler,
-	},
-	{
-		"Comunicati_List_Genitori",
-		"GET",
-		"/api/comunicati/genitori",
-		true,
-		GenitoriComunicatiHandler,
-	},
-	{
-		"Comunicati_List_Genitori",
-		"GET",
-		"/api/comunicati/genitori/{count:[0-9]+}",
-		true,
-		GenitoriComunicatiHandler,
-	},
-	{
-		"Comunicati_List_Studenti",
-		"GET",
-		"/api/comunicati/studenti",
-		true,
-		StudentiComunicatiHandler,
-	},
-	{
-		"Comunicati_List_Studenti",
-		"GET",
-		"/api/comunicati/studenti/{count:[0-9]+}",
-		true,
-		StudentiComunicatiHandler,
-	},
-	{
-		"Comunicati_List_Docenti",
-		"GET",
-		"/api/comunicati/docenti",
-		true,
-		DocentiComunicatiHandler,
-	},
-	{
-		"Comunicati_List_Docenti",
-		"GET",
-		"/api/comunicati/docenti/{count:[0-9]+}",
-		true,
-		DocentiComunicatiHandler,
-	},
+func Init() {
+	comBasePath := config.GetConfig().Dirs.ComunicatiPath
+	routes = []Route{
+		// Generiche
+		{
+			"Index",
+			"GET",
+			"/api",
+			false,
+			IndexHandler,
+		},
+		{
+			"VersionNumber",
+			"GET",
+			"/api/version",
+			false,
+			VersionHandler,
+		},
+		{
+			"Informazioni",
+			"GET",
+			"/api/about",
+			false,
+			AboutHandler,
+		},
+		{
+			"Teapot",
+			"GET",
+			"/api/teapot",
+			false,
+			TeapotHandler,
+		},
+		{
+			"Swagger",
+			"GET",
+			"/api/openapi.yaml",
+			false,
+			OpenapiHandler,
+		},
 
-	// Utilità
-	{
-		"Docenti_List",
-		"GET",
-		"/api/docenti",
-		true,
-		DocentiHandler,
-	},
-	{
-		"Classi_List",
-		"GET",
-		"/api/classi",
-		true,
-		ClassiHandler,
-	},
+		// Comunicati
+		{
+			"Comunicati_List",
+			"GET",
+			"/api/comunicati",
+			true,
+			ComunicatiHandler,
+		},
+		{
+			"Comunicati_List_Genitori",
+			"GET",
+			"/api/comunicati/genitori",
+			true,
+			GenitoriComunicatiHandler,
+		},
+		{
+			"Comunicati_List_Genitori",
+			"GET",
+			"/api/comunicati/genitori/{count:[0-9]+}",
+			true,
+			GenitoriComunicatiHandler,
+		},
+		{
+			"Comunicati_List_Studenti",
+			"GET",
+			"/api/comunicati/studenti",
+			true,
+			StudentiComunicatiHandler,
+		},
+		{
+			"Comunicati_List_Studenti",
+			"GET",
+			"/api/comunicati/studenti/{count:[0-9]+}",
+			true,
+			StudentiComunicatiHandler,
+		},
+		{
+			"Comunicati_List_Docenti",
+			"GET",
+			"/api/comunicati/docenti",
+			true,
+			DocentiComunicatiHandler,
+		},
+		{
+			"Comunicati_List_Docenti",
+			"GET",
+			"/api/comunicati/docenti/{count:[0-9]+}",
+			true,
+			DocentiComunicatiHandler,
+		},
 
-	// Orario
-	{
-		"Orario_Table",
-		"GET",
-		"/api/orario",
-		true,
-		OrarioHandler,
-	},
-	{
-		"Orario_Table_Classe",
-		"GET",
-		"/api/orario/classe/{classe:[1-5][a-zA-Z]}",
-		true,
-		OrarioClasseHandler,
-	},
-	{
-		"Orario_Table_Docente",
-		"POST",
-		"/api/orario/docente",
-		true,
-		OrarioDocenteHandler,
-	},
+		// Utilità
+		{
+			"Docenti_List",
+			"GET",
+			"/api/docenti",
+			true,
+			DocentiHandler,
+		},
+		{
+			"Classi_List",
+			"GET",
+			"/api/classi",
+			true,
+			ClassiHandler,
+		},
+		{
+			"Pdf",
+			"GET",
+			path.Join(comBasePath, "comunicati-docenti/{filename}"),
+			true,
+			PdfHandler,
+		},
+		{
+			"Pdf",
+			"GET",
+			path.Join(comBasePath, "comunicati-genitori/{filename}"),
+			true,
+			PdfHandler,
+		},
+		{
+			"Pdf",
+			"GET",
+			path.Join(comBasePath, "comunicati-studenti/{filename}"),
+			true,
+			PdfHandler,
+		},
 
-	// Agenda
-	{
-		"Agenda",
-		"POST",
-		"/api/agenda",
-		false,
-		AgendaHandler,
-	},
+		// Orario
+		{
+			"Orario_Table",
+			"GET",
+			"/api/orario",
+			true,
+			OrarioHandler,
+		},
+		{
+			"Orario_Table_Classe",
+			"GET",
+			"/api/orario/classe/{classe:[1-5][a-zA-Z]}",
+			true,
+			OrarioClasseHandler,
+		},
+		{
+			"Orario_Table_Docente",
+			"POST",
+			"/api/orario/docente",
+			true,
+			OrarioDocenteHandler,
+		},
+
+		// Agenda
+		{
+			"Agenda",
+			"POST",
+			"/api/agenda",
+			false,
+			AgendaHandler,
+		},
+	}
 }

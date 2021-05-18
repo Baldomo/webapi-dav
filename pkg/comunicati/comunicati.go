@@ -46,7 +46,7 @@ const (
 	TipoStudenti = "studenti"
 	TipoDocenti  = "docenti"
 
-	UrlPrefix = "http://www.liceodavinci.tv/sitoLiceo/images/comunicati/"
+	PathPrefix = "/sitoLiceo/images/comunicati/"
 )
 
 // Compara due comunicati con arrotondamento della data etc
@@ -69,7 +69,7 @@ func NewComunicato(nome string, data time.Time, tipo string) *Comunicato {
 		tipo = strings.Replace(tipo, "/", "", -1)
 	}
 	com.Tipo = tipo
-	com.URL = UrlPrefix + "comunicati-" + tipo + "/" + url.PathEscape(nome)
+	com.URL = "https://" + config.GetConfig().General.FQDN + PathPrefix + "comunicati-" + tipo + "/" + url.PathEscape(nome)
 
 	return com
 }
@@ -100,7 +100,15 @@ func scrape(dir string, tipo string) Comunicati {
 
 	wg.Wait()
 	sort.Slice(buf, func(i, j int) bool {
-		return buf[i].Data.After(buf[j].Data)
+		bufi := buf[i]
+		bufj := buf[j]
+
+		if bufi.Data.Equal(bufj.Data) {
+			// Ordine alfabetico crescente per comunicati con data uguale al secondo
+			return bufi.Nome > bufj.Nome
+		}
+
+		return bufi.Data.After(bufj.Data)
 	})
 	log.Infof("Caricamento comunicati %s completato", tipo)
 	return buf

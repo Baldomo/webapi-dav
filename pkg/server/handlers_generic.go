@@ -2,16 +2,18 @@ package server
 
 import (
 	"encoding/json"
-	"strings"
 	"html/template"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"path/filepath"
+	"strings"
 
+	"github.com/Baldomo/webapi-dav/pkg/auth"
 	"github.com/Baldomo/webapi-dav/pkg/config"
 	"github.com/Baldomo/webapi-dav/pkg/log"
 	"github.com/Baldomo/webapi-dav/pkg/utils"
-	"github.com/Baldomo/webapi-dav/pkg/auth"
+	"github.com/gorilla/mux"
 )
 
 var (
@@ -30,7 +32,7 @@ func AuthorizationMiddleware(next http.Handler) http.Handler {
 			log.Error("AuthorizationMiddleware: header is not valid")
 			w.WriteHeader(http.StatusUnauthorized)
 			w.Write([]byte("Malformed or missing bearer token"))
-
+			r.Body.Close()
 		} else {
 			// Ottiene il token
 			jwtToken := []byte(authHeader[1])
@@ -40,6 +42,7 @@ func AuthorizationMiddleware(next http.Handler) http.Handler {
 				log.Error(err.Error())
 				w.WriteHeader(http.StatusUnauthorized)
 				w.Write([]byte("Unauthorized"))
+				r.Body.Close()
 			} else {
 				next.ServeHTTP(w, r)
 			}
@@ -62,6 +65,47 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusOK)
+}
+
+func PdfHandler(w http.ResponseWriter, r *http.Request) {
+	filename, ok := mux.Vars(r)["filename"]
+	if !ok {
+		// Il client cerca di richiedere la directory, non autorizzato
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	// if filepath.Ext(filename) != "pdf" {
+	// 	// Possibile richiedere solo pdf
+	// 	w.WriteHeader(http.StatusBadRequest)
+	// 	return
+	// }
+
+	filename = filepath.Base(filename)
+	if filename == "." || filename == string(os.PathSeparator) {
+		// Meglio evitare furbate, controlla che non ci siano altri caratteri
+		// di percorso nel nome del file
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	comBaseDir := filepath.Base(filepath.Dir(r.URL.Path))
+	comSubPath := ""
+	switch comBaseDir {
+	case "comunicati-docenti":
+		comSubPath = config.GetConfig().Dirs.Docenti
+	case "comunicati-genitori":
+		comSubPath = config.GetConfig().Dirs.Genitori
+	case "comunicati-studenti":
+		comSubPath = config.GetConfig().Dirs.Studenti
+	}
+	comSubPath, _ = filepath.Abs(comSubPath)
+
+	comBasePath := config.GetConfig().Dirs.ComunicatiPath
+	strip := filepath.Join(comBasePath, comBaseDir) + "/"
+	http.
+		StripPrefix(strip, http.FileServer(http.Dir(comSubPath))).
+		ServeHTTP(w, r)
 }
 
 func OpenapiHandler(w http.ResponseWriter, r *http.Request) {

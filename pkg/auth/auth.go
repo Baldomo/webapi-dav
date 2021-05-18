@@ -1,6 +1,6 @@
 /*
  * auth.go
- * 
+ *
  * Funzioni per la verifica dei token JWT di autorizzazione.
  *
  * Copyright (c) 2020 Antonio Napolitano <nap@antonionapolitano.eu>
@@ -24,12 +24,12 @@
 package auth
 
 import (
+	"errors"
 	"fmt"
 	"time"
-	"errors"
 
-	"github.com/gbrlsnchs/jwt/v3"
 	"github.com/Baldomo/webapi-dav/pkg/config"
+	"github.com/gbrlsnchs/jwt/v3"
 )
 
 var (
@@ -80,7 +80,7 @@ func ParseToken(token []byte) (UserInfo, error) {
 		now = time.Now()
 
 		// Carico l'FQDN dalla configurazione e definisco l'audience
-		fqdn = config.GetConfig().Auth.FQDN
+		fqdn = config.GetConfig().General.FQDN
 		aud  = jwt.Audience{"http://" + fqdn, "https://" + fqdn}
 
 		// Inizializzo i "validatori"

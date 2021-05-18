@@ -14,7 +14,7 @@ import (
 
 type config struct {
 	General general  `json:"generali" toml:"generali"`
-	Auth	auth	 `json:"autenticazione" toml:"autenticazione"`
+	Auth    auth     `json:"autenticazione" toml:"autenticazione"`
 	HTTP    connhttp `json:"http" toml:"http"`
 	DB      db       `json:"db" toml:"db"`
 	Dirs    dirs     `json:"cartelle" toml:"cartelle"`
@@ -22,13 +22,13 @@ type config struct {
 }
 
 type general struct {
-	Notifications  bool `json:"notifiche"`
-	RestartOnPanic bool `json:"riavvio_automatico" toml:"riavvio_automatico"`
+	FQDN           string `json:"fqdn_sito" toml:"fqdn_sito"`
+	Notifications  bool   `json:"notifiche"`
+	RestartOnPanic bool   `json:"riavvio_automatico" toml:"riavvio_automatico"`
 }
 
 type auth struct {
-	FQDN		string `json:"fqdn_sito" toml:"fqdn_sito"`
-	JWTSecret	string `json:"chiave_firma" toml:"chiave_firma"`
+	JWTSecret string `json:"chiave_firma" toml:"chiave_firma"`
 }
 
 type connhttp struct {
@@ -36,12 +36,13 @@ type connhttp struct {
 }
 
 type dirs struct {
-	HTML     string `json:"html" toml:"html"`
-	Genitori string `json:"comunicati_genitori" toml:"comunicati_genitori"`
-	Studenti string `json:"comunicati_studenti" toml:"comunicati_studenti"`
-	Docenti  string `json:"comunicati_docenti" toml:"comunicati_docenti"`
-	Progetti string `json:"progetti" toml:"progetti"`
-	Orario   string `json:"orario" toml:"orario"`
+	HTML           string `json:"html" toml:"html"`
+	ComunicatiPath string `json:"path_comunicati" toml:"path_comunicati"`
+	Genitori       string `json:"comunicati_genitori" toml:"comunicati_genitori"`
+	Studenti       string `json:"comunicati_studenti" toml:"comunicati_studenti"`
+	Docenti        string `json:"comunicati_docenti" toml:"comunicati_docenti"`
+	Progetti       string `json:"progetti" toml:"progetti"`
+	Orario         string `json:"orario" toml:"orario"`
 }
 
 type db struct {
@@ -71,11 +72,11 @@ var (
 
 	defaultPrefs = config{
 		general{
+			FQDN:           "",
 			Notifications:  false,
 			RestartOnPanic: false,
 		},
 		auth{
-			FQDN: "",
 			JWTSecret: "",
 		},
 		connhttp{
@@ -86,12 +87,13 @@ var (
 			Timeout: 10,
 		},
 		dirs{
-			HTML:     "./static",
-			Genitori: "",
-			Studenti: "",
-			Docenti:  "",
-			Progetti: "",
-			Orario:   "./orario.xml",
+			HTML:           "./static",
+			ComunicatiPath: "",
+			Genitori:       "",
+			Studenti:       "",
+			Docenti:        "",
+			Progetti:       "",
+			Orario:         "./orario.xml",
 		},
 		logPrefs{
 			Enabled:  true,
@@ -159,13 +161,18 @@ func LoadPrefs(path string) error {
 // Controlla vari campi della configurazione e aggiusta il formato di quelli non validi
 func formatPrefs() {
 	//Auth
-	if preferences.Auth.FQDN == "" {
+	if preferences.General.FQDN == "" {
 		fmt.Println("FQDN non specificato!")
 	}
 
 	//HTTP
 	if !strings.HasPrefix(preferences.HTTP.Port, ":") {
 		preferences.HTTP.Port = ":" + preferences.HTTP.Port
+	}
+
+	// DB
+	if preferences.DB.Timeout < 0 {
+		preferences.DB.Timeout = 10
 	}
 
 	// Dirs

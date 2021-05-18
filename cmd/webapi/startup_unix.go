@@ -8,9 +8,9 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/Baldomo/webapi-dav/pkg/auth"
 	com "github.com/Baldomo/webapi-dav/pkg/comunicati"
 	"github.com/Baldomo/webapi-dav/pkg/config"
-	"github.com/Baldomo/webapi-dav/pkg/auth"
 	"github.com/Baldomo/webapi-dav/pkg/log"
 	"github.com/Baldomo/webapi-dav/pkg/orario"
 	"github.com/Baldomo/webapi-dav/pkg/server"
@@ -58,6 +58,8 @@ func start() {
 	if err != nil {
 		panic(err)
 	}
+
+	server.Init()
 
 	lockProcess()
 

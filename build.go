@@ -234,7 +234,15 @@ func clean() {
 func deploy() {
 	// drwxr-xr-x
 	err := os.Mkdir("playground", os.ModePerm)
-	must(err)
+	if os.IsExist(err) {
+		clean()
+		_ = os.Mkdir("playground", os.ModePerm)
+	} else {
+		must(err)
+	}
+
+	build()
+
 	dummyFiles(100,
 		"playground/comunicati-genitori",
 		"playground/comunicati-studenti",
